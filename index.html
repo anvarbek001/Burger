@@ -9,9 +9,9 @@
       rel="stylesheet"
     />
     <style>
-      /* ══════════════════════════════════════════════
-   ROOT & RESET
-══════════════════════════════════════════════ */
+      /* ═══════════════════════════════════════
+   ROOT
+═══════════════════════════════════════ */
       :root {
         --fire: #e8300b;
         --gold: #f5a623;
@@ -20,7 +20,7 @@
         --surface: #161616;
         --cream: #f2ead6;
         --muted: rgba(242, 234, 214, 0.45);
-        --border: rgba(242, 234, 214, 0.08);
+        --border: rgba(242, 234, 214, 0.07);
       }
       *,
       *::before,
@@ -31,74 +31,18 @@
       }
       html {
         scroll-behavior: smooth;
-        cursor: none;
       }
       body {
         background: var(--dark);
         color: var(--cream);
         font-family: "Space Grotesk", sans-serif;
         overflow-x: hidden;
+        cursor: none;
       }
 
-      /* ══ CUSTOM CURSOR ══ */
-      #cursor {
-        position: fixed;
-        width: 12px;
-        height: 12px;
-        background: var(--fire);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        transform: translate(-50%, -50%);
-        transition:
-          transform 0.1s,
-          width 0.25s,
-          height 0.25s,
-          background 0.25s;
-      }
-      #cursor-trail {
-        position: fixed;
-        width: 40px;
-        height: 40px;
-        border: 1px solid rgba(232, 48, 11, 0.4);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9998;
-        transform: translate(-50%, -50%);
-        transition:
-          left 0.12s ease,
-          top 0.12s ease,
-          width 0.3s,
-          height 0.3s,
-          opacity 0.3s;
-      }
-      body:has(a:hover) #cursor,
-      body:has(button:hover) #cursor {
-        width: 6px;
-        height: 6px;
-        background: var(--gold);
-      }
-      body:has(a:hover) #cursor-trail,
-      body:has(button:hover) #cursor-trail {
-        width: 60px;
-        height: 60px;
-        border-color: var(--gold);
-      }
-
-      /* ══ NOISE TEXTURE OVERLAY ══ */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-        opacity: 0.025;
-        pointer-events: none;
-        z-index: 9997;
-      }
-
-      /* ══ SCROLLBAR ══ */
+      /* ─── SCROLLBAR ─── */
       ::-webkit-scrollbar {
-        width: 3px;
+        width: 2px;
       }
       ::-webkit-scrollbar-track {
         background: var(--dark);
@@ -107,9 +51,78 @@
         background: var(--fire);
       }
 
-      /* ══════════════════════════════════════════════
+      /* ─── NOISE ─── */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9000;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+        opacity: 0.03;
+      }
+
+      /* ═══════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════ */
+      #cur-dot {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--fire);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.2s,
+          height 0.2s,
+          background 0.2s,
+          transform 0.1s;
+        will-change: left, top;
+      }
+      #cur-ring {
+        position: fixed;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid rgba(232, 48, 11, 0.5);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+          height 0.35s,
+          border-color 0.35s,
+          left 0.09s,
+          top 0.09s;
+        will-change: left, top;
+      }
+      .cur-hover #cur-dot {
+        width: 5px;
+        height: 5px;
+        background: var(--gold);
+      }
+      .cur-hover #cur-ring {
+        width: 54px;
+        height: 54px;
+        border-color: var(--gold);
+      }
+      .cur-btn #cur-dot {
+        width: 4px;
+        height: 4px;
+        background: #fff;
+      }
+      .cur-btn #cur-ring {
+        width: 64px;
+        height: 64px;
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(232, 48, 11, 0.08);
+      }
+
+      /* ═══════════════════════════════════════
    NAVBAR
-══════════════════════════════════════════════ */
+═══════════════════════════════════════ */
       nav {
         position: fixed;
         top: 0;
@@ -119,92 +132,74 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.5rem 4rem;
-        mix-blend-mode: normal;
+        padding: 1.6rem 4rem;
       }
-      nav::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, rgba(8, 8, 8, 0.9), transparent);
-        pointer-events: none;
-        z-index: -1;
-        backdrop-filter: blur(0px);
-        transition: backdrop-filter 0.3s;
+      nav.stuck {
+        background: rgba(8, 8, 8, 0.92);
+        backdrop-filter: blur(24px);
+        padding: 1.1rem 4rem;
+        border-bottom: 1px solid var(--border);
+        transition:
+          padding 0.4s,
+          background 0.4s;
       }
-      nav.scrolled::after {
-        backdrop-filter: blur(20px);
-      }
-
-      .nav-logo {
+      .logo {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.8rem;
+        font-size: 1.9rem;
         letter-spacing: 4px;
         color: var(--cream);
         text-decoration: none;
-        position: relative;
       }
-      .nav-logo em {
+      .logo em {
         color: var(--fire);
         font-style: normal;
-      }
-      .nav-logo::after {
-        content: "";
-        position: absolute;
-        bottom: -3px;
-        left: 0;
-        width: 0;
-        height: 1px;
-        background: var(--fire);
-        transition: width 0.4s;
-      }
-      .nav-logo:hover::after {
-        width: 100%;
       }
 
       .nav-links {
         display: flex;
         align-items: center;
-        gap: 3rem;
+        gap: 2.8rem;
       }
       .nav-links a {
         color: var(--muted);
         text-decoration: none;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
         font-weight: 600;
-        transition: color 0.2s;
         position: relative;
+        overflow: hidden;
+        display: inline-block;
       }
+      /* underline sweep */
       .nav-links a::after {
         content: "";
         position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
+        bottom: 0;
+        left: -100%;
+        width: 100%;
         height: 1px;
         background: var(--gold);
-        transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .nav-links a:hover {
         color: var(--cream);
       }
       .nav-links a:hover::after {
-        width: 100%;
+        left: 0;
       }
 
-      .nav-cta {
-        background: transparent;
-        border: 1px solid rgba(232, 48, 11, 0.6);
+      .nav-btn {
+        background: none;
+        border: 1px solid rgba(232, 48, 11, 0.5);
         color: var(--cream);
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.6rem 1.8rem;
-        border-radius: 2px;
+        padding: 0.55rem 1.6rem;
+        border-radius: 1px;
         cursor: none;
         position: relative;
         overflow: hidden;
@@ -212,136 +207,190 @@
           color 0.3s,
           border-color 0.3s;
       }
-      .nav-cta::before {
+      .nav-btn::before {
         content: "";
         position: absolute;
         inset: 0;
         background: var(--fire);
-        transform: translateX(-101%);
+        transform: scaleX(0);
+        transform-origin: right;
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .nav-cta:hover {
+      .nav-btn:hover {
         color: #fff;
         border-color: var(--fire);
       }
-      .nav-cta:hover::before {
-        transform: translateX(0);
+      .nav-btn:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
       }
-      .nav-cta span {
+      .nav-btn span {
         position: relative;
         z-index: 1;
       }
 
-      /* ══════════════════════════════════════════════
-   HERO — FULLSCREEN KINETIC
-══════════════════════════════════════════════ */
+      /* ═══════════════════════════════════════
+   CLIP-PATH TEXT REVEAL (Format-3 style)
+═══════════════════════════════════════ */
+      .cr {
+        display: block;
+        overflow: hidden;
+      }
+      .cr-inner {
+        display: block;
+        transform: translateY(105%);
+        transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .cr.active .cr-inner {
+        transform: translateY(0);
+      }
+
+      /* Stagger variants */
+      .cr-d1 .cr-inner {
+        transition-delay: 0.08s;
+      }
+      .cr-d2 .cr-inner {
+        transition-delay: 0.16s;
+      }
+      .cr-d3 .cr-inner {
+        transition-delay: 0.24s;
+      }
+      .cr-d4 .cr-inner {
+        transition-delay: 0.32s;
+      }
+      .cr-d5 .cr-inner {
+        transition-delay: 0.4s;
+      }
+
+      /* Fade reveal for non-text */
+      .fr {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .fr.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fr-d1 {
+        transition-delay: 0.1s;
+      }
+      .fr-d2 {
+        transition-delay: 0.2s;
+      }
+      .fr-d3 {
+        transition-delay: 0.3s;
+      }
+      .fr-d4 {
+        transition-delay: 0.4s;
+      }
+
+      /* Left slide */
+      .sl {
+        opacity: 0;
+        transform: translateX(-36px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .sl.active {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
       .hero {
         position: relative;
         height: 100vh;
         display: flex;
         align-items: flex-end;
-        padding: 0 4rem 5rem;
+        padding: 0 4rem 6rem;
         overflow: hidden;
       }
-
       .hero-bg {
         position: absolute;
         inset: 0;
-        z-index: 0;
-        background-image: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800&q=90");
-        background-size: cover;
-        background-position: center;
-        filter: brightness(0.35) saturate(1.1);
-        transform: scale(1.05);
-        animation: heroPan 20s ease-in-out infinite alternate;
+        background: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800&q=90")
+          center/cover;
+        filter: brightness(0.3) saturate(1.1);
+        will-change: transform;
+        /* parallax set by JS */
       }
-      @keyframes heroPan {
-        from {
-          transform: scale(1.05) translate(0, 0);
-        }
-        to {
-          transform: scale(1.08) translate(-1%, -0.5%);
-        }
-      }
-      .hero-bg::after {
-        content: "";
+      .hero-vignette {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           135deg,
-          rgba(8, 8, 8, 0.95) 0%,
-          rgba(8, 8, 8, 0.6) 50%,
-          rgba(8, 8, 8, 0.2) 100%
+          rgba(8, 8, 8, 0.96) 0%,
+          rgba(8, 8, 8, 0.55) 55%,
+          rgba(8, 8, 8, 0.1) 100%
         );
       }
-
-      /* Floating red orb */
       .hero-orb {
         position: absolute;
-        top: 20%;
-        right: 15%;
-        width: 380px;
-        height: 380px;
+        top: 15%;
+        right: 12%;
+        width: 440px;
+        height: 440px;
+        border-radius: 50%;
         background: radial-gradient(
           circle,
-          rgba(232, 48, 11, 0.25) 0%,
+          rgba(232, 48, 11, 0.18) 0%,
           transparent 70%
         );
-        border-radius: 50%;
-        animation: orbFloat 8s ease-in-out infinite;
-        z-index: 1;
+        animation: orbFloat 9s ease-in-out infinite;
       }
       @keyframes orbFloat {
         0%,
         100% {
           transform: translate(0, 0) scale(1);
         }
-        33% {
-          transform: translate(20px, -30px) scale(1.05);
+        40% {
+          transform: translate(18px, -28px) scale(1.04);
         }
-        66% {
-          transform: translate(-15px, 20px) scale(0.97);
+        70% {
+          transform: translate(-12px, 16px) scale(0.97);
         }
       }
 
       .hero-content {
         position: relative;
         z-index: 2;
-        max-width: 900px;
+        width: 100%;
       }
-
       .hero-tag {
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 0.8rem;
-        font-size: 0.65rem;
+        gap: 0.9rem;
+        font-size: 0.62rem;
         letter-spacing: 4px;
         text-transform: uppercase;
         color: var(--fire);
         font-weight: 700;
         margin-bottom: 2rem;
-        opacity: 0;
-        animation: fadeUp 0.8s 0.2s ease both;
       }
       .hero-tag-line {
-        width: 40px;
+        width: 38px;
         height: 1px;
         background: var(--fire);
       }
 
       .hero-h1 {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(6rem, 16vw, 15rem);
-        line-height: 0.88;
-        letter-spacing: 3px;
-        opacity: 0;
-        animation: fadeUp 0.9s 0.4s ease both;
+        font-size: clamp(6.5rem, 17vw, 16rem);
+        line-height: 0.86;
+        letter-spacing: 4px;
+        margin-bottom: 3rem;
       }
-      .hero-h1 .outline {
+      .hero-h1 .stroke {
         -webkit-text-stroke: 1.5px var(--cream);
         color: transparent;
       }
-      .hero-h1 .fire-text {
+      .hero-h1 .fire {
         color: var(--fire);
       }
 
@@ -349,112 +398,52 @@
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        margin-top: 3rem;
-        opacity: 0;
-        animation: fadeUp 0.9s 0.7s ease both;
+        gap: 2rem;
       }
       .hero-desc {
-        font-size: 1rem;
-        line-height: 1.8;
+        font-size: 0.98rem;
         color: var(--muted);
-        max-width: 380px;
+        line-height: 1.85;
+        max-width: 360px;
         font-weight: 300;
       }
       .hero-desc strong {
         color: var(--cream);
         font-weight: 600;
       }
-
-      .hero-actions {
+      .hero-btns {
         display: flex;
-        gap: 1.2rem;
-        align-items: center;
+        gap: 1rem;
       }
 
-      .btn-fire {
-        background: var(--fire);
-        color: #fff;
-        border: none;
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 0.9rem 2.5rem;
-        border-radius: 2px;
-        cursor: none;
-        position: relative;
-        overflow: hidden;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-      }
-      .btn-fire::after {
-        content: "";
+      /* Scroll cue */
+      .scroll-cue {
         position: absolute;
-        inset: 0;
-        background: rgba(255, 255, 255, 0.15);
-        transform: translateX(-101%);
-        transition: transform 0.3s;
-      }
-      .btn-fire:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 40px rgba(232, 48, 11, 0.4);
-      }
-      .btn-fire:hover::after {
-        transform: translateX(0);
-      }
-
-      .btn-outline-fire {
-        background: transparent;
-        color: var(--cream);
-        border: 1px solid var(--border);
-        font-family: "Syne", sans-serif;
-        font-weight: 600;
-        font-size: 0.82rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 0.9rem 2.5rem;
-        border-radius: 2px;
-        cursor: none;
-        transition:
-          border-color 0.2s,
-          color 0.2s;
-      }
-      .btn-outline-fire:hover {
-        border-color: var(--cream);
-      }
-
-      /* Scroll indicator */
-      .scroll-ind {
-        position: absolute;
-        bottom: 3rem;
         right: 4rem;
+        bottom: 5rem;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.8rem;
-        z-index: 2;
-        opacity: 0;
-        animation: fadeUp 0.9s 1.1s ease both;
+        gap: 0.7rem;
       }
-      .scroll-line {
+      .scroll-cue-line {
         width: 1px;
-        height: 60px;
+        height: 64px;
         background: var(--border);
-        position: relative;
         overflow: hidden;
+        position: relative;
       }
-      .scroll-line::after {
+      .scroll-cue-line::after {
         content: "";
         position: absolute;
         top: -100%;
-        width: 100%;
+        width: 1px;
         height: 100%;
         background: var(--fire);
-        animation: scrollDrop 2s ease-in-out infinite;
+        animation: lineDrop 1.8s ease-in-out infinite;
       }
-      @keyframes scrollDrop {
+      @keyframes lineDrop {
         0% {
           top: -100%;
         }
@@ -462,52 +451,114 @@
           top: 200%;
         }
       }
-      .scroll-text {
-        font-size: 0.6rem;
+      .scroll-cue-text {
+        font-size: 0.58rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--muted);
         writing-mode: vertical-rl;
       }
 
-      /* ══════════════════════════════════════════════
-   MARQUEE TICKER
-══════════════════════════════════════════════ */
-      .marquee-section {
+      /* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+      .btn-fire {
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.9rem 2.4rem;
+        border-radius: 1px;
+        cursor: none;
+        position: relative;
+        overflow: hidden;
+        transition:
+          box-shadow 0.3s,
+          transform 0.2s;
+        display: inline-block;
+      }
+      .btn-fire::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transform: translateX(-100%) skewX(-15deg);
+        transition: transform 0.5s;
+      }
+      .btn-fire:hover {
+        box-shadow: 0 12px 40px rgba(232, 48, 11, 0.45);
+        transform: translateY(-2px);
+      }
+      .btn-fire:hover::after {
+        transform: translateX(150%) skewX(-15deg);
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--cream);
+        border: 1px solid rgba(242, 234, 214, 0.18);
+        font-family: "Syne", sans-serif;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.9rem 2.4rem;
+        border-radius: 1px;
+        cursor: none;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.3s,
+          color 0.3s;
+      }
+      .btn-ghost::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(242, 234, 214, 0.05);
+        transform: scaleY(0);
+        transform-origin: bottom;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .btn-ghost:hover {
+        border-color: var(--cream);
+      }
+      .btn-ghost:hover::before {
+        transform: scaleY(1);
+      }
+
+      /* MAGNETIC wrapper */
+      .magnetic {
+        display: inline-block;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* ═══════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════ */
+      .marquee-wrap {
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
-        padding: 0.9rem 0;
         overflow: hidden;
-        background: var(--dark);
+        padding: 0.85rem 0;
       }
-      .marquee-track {
+      .marquee-inner {
         display: flex;
-        gap: 0;
-        animation: marqueeRun 30s linear infinite;
         width: max-content;
+        animation: mq 28s linear infinite;
       }
-      .marquee-item {
-        display: flex;
-        align-items: center;
-        gap: 2.5rem;
-        padding: 0 2.5rem;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 1.3rem;
-        letter-spacing: 4px;
-        color: var(--muted);
-        white-space: nowrap;
+      .marquee-wrap:hover .marquee-inner {
+        animation-play-state: paused;
       }
-      .marquee-item .dot {
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: var(--fire);
-        flex-shrink: 0;
-      }
-      .marquee-item:nth-child(even) {
-        color: var(--cream);
-      }
-      @keyframes marqueeRun {
+      @keyframes mq {
         from {
           transform: translateX(0);
         }
@@ -515,553 +566,562 @@
           transform: translateX(-50%);
         }
       }
-
-      /* ══════════════════════════════════════════════
-   SECTION HELPERS
-══════════════════════════════════════════════ */
-      .section-eyebrow {
-        font-size: 0.62rem;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        color: var(--fire);
-        font-weight: 700;
-        margin-bottom: 0.6rem;
+      .mq-item {
         display: flex;
         align-items: center;
-        gap: 1rem;
-      }
-      .section-eyebrow::before {
-        content: "";
-        width: 30px;
-        height: 1px;
-        background: var(--fire);
-      }
-      .section-title {
+        gap: 1.8rem;
+        padding: 0 2rem;
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3rem, 7vw, 6rem);
-        line-height: 0.9;
-        letter-spacing: 3px;
+        font-size: 1.2rem;
+        letter-spacing: 4px;
+        color: var(--muted);
+        white-space: nowrap;
+        transition: color 0.3s;
       }
-      .section-title .stroke {
-        -webkit-text-stroke: 1px var(--cream);
-        color: transparent;
+      .marquee-inner:hover .mq-item:hover {
+        color: var(--cream);
       }
-
-      /* Reveal animations */
-      .rv {
-        opacity: 0;
-        transform: translateY(40px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-      .rv.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .rv-l {
-        opacity: 0;
-        transform: translateX(-40px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-      .rv-l.visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      .rv-r {
-        opacity: 0;
-        transform: translateX(40px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-      .rv-r.visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      .d1 {
-        transition-delay: 0.1s;
-      }
-      .d2 {
-        transition-delay: 0.2s;
-      }
-      .d3 {
-        transition-delay: 0.3s;
-      }
-      .d4 {
-        transition-delay: 0.4s;
+      .mq-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--fire);
+        flex-shrink: 0;
       }
 
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* ══════════════════════════════════════════════
-   STATS BAR
-══════════════════════════════════════════════ */
-      .stats-bar {
-        padding: 6rem 4rem;
-        background: var(--mid);
-        border-bottom: 1px solid var(--border);
+      /* ═══════════════════════════════════════
+   STATS — COUNTER ANIMATION
+═══════════════════════════════════════ */
+      .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 2px;
+        border-bottom: 1px solid var(--border);
       }
-      .stat-cell {
-        padding: 2.5rem 3rem;
-        text-align: center;
+      .stat {
+        padding: 4rem 3rem;
+        border-right: 1px solid var(--border);
         position: relative;
-        transition: background 0.3s;
+        overflow: hidden;
+        cursor: default;
       }
-      .stat-cell:not(:last-child)::after {
+      .stat:last-child {
+        border-right: none;
+      }
+      /* slide-up fill on hover */
+      .stat::before {
         content: "";
         position: absolute;
-        right: 0;
-        top: 15%;
-        height: 70%;
-        width: 1px;
-        background: var(--border);
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(232, 48, 11, 0.06) 0%,
+          transparent 100%
+        );
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .stat-cell:hover {
-        background: rgba(232, 48, 11, 0.04);
+      .stat:hover::before {
+        transform: translateY(0);
       }
-      .stat-num {
+      .stat-n {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3rem, 5vw, 5rem);
+        font-size: clamp(3.5rem, 5vw, 5.5rem);
+        color: var(--fire);
         line-height: 1;
         letter-spacing: 2px;
-        color: var(--fire);
+        display: flex;
+        align-items: baseline;
+        gap: 0.2rem;
       }
-      .stat-unit {
-        font-size: 0.6em;
-        vertical-align: top;
-        margin-top: 0.3em;
-        display: inline-block;
+      .stat-suffix {
+        font-size: 0.45em;
+        color: var(--gold);
       }
-      .stat-label {
-        font-size: 0.65rem;
+      .stat-l {
+        font-size: 0.62rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--muted);
         font-weight: 600;
-        margin-top: 0.6rem;
+        margin-top: 0.7rem;
       }
 
-      /* ══════════════════════════════════════════════
-   MENU SECTION — HORIZONTAL SCROLL CARDS
-══════════════════════════════════════════════ */
-      .menu-section {
+      /* ═══════════════════════════════════════
+   MENU — CARDS WITH 3D TILT
+═══════════════════════════════════════ */
+      .menu-sec {
         padding: 8rem 0;
-        background: var(--dark);
         overflow: hidden;
       }
-      .menu-header {
-        padding: 0 4rem 4rem;
+      .menu-head {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
+        padding: 0 4rem 4rem;
+      }
+      .menu-hint {
+        font-size: 0.8rem;
+        color: var(--muted);
+        max-width: 240px;
+        line-height: 1.7;
       }
 
-      .menu-track-wrap {
-        position: relative;
-        overflow: hidden;
-      }
-      .menu-track {
+      .menu-scroll {
         display: flex;
-        gap: 1.5rem;
+        gap: 1.4rem;
         padding: 0 4rem 3rem;
         overflow-x: auto;
         scrollbar-width: none;
         cursor: grab;
         scroll-snap-type: x mandatory;
       }
-      .menu-track::-webkit-scrollbar {
+      .menu-scroll::-webkit-scrollbar {
         display: none;
       }
-      .menu-track.grabbing {
+      .menu-scroll.dragging {
         cursor: grabbing;
+        user-select: none;
       }
 
-      /* Progress bar */
-      .menu-progress {
+      /* progress */
+      .mprog {
         height: 1px;
         background: var(--border);
         margin: 0 4rem;
         position: relative;
       }
-      .menu-progress-fill {
+      .mprog-f {
         position: absolute;
         left: 0;
         top: 0;
-        height: 100%;
+        height: 1px;
         background: var(--fire);
-        width: 25%;
-        transition: width 0.15s;
+        width: 20%;
+        transition: width 0.1s;
       }
 
-      /* Menu card */
-      .mcard {
-        flex: 0 0 360px;
+      /* Card */
+      .mc {
+        flex: 0 0 340px;
         scroll-snap-align: start;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: 3px;
         overflow: hidden;
-        position: relative;
+        will-change: transform;
+        /* 3D tilt applied by JS */
         transition:
-          transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-          border-color 0.3s;
+          box-shadow 0.4s,
+          border-color 0.4s;
+        transform-style: preserve-3d;
+        position: relative;
         cursor: none;
       }
-      .mcard:hover {
-        transform: translateY(-8px);
-        border-color: rgba(232, 48, 11, 0.3);
+      .mc:hover {
+        border-color: rgba(232, 48, 11, 0.25);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
       }
 
-      .mcard-img {
-        height: 260px;
+      .mc-img {
+        height: 250px;
         overflow: hidden;
         position: relative;
       }
-      .mcard-img img {
+      .mc-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.7s ease;
         display: block;
+        transition: transform 0.7s ease;
       }
-      .mcard:hover .mcard-img img {
+      .mc:hover .mc-img img {
         transform: scale(1.08);
       }
-      .mcard-img-overlay {
+      .mc-img-ov {
         position: absolute;
         inset: 0;
         background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
       }
 
-      .mcard-badge {
+      .mc-badge {
         position: absolute;
-        top: 1.2rem;
-        left: 1.2rem;
+        top: 1rem;
+        left: 1rem;
+        z-index: 2;
         background: var(--fire);
         color: #fff;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.6rem;
+        font-size: 0.58rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.3rem 0.9rem;
+        padding: 0.28rem 0.8rem;
         border-radius: 1px;
-        z-index: 2;
       }
-      .mcard-badge.gold {
+      .mc-badge.gld {
         background: var(--gold);
-        color: var(--dark);
+        color: #000;
       }
-      .mcard-badge.spicy {
-        background: #ff6a00;
+      .mc-badge.spc {
+        background: #ff6500;
       }
 
-      .mcard-body {
-        padding: 1.5rem 1.8rem 2rem;
+      .mc-body {
+        padding: 1.4rem 1.6rem 1.8rem;
       }
-      .mcard-name {
+      .mc-name {
         font-family: "Syne", sans-serif;
         font-weight: 800;
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         color: var(--cream);
         margin-bottom: 0.5rem;
+        /* text scramble target */
       }
-      .mcard-desc {
-        font-size: 0.84rem;
+      .mc-desc {
+        font-size: 0.82rem;
         color: var(--muted);
         line-height: 1.65;
         margin-bottom: 1.4rem;
       }
-      .mcard-footer {
+      .mc-foot {
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
-      .mcard-price {
+      .mc-price {
         font-family: "Bebas Neue", sans-serif;
         font-size: 2rem;
         color: var(--gold);
         letter-spacing: 1px;
       }
-      .mcard-btn {
+
+      /* Cart btn with fill animation */
+      .mc-btn {
         background: transparent;
         border: 1px solid var(--border);
         color: var(--cream);
         font-family: "Syne", sans-serif;
-        font-weight: 600;
-        font-size: 0.7rem;
+        font-weight: 700;
+        font-size: 0.68rem;
         letter-spacing: 2px;
         text-transform: uppercase;
         padding: 0.5rem 1.2rem;
         border-radius: 1px;
         cursor: none;
-        transition:
-          background 0.2s,
-          border-color 0.2s,
-          color 0.2s;
         position: relative;
         overflow: hidden;
+        transition:
+          border-color 0.25s,
+          color 0.25s;
       }
-      .mcard-btn::before {
+      .mc-btn::before {
         content: "";
         position: absolute;
         inset: 0;
         background: var(--fire);
-        transform: translateX(-101%);
-        transition: transform 0.3s;
+        transform: translateY(101%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .mcard-btn:hover {
+      .mc-btn:hover {
         border-color: var(--fire);
         color: #fff;
       }
-      .mcard-btn:hover::before {
-        transform: translateX(0);
+      .mc-btn:hover::before {
+        transform: translateY(0);
       }
-      .mcard-btn span {
+      .mc-btn span {
         position: relative;
         z-index: 1;
       }
+      .mc-btn.added {
+        border-color: #1a7a3c;
+        color: #1a7a3c;
+      }
+      .mc-btn.added::before {
+        background: #1a7a3c;
+        transform: translateY(0);
+      }
+      .mc-btn.added {
+        color: #fff;
+      }
 
-      /* ══════════════════════════════════════════════
-   FEATURED — SIGNATURE BURGER
-══════════════════════════════════════════════ */
+      /* Hover image preview on card (Format-3 work cards) */
+      .mc-hover-tag {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        background: rgba(8, 8, 8, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border);
+        padding: 0.4rem 0.9rem;
+        border-radius: 1px;
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 700;
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.3s,
+          transform 0.3s;
+        z-index: 3;
+      }
+      .mc:hover .mc-hover-tag {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ═══════════════════════════════════════
+   SECTION EYEBROW / TITLE HELPERS
+═══════════════════════════════════════ */
+      .s-eye {
+        font-size: 0.62rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--fire);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin-bottom: 0.7rem;
+      }
+      .s-eye::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: var(--fire);
+      }
+      .s-ttl {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 7vw, 6rem);
+        line-height: 0.9;
+        letter-spacing: 3px;
+      }
+      .s-ttl .stk {
+        -webkit-text-stroke: 1px var(--cream);
+        color: transparent;
+      }
+
+      /* ═══════════════════════════════════════
+   FEATURED — PARALLAX IMAGE
+═══════════════════════════════════════ */
       .featured {
-        padding: 0;
-        background: var(--mid);
         display: grid;
         grid-template-columns: 1fr 1fr;
-        min-height: 85vh;
+        min-height: 88vh;
       }
-      .featured-img-side {
+      .feat-img-wrap {
         position: relative;
         overflow: hidden;
       }
-      .featured-img-side img {
+      .feat-img {
         width: 100%;
-        height: 100%;
+        height: 110%;
         object-fit: cover;
         display: block;
-        transition: transform 8s ease;
-        transform: scale(1.02);
+        transform: translateY(0);
+        will-change: transform;
+        /* parallax via JS */
       }
-      .featured-img-side:hover img {
-        transform: scale(1.06);
-      }
-      .featured-overlay {
+      .feat-img-ov {
         position: absolute;
         inset: 0;
-        background: linear-gradient(to right, transparent 60%, var(--mid) 100%);
+        background: linear-gradient(
+          to right,
+          transparent 55%,
+          var(--dark) 100%
+        );
       }
-
-      /* Floating info card on image */
-      .featured-info-card {
+      .feat-info {
         position: absolute;
         bottom: 3rem;
         left: 3rem;
-        background: rgba(8, 8, 8, 0.85);
+        background: rgba(8, 8, 8, 0.82);
         backdrop-filter: blur(20px);
         border: 1px solid var(--border);
-        padding: 1.5rem 2rem;
+        padding: 1.4rem 1.8rem;
         border-radius: 2px;
-        max-width: 240px;
       }
-      .fic-label {
-        font-size: 0.6rem;
+      .fi-lbl {
+        font-size: 0.58rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--fire);
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
       }
-      .fic-name {
+      .fi-name {
         font-family: "Syne", sans-serif;
         font-weight: 800;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: var(--cream);
         margin-bottom: 0.3rem;
       }
-      .fic-rating {
+      .fi-stars {
         color: var(--gold);
-        font-size: 0.9rem;
         letter-spacing: 2px;
+        font-size: 0.85rem;
       }
 
-      .featured-body {
+      .feat-body {
         padding: 6rem 5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: var(--dark);
       }
-      .feat-big-title {
+      .feat-ttl {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3.5rem, 6vw, 5.5rem);
-        line-height: 0.92;
+        font-size: clamp(4rem, 7vw, 6rem);
+        line-height: 0.9;
         letter-spacing: 3px;
-        margin: 1.2rem 0 2rem;
+        margin: 1rem 0 2rem;
       }
-      .feat-big-title em {
+      .feat-ttl em {
         font-style: normal;
         color: var(--fire);
       }
-
-      .feat-desc {
-        font-size: 0.97rem;
+      .feat-txt {
+        font-size: 0.95rem;
         color: var(--muted);
         line-height: 1.85;
         max-width: 400px;
         margin-bottom: 2.5rem;
       }
-
       .feat-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.6rem;
-        margin-bottom: 3rem;
+        gap: 0.5rem;
+        margin-bottom: 2.8rem;
       }
       .feat-tag {
-        font-size: 0.68rem;
+        font-size: 0.66rem;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--cream);
         font-weight: 600;
-        padding: 0.35rem 1rem;
+        padding: 0.32rem 0.9rem;
         border-radius: 30px;
         border: 1px solid var(--border);
         transition:
           border-color 0.2s,
-          color 0.2s;
+          color 0.2s,
+          background 0.2s;
+        cursor: default;
       }
       .feat-tag:hover {
         border-color: var(--fire);
         color: var(--fire);
-      }
-
-      .feat-price-row {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        margin-bottom: 2rem;
+        background: rgba(232, 48, 11, 0.05);
       }
       .feat-price {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 4rem;
+        font-size: 4.5rem;
         color: var(--gold);
         line-height: 1;
-      }
-      .feat-price-note {
-        font-size: 0.75rem;
-        color: var(--muted);
-        line-height: 1.6;
-        max-width: 130px;
+        margin-bottom: 2rem;
       }
 
-      /* ══════════════════════════════════════════════
-   PROMO STRIP — EDITORIAL STYLE
-══════════════════════════════════════════════ */
+      /* ═══════════════════════════════════════
+   PROMO STRIP
+═══════════════════════════════════════ */
       .promo {
-        padding: 5rem 4rem;
         background: var(--fire);
-        position: relative;
-        overflow: hidden;
+        padding: 5.5rem 4rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 3rem;
+        position: relative;
+        overflow: hidden;
       }
+      /* huge BG watermark */
       .promo::before {
-        content: "BOSS";
+        content: "BOSS20";
         position: absolute;
         font-family: "Bebas Neue", sans-serif;
-        font-size: 22vw;
+        font-size: 28vw;
         letter-spacing: -2vw;
-        color: rgba(255, 255, 255, 0.06);
+        color: rgba(0, 0, 0, 0.07);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         pointer-events: none;
         white-space: nowrap;
-        animation: promoText 20s linear infinite;
-      }
-      @keyframes promoText {
-        from {
-          transform: translate(-50%, -50%) rotate(0deg);
-        }
-        to {
-          transform: translate(-50%, -50%) rotate(5deg);
-        }
-      }
-      .promo-left {
-      }
-      .promo-eyebrow {
-        font-size: 0.65rem;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.6);
-        font-weight: 700;
-        margin-bottom: 1rem;
       }
       .promo-h2 {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 9vw, 9rem);
+        font-size: clamp(4.5rem, 10vw, 10rem);
         line-height: 0.88;
         letter-spacing: 3px;
         color: #fff;
       }
-      .promo-right {
-        text-align: right;
-        position: relative;
-        z-index: 2;
-      }
-      .promo-code-label {
+      .promo-sub {
         font-size: 0.65rem;
         letter-spacing: 4px;
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.6);
         font-weight: 700;
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.9rem;
+      }
+      .promo-right {
+        position: relative;
+        z-index: 2;
+        text-align: right;
       }
       .promo-code {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(2.5rem, 5vw, 5rem);
+        font-size: clamp(3rem, 6vw, 6rem);
         letter-spacing: 8px;
         color: #fff;
         border: 2px solid rgba(255, 255, 255, 0.3);
-        padding: 0.5rem 2rem;
+        padding: 0.4rem 1.8rem;
         display: inline-block;
         border-radius: 2px;
         margin-bottom: 1.5rem;
       }
+      /* code shimmer on hover */
+      .promo-code {
+        position: relative;
+        overflow: hidden;
+      }
+      .promo-code::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.25),
+          transparent
+        );
+        transform: translateX(-100%);
+      }
+      .promo-code:hover::after {
+        animation: shimmer 0.6s ease forwards;
+      }
+      @keyframes shimmer {
+        to {
+          transform: translateX(100%);
+        }
+      }
       .promo-desc {
-        font-size: 0.85rem;
+        font-size: 0.84rem;
         color: rgba(255, 255, 255, 0.65);
         line-height: 1.7;
         max-width: 280px;
         margin-left: auto;
       }
 
-      /* ══════════════════════════════════════════════
-   GALLERY — ASYMMETRIC GRID
-══════════════════════════════════════════════ */
-      .gallery {
+      /* ═══════════════════════════════════════
+   GALLERY — ASYMMETRIC + PARALLAX
+═══════════════════════════════════════ */
+      .gallery-sec {
         padding: 8rem 4rem;
         background: var(--dark);
       }
-      .gallery-header {
+      .gallery-head {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
@@ -1070,259 +1130,280 @@
       .gallery-grid {
         display: grid;
         grid-template-columns: 3fr 2fr 2fr;
-        grid-template-rows: 320px 220px;
-        gap: 12px;
+        grid-template-rows: 330px 230px;
+        gap: 10px;
       }
-      .gitem {
+      .gi {
         overflow: hidden;
         border-radius: 2px;
         position: relative;
         cursor: none;
       }
-      .gitem img {
+      .gi img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        filter: brightness(0.75) saturate(0.75);
         transition:
-          transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
           filter 0.5s;
-        filter: brightness(0.8) saturate(0.8);
       }
-      .gitem:hover img {
-        transform: scale(1.06);
+      .gi:hover img {
+        transform: scale(1.07);
         filter: brightness(1) saturate(1.1);
       }
-      .gitem.tall {
+      .gi.tall {
         grid-row: span 2;
       }
-      .gcap {
+      .gi-cap {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 2rem 1.5rem 1.2rem;
-        background: linear-gradient(to top, rgba(8, 8, 8, 0.85), transparent);
+        padding: 2rem 1.4rem 1rem;
+        background: linear-gradient(to top, rgba(8, 8, 8, 0.9), transparent);
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.85rem;
-        letter-spacing: 1.5px;
+        font-size: 0.78rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--cream);
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
         transition:
-          opacity 0.3s,
-          transform 0.3s;
+          opacity 0.35s,
+          transform 0.35s;
       }
-      .gitem:hover .gcap {
+      .gi:hover .gi-cap {
         opacity: 1;
         transform: translateY(0);
       }
+      /* line accent */
+      .gi-cap::before {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 1px;
+        background: var(--fire);
+        margin-bottom: 0.5rem;
+      }
 
-      /* ══════════════════════════════════════════════
+      /* ═══════════════════════════════════════
    DELIVERY CARDS
-══════════════════════════════════════════════ */
-      .delivery {
-        padding: 8rem 4rem;
-        background: var(--mid);
-        border-top: 1px solid var(--border);
-      }
-      .delivery-header {
-        margin-bottom: 5rem;
-      }
-      .delivery-grid {
+═══════════════════════════════════════ */
+      .delivery-sec {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 1px;
-        background: var(--border);
+        border-top: 1px solid var(--border);
       }
-      .dcard {
-        background: var(--mid);
-        padding: 3rem 2.5rem;
-        transition: background 0.3s;
+      .dc {
+        padding: 4rem 2.8rem;
+        border-right: 1px solid var(--border);
         position: relative;
         overflow: hidden;
+        cursor: default;
       }
-      .dcard::before {
+      .dc:last-child {
+        border-right: none;
+      }
+      .dc::before {
         content: "";
         position: absolute;
-        inset: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
         background: var(--fire);
         transform: scaleX(0);
         transform-origin: left;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0.05;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .dcard:hover {
-        background: var(--surface);
-      }
-      .dcard:hover::before {
+      .dc:hover::before {
         transform: scaleX(1);
       }
-      .dcard-num {
+      .dc-n {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 4.5rem;
+        font-size: clamp(3.5rem, 5vw, 5rem);
         color: var(--fire);
         line-height: 1;
-        margin-bottom: 0.3rem;
+        letter-spacing: 1px;
       }
-      .dcard-unit {
-        font-size: 0.65rem;
+      .dc-u {
+        font-size: 0.6rem;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: rgba(232, 48, 11, 0.7);
+        color: rgba(232, 48, 11, 0.6);
         font-weight: 700;
-        margin-bottom: 1.5rem;
+        margin: 0.4rem 0 1.4rem;
       }
-      .dcard-title {
+      .dc-t {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         color: var(--cream);
-        margin-bottom: 0.7rem;
+        margin-bottom: 0.6rem;
       }
-      .dcard-desc {
-        font-size: 0.85rem;
+      .dc-d {
+        font-size: 0.83rem;
         color: var(--muted);
         line-height: 1.7;
       }
+      /* number count up applied by JS */
 
-      /* ══════════════════════════════════════════════
-   TESTIMONIALS — MAGAZINE LAYOUT
-══════════════════════════════════════════════ */
-      .testi {
+      /* ═══════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════ */
+      .testi-sec {
         padding: 8rem 4rem;
-        background: var(--dark);
         border-top: 1px solid var(--border);
       }
       .testi-grid {
         display: grid;
-        grid-template-columns: 1.2fr 1fr 1fr;
-        gap: 2px;
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 1px;
         background: var(--border);
         margin-top: 4rem;
       }
-      .tcard {
+      .tc {
         background: var(--dark);
         padding: 3rem 2.5rem;
-        transition: background 0.3s;
+        position: relative;
+        overflow: hidden;
+        cursor: default;
       }
-      .tcard:hover {
-        background: var(--surface);
+      .tc::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--fire);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .tcard-quote {
+      .tc:hover::after {
+        transform: scaleX(1);
+      }
+      .tc-q {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 5rem;
+        font-size: 6rem;
         color: var(--fire);
-        opacity: 0.2;
-        line-height: 0.8;
+        opacity: 0.15;
+        line-height: 0.7;
         margin-bottom: 1rem;
+        display: block;
       }
-      .tcard-text {
-        font-size: 0.95rem;
+      .tc-stars {
+        color: var(--gold);
+        letter-spacing: 3px;
+        font-size: 0.9rem;
+        margin-bottom: 1.2rem;
+      }
+      .tc-txt {
+        font-size: 0.93rem;
         color: var(--muted);
-        line-height: 1.8;
+        line-height: 1.85;
         margin-bottom: 2rem;
         font-style: italic;
       }
-      .tcard-text em {
+      .tc-txt em {
         color: var(--cream);
         font-style: normal;
         font-weight: 600;
       }
-      .tcard-stars {
-        color: var(--gold);
-        font-size: 0.9rem;
-        letter-spacing: 4px;
-        margin-bottom: 1.5rem;
-      }
-      .tcard-foot {
+      .tc-foot {
         display: flex;
         align-items: center;
         gap: 1rem;
       }
-      .tcard-av {
-        width: 48px;
-        height: 48px;
+      .tc-av {
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         overflow: hidden;
         border: 2px solid var(--border);
         flex-shrink: 0;
       }
-      .tcard-av img {
+      .tc-av img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
-      .tcard-name {
+      .tc-name {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: var(--cream);
       }
-      .tcard-loc {
-        font-size: 0.72rem;
+      .tc-loc {
+        font-size: 0.7rem;
         color: var(--muted);
         margin-top: 0.2rem;
       }
-
-      /* Featured testi */
-      .tcard.featured-t {
-        background: var(--surface);
-      }
-      .tcard.featured-t .tcard-text {
-        font-size: 1.1rem;
+      .tc.big .tc-txt {
+        font-size: 1.05rem;
       }
 
-      /* ══════════════════════════════════════════════
-   CTA BANNER
-══════════════════════════════════════════════ */
-      .cta-banner {
-        padding: 8rem 4rem;
-        background: var(--dark);
+      /* ═══════════════════════════════════════
+   CTA FULL
+═══════════════════════════════════════ */
+      .cta-full {
+        padding: 9rem 4rem;
         text-align: center;
         border-top: 1px solid var(--border);
         position: relative;
         overflow: hidden;
       }
-      .cta-banner::before {
+      .cta-full::before {
         content: "";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 600px;
-        height: 600px;
+        width: 700px;
+        height: 700px;
+        border-radius: 50%;
         background: radial-gradient(
           circle,
-          rgba(232, 48, 11, 0.12) 0%,
+          rgba(232, 48, 11, 0.1) 0%,
           transparent 70%
         );
-        border-radius: 50%;
+        animation: ctaOrb 6s ease-in-out infinite;
       }
-      .cta-big {
+      @keyframes ctaOrb {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.15);
+        }
+      }
+      .cta-ttl {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 10vw, 9rem);
-        line-height: 0.9;
+        font-size: clamp(5rem, 13vw, 12rem);
+        line-height: 0.88;
         letter-spacing: 4px;
         position: relative;
         z-index: 1;
       }
-      .cta-big .stroke {
+      .cta-ttl .stk {
         -webkit-text-stroke: 1.5px var(--cream);
         color: transparent;
       }
       .cta-sub {
-        font-size: 1rem;
+        font-size: 0.97rem;
         color: var(--muted);
-        margin: 2rem auto 3rem;
+        margin: 2.2rem auto 3rem;
         max-width: 400px;
-        line-height: 1.7;
+        line-height: 1.75;
         position: relative;
         z-index: 1;
       }
-      .cta-btns {
+      .cta-actions {
         display: flex;
         gap: 1.2rem;
         justify-content: center;
@@ -1330,129 +1411,137 @@
         z-index: 1;
       }
 
-      /* ══════════════════════════════════════════════
+      /* ═══════════════════════════════════════
    FOOTER
-══════════════════════════════════════════════ */
+═══════════════════════════════════════ */
       footer {
         background: #000;
         border-top: 1px solid var(--border);
         padding: 5rem 4rem 2.5rem;
       }
-      .footer-top {
+      .ft {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr 1fr;
         gap: 4rem;
         margin-bottom: 4rem;
       }
-      .footer-logo-big {
+      .ft-logo {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 3.5rem;
+        font-size: 3.2rem;
         letter-spacing: 4px;
         color: var(--cream);
-        margin-bottom: 1.2rem;
-        display: block;
         text-decoration: none;
+        display: block;
+        margin-bottom: 1rem;
       }
-      .footer-logo-big em {
+      .ft-logo em {
         color: var(--fire);
         font-style: normal;
       }
-      .footer-tagline {
-        font-size: 0.85rem;
+      .ft-desc {
+        font-size: 0.83rem;
         color: var(--muted);
-        line-height: 1.7;
-        max-width: 280px;
-        margin-bottom: 2rem;
+        line-height: 1.75;
+        max-width: 270px;
+        margin-bottom: 1.8rem;
       }
-      .footer-social {
+      .ft-soc {
         display: flex;
-        gap: 1rem;
+        gap: 0.8rem;
       }
-      .fsoc {
-        width: 40px;
-        height: 40px;
+      .ft-s {
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         border: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--muted);
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-decoration: none;
+        font-size: 0.68rem;
+        font-weight: 700;
         letter-spacing: 1px;
+        text-decoration: none;
         transition:
           border-color 0.2s,
           color 0.2s,
-          background 0.2s;
+          transform 0.2s;
+        cursor: none;
       }
-      .fsoc:hover {
+      .ft-s:hover {
         border-color: var(--fire);
         color: var(--fire);
+        transform: translateY(-3px);
       }
 
-      .footer-col-title {
+      .ft-ch {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--cream);
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.4rem;
       }
-      .footer-links {
+      .ft-ul {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 0.75rem;
       }
-      .footer-links a {
+      .ft-ul a {
         color: var(--muted);
         text-decoration: none;
-        font-size: 0.85rem;
-        transition: color 0.2s;
-        display: flex;
+        font-size: 0.83rem;
+        display: inline-flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.5rem;
+        transition:
+          color 0.2s,
+          gap 0.25s;
+        position: relative;
       }
-      .footer-links a::before {
+      .ft-ul a::before {
         content: "→";
         font-size: 0.7rem;
         color: var(--fire);
         opacity: 0;
-        transform: translateX(-6px);
         transition:
           opacity 0.2s,
-          transform 0.2s;
+          transform 0.25s;
+        transform: translateX(-8px);
       }
-      .footer-links a:hover {
+      .ft-ul a:hover {
         color: var(--cream);
+        gap: 0.8rem;
       }
-      .footer-links a:hover::before {
+      .ft-ul a:hover::before {
         opacity: 1;
         transform: translateX(0);
       }
 
-      .footer-bottom {
+      .ft-bot {
         border-top: 1px solid var(--border);
-        padding-top: 2rem;
+        padding-top: 1.8rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
-      .footer-copy {
-        font-size: 0.78rem;
-        color: rgba(242, 234, 214, 0.25);
+      .ft-copy {
+        font-size: 0.75rem;
+        color: rgba(242, 234, 214, 0.2);
       }
-      .footer-phone {
+      .ft-phone {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: var(--cream);
       }
 
-      /* ══ FLOAT ORDER BTN ══ */
-      .float-order {
+      /* ═══════════════════════════════════════
+   FLOAT BUTTON
+═══════════════════════════════════════ */
+      #floatBtn {
         position: fixed;
         bottom: 2.5rem;
         right: 2.5rem;
@@ -1462,187 +1551,192 @@
         border: none;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.8rem 1.8rem;
+        padding: 0.75rem 1.6rem;
         border-radius: 40px;
         cursor: none;
         display: flex;
         align-items: center;
-        gap: 0.7rem;
-        box-shadow: 0 8px 30px rgba(232, 48, 11, 0.5);
+        gap: 0.6rem;
+        box-shadow: 0 8px 30px rgba(232, 48, 11, 0.45);
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
+        pointer-events: none;
         transition:
-          opacity 0.4s,
-          transform 0.4s,
-          box-shadow 0.2s,
-          background 0.2s;
+          opacity 0.35s,
+          transform 0.35s,
+          background 0.2s,
+          box-shadow 0.2s;
       }
-      .float-order.show {
+      #floatBtn.show {
         opacity: 1;
         transform: translateY(0);
+        pointer-events: auto;
       }
-      .float-order:hover {
+      #floatBtn:hover {
         background: #c4250a;
-        box-shadow: 0 15px 40px rgba(232, 48, 11, 0.6);
+        box-shadow: 0 16px 44px rgba(232, 48, 11, 0.6);
       }
-      .float-pulse {
-        width: 8px;
-        height: 8px;
+      .fpulse {
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         background: #fff;
-        animation: pulse 1.4s ease-in-out infinite;
+        animation: fp 1.4s ease-in-out infinite;
       }
-      @keyframes pulse {
+      @keyframes fp {
         0%,
         100% {
           opacity: 1;
           transform: scale(1);
         }
         50% {
-          opacity: 0.3;
-          transform: scale(0.5);
+          opacity: 0.25;
+          transform: scale(0.4);
         }
       }
 
-      /* ══ MOBILE ══ */
+      /* ═══════════════════════════════════════
+   MOBILE
+═══════════════════════════════════════ */
       @media (max-width: 900px) {
-        nav {
-          padding: 1.2rem 1.5rem;
+        nav,
+        .nav-links a:not(:last-child) {
+          padding: 1rem 1.5rem;
         }
-        .nav-links {
+        .nav-links > *:not(:last-child) {
           display: none;
         }
         .hero {
-          padding: 0 1.5rem 4rem;
+          padding: 0 1.5rem 4.5rem;
         }
         .hero-h1 {
-          font-size: clamp(4.5rem, 22vw, 8rem);
+          font-size: clamp(4.8rem, 22vw, 9rem);
         }
         .hero-bottom {
           flex-direction: column;
           align-items: flex-start;
-          gap: 1.5rem;
         }
-        .hero-actions {
-          flex-wrap: wrap;
+        .scroll-cue {
+          right: 1.5rem;
+          bottom: 4rem;
         }
-        .stats-bar {
+        .stats {
           grid-template-columns: 1fr 1fr;
-          padding: 3rem 1.5rem;
         }
-        .stat-cell:nth-child(2)::after {
-          display: none;
+        .stat:nth-child(2) {
+          border-right: none;
         }
-        .menu-section {
-          padding: 5rem 0;
+        .stat:nth-child(3) {
+          border-top: 1px solid var(--border);
         }
-        .menu-header {
+        .menu-head {
           padding: 0 1.5rem 2.5rem;
           flex-direction: column;
-          align-items: flex-start;
           gap: 1rem;
         }
-        .menu-track {
+        .menu-scroll {
           padding: 0 1.5rem 2rem;
-          gap: 1rem;
         }
-        .menu-progress {
+        .mprog {
           margin: 0 1.5rem;
         }
-        .mcard {
-          flex: 0 0 300px;
+        .mc {
+          flex: 0 0 290px;
         }
         .featured {
           grid-template-columns: 1fr;
         }
-        .featured-img-side {
+        .feat-img-wrap {
           height: 55vw;
         }
-        .featured-body {
+        .feat-body {
           padding: 3rem 2rem;
+        }
+        .feat-ttl {
+          font-size: clamp(3rem, 12vw, 5rem);
         }
         .promo {
           flex-direction: column;
           padding: 4rem 2rem;
+          gap: 2rem;
         }
         .promo-right {
           text-align: left;
         }
         .promo-desc {
           margin-left: 0;
-          max-width: 100%;
         }
-        .gallery {
+        .gallery-sec {
           padding: 5rem 1.5rem;
         }
         .gallery-grid {
           grid-template-columns: 1fr 1fr;
-          grid-template-rows: 200px 200px 200px;
+          grid-template-rows: 190px 190px 190px;
         }
-        .gitem.tall {
+        .gi.tall {
           grid-row: span 1;
         }
-        .delivery {
-          padding: 5rem 1.5rem;
-        }
-        .delivery-grid {
+        .delivery-sec {
           grid-template-columns: 1fr 1fr;
         }
-        .testi {
+        .dc:nth-child(2) {
+          border-right: none;
+        }
+        .dc:nth-child(3) {
+          border-top: 1px solid var(--border);
+        }
+        .testi-sec {
           padding: 5rem 1.5rem;
         }
         .testi-grid {
           grid-template-columns: 1fr;
         }
-        .cta-banner {
-          padding: 5rem 1.5rem;
+        .cta-full {
+          padding: 6rem 1.5rem;
         }
         footer {
-          padding: 4rem 1.5rem 2rem;
+          padding: 3.5rem 1.5rem 2rem;
         }
-        .footer-top {
+        .ft {
           grid-template-columns: 1fr 1fr;
           gap: 2.5rem;
         }
-        .float-order {
+        #floatBtn {
           bottom: 1.2rem;
           right: 1.2rem;
-          padding: 0.65rem 1.2rem;
-          font-size: 0.7rem;
         }
       }
     </style>
   </head>
   <body>
     <!-- CURSOR -->
-    <div id="cursor"></div>
-    <div id="cursor-trail"></div>
+    <div id="cur-dot"></div>
+    <div id="cur-ring"></div>
 
-    <!-- FLOAT ORDER -->
+    <!-- FLOAT BTN -->
     <button
-      class="float-order"
-      id="floatOrder"
+      id="floatBtn"
       onclick="
         document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })
       "
     >
-      <div class="float-pulse"></div>
-      <span>Buyurtma berish</span>
+      <div class="fpulse"></div>
+      Buyurtma
     </button>
 
-    <!-- ═══ NAVBAR ═══ -->
-    <nav id="navbar">
-      <a class="nav-logo" href="#">Burger<em>Boss</em></a>
+    <!-- ═══ NAV ═══ -->
+    <nav id="nav">
+      <a class="logo" href="#">Burger<em>Boss</em></a>
       <div class="nav-links">
         <a href="#menu">Menyu</a>
         <a href="#featured">Signature</a>
         <a href="#gallery">Galereya</a>
         <a href="#delivery">Yetkazish</a>
         <button
-          class="nav-cta"
+          class="nav-btn magnetic"
           onclick="
             document
               .getElementById('menu')
@@ -1656,289 +1750,287 @@
 
     <!-- ═══ HERO ═══ -->
     <section class="hero">
-      <div class="hero-bg"></div>
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-vignette"></div>
       <div class="hero-orb"></div>
 
       <div class="hero-content">
         <div class="hero-tag">
           <div class="hero-tag-line"></div>
-          Toshkentning №1 Fast Food
+          <span class="cr cr-d1"
+            ><span class="cr-inner">Toshkentning №1 Fast Food</span></span
+          >
         </div>
         <h1 class="hero-h1">
-          BURGER<br />
-          <span class="outline">BOSS</span>
+          <span class="cr"><span class="cr-inner">BURGER</span></span>
+          <span class="cr cr-d2"
+            ><span class="cr-inner"
+              ><span class="stroke">BOS</span><span class="fire">S</span></span
+            ></span
+          >
         </h1>
         <div class="hero-bottom">
-          <p class="hero-desc">
+          <p class="hero-desc fr fr-d3">
             Har bir tishlamda — <strong>yangi go'sht</strong>, maxsus sous va
-            unutilmas ta'm. Faqat siz uchun, faqat bugun.
+            unutilmas ta'm. Faqat siz uchun.
           </p>
-          <div class="hero-actions">
-            <button
-              class="btn-fire"
-              onclick="
-                document
-                  .getElementById('menu')
-                  .scrollIntoView({ behavior: 'smooth' })
-              "
-            >
-              Menyu ko'rish
-            </button>
-            <button
-              class="btn-outline-fire"
-              onclick="
-                document
-                  .getElementById('delivery')
-                  .scrollIntoView({ behavior: 'smooth' })
-              "
-            >
-              Yetkazib berish
-            </button>
+          <div class="hero-btns fr fr-d4">
+            <div class="magnetic">
+              <button class="btn-fire">Menyu ko'rish</button>
+            </div>
+            <div class="magnetic">
+              <button class="btn-ghost">Yetkazish</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="scroll-ind">
-        <span class="scroll-text">Pastga</span>
-        <div class="scroll-line"></div>
+      <div class="scroll-cue">
+        <span class="scroll-cue-text">Pastga</span>
+        <div class="scroll-cue-line"></div>
       </div>
     </section>
 
     <!-- ═══ MARQUEE ═══ -->
-    <div class="marquee-section">
-      <div class="marquee-track">
-        <!-- repeat x2 for seamless loop -->
-        <div class="marquee-item"><span class="dot"></span> Toza Go'sht</div>
-        <div class="marquee-item"><span class="dot"></span> Har Kuni Yangi</div>
-        <div class="marquee-item">
-          <span class="dot"></span> 30 Daqiqada Yetkazish
+    <div class="marquee-wrap">
+      <div class="marquee-inner">
+        <div class="mq-item"><span class="mq-dot"></span>Toza Go'sht</div>
+        <div class="mq-item"><span class="mq-dot"></span>Har Kuni Yangi</div>
+        <div class="mq-item">
+          <span class="mq-dot"></span>30 Daqiqada Yetkazish
         </div>
-        <div class="marquee-item"><span class="dot"></span> 100% Halol</div>
-        <div class="marquee-item"><span class="dot"></span> Maxsus Sous</div>
-        <div class="marquee-item">
-          <span class="dot"></span> Eksklyuziv Retsept
+        <div class="mq-item"><span class="mq-dot"></span>100% Halol</div>
+        <div class="mq-item"><span class="mq-dot"></span>Maxsus Sous</div>
+        <div class="mq-item">
+          <span class="mq-dot"></span>Eksklyuziv Retsept
         </div>
-        <div class="marquee-item"><span class="dot"></span> Chef's Special</div>
-        <div class="marquee-item"><span class="dot"></span> Toza Go'sht</div>
-        <div class="marquee-item"><span class="dot"></span> Har Kuni Yangi</div>
-        <div class="marquee-item">
-          <span class="dot"></span> 30 Daqiqada Yetkazish
+        <div class="mq-item"><span class="mq-dot"></span>Chef's Special</div>
+        <div class="mq-item"><span class="mq-dot"></span>Toza Go'sht</div>
+        <div class="mq-item"><span class="mq-dot"></span>Har Kuni Yangi</div>
+        <div class="mq-item">
+          <span class="mq-dot"></span>30 Daqiqada Yetkazish
         </div>
-        <div class="marquee-item"><span class="dot"></span> 100% Halol</div>
-        <div class="marquee-item"><span class="dot"></span> Maxsus Sous</div>
-        <div class="marquee-item">
-          <span class="dot"></span> Eksklyuziv Retsept
+        <div class="mq-item"><span class="mq-dot"></span>100% Halol</div>
+        <div class="mq-item"><span class="mq-dot"></span>Maxsus Sous</div>
+        <div class="mq-item">
+          <span class="mq-dot"></span>Eksklyuziv Retsept
         </div>
-        <div class="marquee-item"><span class="dot"></span> Chef's Special</div>
+        <div class="mq-item"><span class="mq-dot"></span>Chef's Special</div>
       </div>
     </div>
 
-    <!-- ═══ STATS BAR ═══ -->
-    <div class="stats-bar">
-      <div class="stat-cell rv">
-        <div class="stat-num">30<span class="stat-unit">daq</span></div>
-        <div class="stat-label">Yetkazish vaqti</div>
+    <!-- ═══ STATS ═══ -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-n" data-to="30">
+          <span class="num">0</span><span class="stat-suffix">daq</span>
+        </div>
+        <div class="stat-l">Yetkazish vaqti</div>
       </div>
-      <div class="stat-cell rv d1">
-        <div class="stat-num">4.9<span class="stat-unit">★</span></div>
-        <div class="stat-label">O'rtacha reyting</div>
+      <div class="stat">
+        <div class="stat-n" data-to="4.9" data-dec="1">
+          <span class="num">0</span><span class="stat-suffix">★</span>
+        </div>
+        <div class="stat-l">O'rtacha reyting</div>
       </div>
-      <div class="stat-cell rv d2">
-        <div class="stat-num">5K<span class="stat-unit">+</span></div>
-        <div class="stat-label">Mamnun mijoz</div>
+      <div class="stat">
+        <div class="stat-n" data-to="5">
+          <span class="num">0</span><span class="stat-suffix">K+</span>
+        </div>
+        <div class="stat-l">Mamnun mijoz</div>
       </div>
-      <div class="stat-cell rv d3">
-        <div class="stat-num">24<span class="stat-unit">/7</span></div>
-        <div class="stat-label">Doim ochiq</div>
+      <div class="stat">
+        <div class="stat-n" data-to="24">
+          <span class="num">0</span><span class="stat-suffix">/7</span>
+        </div>
+        <div class="stat-l">Doim ochiq</div>
       </div>
     </div>
 
     <!-- ═══ MENU ═══ -->
-    <section class="menu-section" id="menu">
-      <div class="menu-header">
-        <div class="rv">
-          <div class="section-eyebrow">Bizning taomlar</div>
-          <h2 class="section-title">
-            MASHHUR<br /><span class="stroke">MENYULAR</span>
+    <section class="menu-sec" id="menu">
+      <div class="menu-head">
+        <div>
+          <div class="s-eye fr"><span>Bizning taomlar</span></div>
+          <h2 class="s-ttl">
+            <span class="cr"><span class="cr-inner">MASHHUR</span></span>
+            <span class="cr cr-d1"
+              ><span class="cr-inner"
+                ><span class="stk">MENYULAR</span></span
+              ></span
+            >
           </h2>
         </div>
-        <p
-          class="rv d2"
-          style="
-            color: var(--muted);
-            font-size: 0.85rem;
-            line-height: 1.7;
-            max-width: 280px;
-          "
-        >
-          Kartochkani o'ngga suring va sevimli taomingizni tanlang
+        <p class="menu-hint fr fr-d2">
+          Kartochkani o'ngga suring — sevimlingizni tanlang
         </p>
       </div>
 
-      <div class="menu-track-wrap">
-        <div class="menu-track" id="menuTrack">
-          <!-- Card 1 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <div class="mcard-badge">🔥 Bestseller</div>
-              <img
-                src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=85"
-                alt="Boss Double"
-              />
-              <div class="mcard-img-overlay"></div>
-            </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Boss Double</div>
-              <div class="mcard-desc">
-                Qo'sh beef patty, smoked cheddar, crispy bacon va maxsus
-                BossSauce.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">49 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
-            </div>
+      <div class="menu-scroll" id="menuScroll">
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <div class="mc-badge">🔥 Bestseller</div>
+            <img
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=85"
+              alt="Boss Double"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">49 000 so'm</div>
           </div>
-
-          <!-- Card 2 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <div class="mcard-badge gold">★ Yangi</div>
-              <img
-                src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=700&q=85"
-                alt="Crispy Chicken"
-              />
-              <div class="mcard-img-overlay"></div>
+          <div class="mc-body">
+            <div class="mc-name">Boss Double</div>
+            <div class="mc-desc">
+              Qo'sh beef patty, smoked cheddar, crispy bacon va maxsus
+              BossSauce.
             </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Crispy Chicken</div>
-              <div class="mcard-desc">
-                Buttermilk marinad, qovurilgan fillet, coleslaw va honey-mustard
-                sous.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">38 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <div class="mcard-badge spicy">🌶 Achchiq</div>
-              <img
-                src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=700&q=85"
-                alt="Spicy Smash"
-              />
-              <div class="mcard-img-overlay"></div>
-            </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Spicy Smash</div>
-              <div class="mcard-desc">
-                Smash-patty usulida, jalapeño, chipotle mayo va iceberg lettuce.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">42 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <img
-                src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=85"
-                alt="Boss Fries"
-              />
-              <div class="mcard-img-overlay"></div>
-            </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Boss Fries</div>
-              <div class="mcard-desc">
-                Texnik qovurilgan, deniz tuzi va mozzarella sous bilan.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">18 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <img
-                src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&q=85"
-                alt="Stone Pizza"
-              />
-              <div class="mcard-img-overlay"></div>
-            </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Stone Pizza</div>
-              <div class="mcard-desc">
-                Tosh tandirda pishirilgan, San-Marzano tomato va fior di latte.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">55 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 6 -->
-          <div class="mcard">
-            <div class="mcard-img">
-              <img
-                src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&q=85"
-                alt="Thick Shake"
-              />
-              <div class="mcard-img-overlay"></div>
-            </div>
-            <div class="mcard-body">
-              <div class="mcard-name">Thick Shake</div>
-              <div class="mcard-desc">
-                Vanilla, shokolad yoki strawberry — qalin, sovuq va to'liq
-                huzur.
-              </div>
-              <div class="mcard-footer">
-                <div class="mcard-price">22 000</div>
-                <button class="mcard-btn"><span>+ Savatga</span></button>
-              </div>
+            <div class="mc-foot">
+              <div class="mc-price">49 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
-        <!-- /menu-track -->
+
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <div class="mc-badge gld">★ Yangi</div>
+            <img
+              src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=700&q=85"
+              alt="Crispy Chicken"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">38 000 so'm</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">Crispy Chicken</div>
+            <div class="mc-desc">
+              Buttermilk marinad, qovurilgan fillet, coleslaw va honey-mustard
+              sous.
+            </div>
+            <div class="mc-foot">
+              <div class="mc-price">38 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <div class="mc-badge spc">🌶 Achchiq</div>
+            <img
+              src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=700&q=85"
+              alt="Spicy Smash"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">42 000 so'm</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">Spicy Smash</div>
+            <div class="mc-desc">
+              Smash-patty usulida, jalapeño, chipotle mayo va iceberg lettuce.
+            </div>
+            <div class="mc-foot">
+              <div class="mc-price">42 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <img
+              src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=85"
+              alt="Boss Fries"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">18 000 so'm</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">Boss Fries</div>
+            <div class="mc-desc">
+              Texnik qovurilgan, deniz tuzi va mozzarella sous bilan.
+            </div>
+            <div class="mc-foot">
+              <div class="mc-price">18 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <img
+              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&q=85"
+              alt="Stone Pizza"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">55 000 so'm</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">Stone Pizza</div>
+            <div class="mc-desc">
+              Tosh tandirda pishirilgan, San-Marzano tomato va fior di latte.
+            </div>
+            <div class="mc-foot">
+              <div class="mc-price">55 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mc" data-tilt>
+          <div class="mc-img">
+            <img
+              src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&q=85"
+              alt="Thick Shake"
+            />
+            <div class="mc-img-ov"></div>
+            <div class="mc-hover-tag">22 000 so'm</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">Thick Shake</div>
+            <div class="mc-desc">
+              Vanilla, shokolad yoki strawberry — qalin, sovuq va to'liq huzur.
+            </div>
+            <div class="mc-foot">
+              <div class="mc-price">22 000</div>
+              <button class="mc-btn"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="menu-progress" style="margin-top: 1.5rem">
-        <div class="menu-progress-fill" id="menuFill"></div>
-      </div>
+      <div class="mprog"><div class="mprog-f" id="mpf"></div></div>
     </section>
 
     <!-- ═══ FEATURED ═══ -->
     <section class="featured" id="featured">
-      <div class="featured-img-side">
+      <div class="feat-img-wrap">
         <img
+          class="feat-img"
+          id="featImg"
           src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=1000&q=90"
-          alt="Wagyu Signature"
+          alt="Wagyu"
         />
-        <div class="featured-overlay"></div>
-        <div class="featured-info-card">
-          <div class="fic-label">Chef's Special</div>
-          <div class="fic-name">Wagyu Signature</div>
-          <div class="fic-rating">★★★★★</div>
+        <div class="feat-img-ov"></div>
+        <div class="feat-info">
+          <div class="fi-lbl">Chef's Special</div>
+          <div class="fi-name">Wagyu Signature</div>
+          <div class="fi-stars">★★★★★</div>
         </div>
       </div>
-      <div class="featured-body">
-        <div class="section-eyebrow rv">Tavsiyamiz</div>
-        <h2 class="feat-big-title rv d1">WAGYU<br /><em>SIGNATURE</em></h2>
-        <p class="feat-desc rv d2">
+      <div class="feat-body">
+        <div class="s-eye fr">Tavsiyamiz</div>
+        <h2 class="feat-ttl">
+          <span class="cr"><span class="cr-inner">WAGYU</span></span>
+          <span class="cr cr-d1"
+            ><span class="cr-inner"><em>SIGNATURE</em></span></span
+          >
+        </h2>
+        <p class="feat-txt fr fr-d2">
           Yaponiya A5 Wagyu go'shtidan tayyorlangan, qo'l yoğurma briosh non,
           truffle mayo va french mustard bilan xizmat qilinadi.
         </p>
-        <div class="feat-tags rv d2">
+        <div class="feat-tags fr fr-d2">
           <span class="feat-tag">A5 Wagyu</span>
           <span class="feat-tag">Brioche Bun</span>
           <span class="feat-tag">Truffle Mayo</span>
@@ -1946,60 +2038,67 @@
           <span class="feat-tag">Caramelized Onion</span>
           <span class="feat-tag">Arugula</span>
         </div>
-        <div class="feat-price-row rv d3">
-          <div class="feat-price">89 000</div>
-          <div
-            class="feat-price-note"
-            style="color: var(--muted); font-size: 0.78rem; line-height: 1.6"
-          >
-            so'm / bir porsiya<br />Cheklangan miqdorda
-          </div>
+        <div class="feat-price fr fr-d3">
+          <span class="cnt" data-to="89">0</span> 000
+          <span style="font-size: 1.5rem; color: var(--muted)">so'm</span>
         </div>
-        <button class="btn-fire rv d3">Buyurtma berish</button>
+        <div class="magnetic fr fr-d4">
+          <button class="btn-fire">Buyurtma berish</button>
+        </div>
       </div>
     </section>
 
     <!-- ═══ PROMO ═══ -->
-    <div class="promo rv">
-      <div class="promo-left">
-        <div class="promo-eyebrow">Bugungi aksiya</div>
+    <div class="promo">
+      <div>
+        <div class="promo-sub">Bugungi aksiya</div>
         <h2 class="promo-h2">BIRINCHI<br />BUYURTMA<br />–20%</h2>
       </div>
       <div class="promo-right">
-        <div class="promo-code-label">Promo kod</div>
-        <div class="promo-code">BOSS20</div>
-        <p class="promo-desc">
-          Birinchi buyurtmangizda 20% chegirma. Faqat onlayn. Muddati: bugun
-          tungi 00:00 gacha.
-        </p>
-        <button
-          class="btn-fire"
+        <div
           style="
-            margin-top: 1.5rem;
-            background: rgba(0, 0, 0, 0.25);
-            box-shadow: none;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 0.62rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 700;
+            margin-bottom: 0.7rem;
           "
         >
-          Hozir buyurtma
-        </button>
+          Promo kod
+        </div>
+        <div class="promo-code">BOSS20</div>
+        <p class="promo-desc">
+          Birinchi buyurtmangizda 20% chegirma. Faqat onlayn. Muddati
+          cheklangan.
+        </p>
+        <div class="magnetic" style="margin-top: 1.5rem">
+          <button
+            class="btn-fire"
+            style="
+              background: rgba(0, 0, 0, 0.25);
+              box-shadow: none;
+              border: 1px solid rgba(255, 255, 255, 0.25);
+            "
+          >
+            Hozir buyurtma
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- ═══ GALLERY ═══ -->
-    <section class="gallery" id="gallery">
-      <div class="gallery-header rv">
+    <section class="gallery-sec" id="gallery">
+      <div class="gallery-head fr">
         <div>
-          <div class="section-eyebrow">Atmosfera</div>
-          <h2 class="section-title">
-            BIZNING <span class="stroke">GALEREYA</span>
-          </h2>
+          <div class="s-eye">Atmosfera</div>
+          <h2 class="s-ttl">BIZNING <span class="stk">GALEREYA</span></h2>
         </div>
         <p
           style="
             color: var(--muted);
-            font-size: 0.85rem;
-            max-width: 220px;
+            font-size: 0.83rem;
+            max-width: 210px;
             line-height: 1.7;
           "
         >
@@ -2007,333 +2106,517 @@
         </p>
       </div>
       <div class="gallery-grid">
-        <div class="gitem tall">
+        <div class="gi tall">
           <img
             src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=85"
             alt="Interer"
           />
-          <div class="gcap">Zamonaviy interer</div>
+          <div class="gi-cap">Zamonaviy interer</div>
         </div>
-        <div class="gitem">
+        <div class="gi">
           <img
             src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=85"
             alt="Grill"
           />
-          <div class="gcap">Ochiq oshxona</div>
+          <div class="gi-cap">Ochiq oshxona</div>
         </div>
-        <div class="gitem">
+        <div class="gi">
           <img
             src="https://images.unsplash.com/photo-1616645255967-9e8cf2a2bc67?w=600&q=85"
             alt="Burger"
           />
-          <div class="gcap">Har bir detal muhim</div>
+          <div class="gi-cap">Har bir detal muhim</div>
         </div>
-        <div class="gitem">
+        <div class="gi">
           <img
             src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=600&q=85"
             alt="Fresh"
           />
-          <div class="gcap">Yangi ingredientlar</div>
+          <div class="gi-cap">Yangi ingredientlar</div>
         </div>
-        <div class="gitem">
+        <div class="gi">
           <img
             src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=85"
             alt="Set"
           />
-          <div class="gcap">Klassik to'plam</div>
+          <div class="gi-cap">Klassik to'plam</div>
         </div>
       </div>
     </section>
 
     <!-- ═══ DELIVERY ═══ -->
-    <section class="delivery" id="delivery">
-      <div class="delivery-header">
-        <div class="section-eyebrow rv">Nima uchun biz?</div>
-        <h2 class="section-title rv d1">
-          BIZNING <span style="color: var(--gold)">AFZALLIKLAR</span>
-        </h2>
+    <section class="delivery-sec" id="delivery">
+      <div class="dc">
+        <div class="dc-n"><span class="cnt" data-to="30">0</span></div>
+        <div class="dc-u">Daqiqa</div>
+        <div class="dc-t">Tez yetkazish</div>
+        <div class="dc-d">
+          Kechiksa — keyingi buyurtma bepul. Bu bizning va'damiz.
+        </div>
       </div>
-      <div class="delivery-grid">
-        <div class="dcard rv">
-          <div class="dcard-num">30</div>
-          <div class="dcard-unit">Daqiqa</div>
-          <div class="dcard-title">Tez yetkazish</div>
-          <div class="dcard-desc">
-            Kechiksa — keyingi buyurtma bepul. Bu bizning va'damiz.
-          </div>
+      <div class="dc">
+        <div class="dc-n"><span class="cnt" data-to="100">0</span></div>
+        <div class="dc-u">% Halol</div>
+        <div class="dc-t">Sertifikatlangan</div>
+        <div class="dc-d">Barcha mahsulotlarimiz halol sertifikatiga ega.</div>
+      </div>
+      <div class="dc">
+        <div class="dc-n">
+          <span class="cnt" data-to="4" data-dec="1" data-str="4.9">4.9</span>
         </div>
-        <div class="dcard rv d1">
-          <div class="dcard-num">100%</div>
-          <div class="dcard-unit">Halol</div>
-          <div class="dcard-title">Sertifikatlangan</div>
-          <div class="dcard-desc">
-            Barcha mahsulotlarimiz halol sertifikatiga ega. Xavfsiz va sifatli.
-          </div>
+        <div class="dc-u">Reyting ★</div>
+        <div class="dc-t">Eng yuqori baho</div>
+        <div class="dc-d">5000+ mamnun mijozimiz bizni tavsiya qiladi.</div>
+      </div>
+      <div class="dc">
+        <div class="dc-n">
+          <span class="cnt" data-to="24">0</span
+          ><span style="font-size: 0.45em; color: var(--gold)">/7</span>
         </div>
-        <div class="dcard rv d2">
-          <div class="dcard-num">4.9</div>
-          <div class="dcard-unit">Reyting ★</div>
-          <div class="dcard-title">Eng yuqori baho</div>
-          <div class="dcard-desc">
-            5000+ mamnun mijozimiz bizni tavsiya qiladi.
-          </div>
-        </div>
-        <div class="dcard rv d3">
-          <div class="dcard-num">24/7</div>
-          <div class="dcard-unit">Ochiq</div>
-          <div class="dcard-title">Doim xizmatda</div>
-          <div class="dcard-desc">Tun yarmimi yoki tong — biz doim tayyor.</div>
-        </div>
+        <div class="dc-u">Ochiq</div>
+        <div class="dc-t">Doim xizmatda</div>
+        <div class="dc-d">Tun yarmimi yoki tong — biz doim tayyor.</div>
       </div>
     </section>
 
     <!-- ═══ TESTIMONIALS ═══ -->
-    <section class="testi">
-      <div class="section-eyebrow rv">Mijozlar fikri</div>
-      <h2 class="section-title rv d1">
-        ULAR <span style="color: var(--fire)">GAPIRADI</span>
+    <section class="testi-sec">
+      <div class="s-eye fr">Mijozlar fikri</div>
+      <h2 class="s-ttl">
+        <span class="cr"><span class="cr-inner">ULAR</span></span>
+        <span class="cr cr-d1"
+          ><span class="cr-inner"
+            ><span style="color: var(--fire)">GAPIRADI</span></span
+          ></span
+        >
       </h2>
       <div class="testi-grid">
-        <div class="tcard featured-t rv">
-          <div class="tcard-quote">"</div>
-          <div class="tcard-stars">★★★★★</div>
-          <p class="tcard-text">
+        <div class="tc big fr">
+          <span class="tc-q">"</span>
+          <div class="tc-stars">★★★★★</div>
+          <p class="tc-txt">
             "<em>Boss Double burgerini tatib ko'rdim</em> — bu umrimda yeganim
             eng mazali burger. Sous va go'sht kombinatsiyasi — ajoyib! Har
-            haftada kamida bir marta buyurtma beraman."
+            haftada buyurtma beraman."
           </p>
-          <div class="tcard-foot">
-            <div class="tcard-av">
+          <div class="tc-foot">
+            <div class="tc-av">
               <img
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"
                 alt="Jasur"
               />
             </div>
             <div>
-              <div class="tcard-name">Jasur T.</div>
-              <div class="tcard-loc">Yunusobod, Toshkent</div>
+              <div class="tc-name">Jasur T.</div>
+              <div class="tc-loc">Yunusobod, Toshkent</div>
             </div>
           </div>
         </div>
-        <div class="tcard rv d1">
-          <div class="tcard-quote">"</div>
-          <div class="tcard-stars">★★★★★</div>
-          <p class="tcard-text">
+        <div class="tc fr fr-d1">
+          <span class="tc-q">"</span>
+          <div class="tc-stars">★★★★★</div>
+          <p class="tc-txt">
             "Tez va issiq yetkazib berishdi!
-            <em>Pizza va frilar juda yaxshi.</em> Har hafta 2-3 marta buyurtma
-            beraman."
+            <em>Pizza va frilar juda yaxshi.</em>"
           </p>
-          <div class="tcard-foot">
-            <div class="tcard-av">
+          <div class="tc-foot">
+            <div class="tc-av">
               <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
                 alt="Nilufar"
               />
             </div>
             <div>
-              <div class="tcard-name">Nilufar X.</div>
-              <div class="tcard-loc">Chilonzor, Toshkent</div>
+              <div class="tc-name">Nilufar X.</div>
+              <div class="tc-loc">Chilonzor, Toshkent</div>
             </div>
           </div>
         </div>
-        <div class="tcard rv d2">
-          <div class="tcard-quote">"</div>
-          <div class="tcard-stars">★★★★★</div>
-          <p class="tcard-text">
+        <div class="tc fr fr-d2">
+          <span class="tc-q">"</span>
+          <div class="tc-stars">★★★★★</div>
+          <p class="tc-txt">
             "<em>Wagyu Signature</em> — hayotingiz o'zgaradi. App orqali
-            buyurtma juda qulay va tez!"
+            buyurtma juda qulay!"
           </p>
-          <div class="tcard-foot">
-            <div class="tcard-av">
+          <div class="tc-foot">
+            <div class="tc-av">
               <img
                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80"
                 alt="Sherzod"
               />
             </div>
             <div>
-              <div class="tcard-name">Sherzod M.</div>
-              <div class="tcard-loc">Mirzo Ulug'bek, Toshkent</div>
+              <div class="tc-name">Sherzod M.</div>
+              <div class="tc-loc">Mirzo Ulug'bek, Toshkent</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ CTA BANNER ═══ -->
-    <div class="cta-banner">
-      <h2 class="cta-big rv">
-        BUYURTMA<br /><span class="stroke">BERING</span>
+    <!-- ═══ CTA ═══ -->
+    <div class="cta-full">
+      <h2 class="cta-ttl">
+        <span class="cr"><span class="cr-inner">BUYURTMA</span></span>
+        <span class="cr cr-d1"
+          ><span class="cr-inner"><span class="stk">BERING</span></span></span
+        >
       </h2>
-      <p class="cta-sub rv d1">
-        30 daqiqada eshigingizga yetkazamiz. Birinchi buyurtmada BOSS20 kodi
-        bilan 20% chegirma!
+      <p class="cta-sub fr fr-d2">
+        30 daqiqada eshigingizga yetkazamiz. BOSS20 kodi bilan 20% chegirma!
       </p>
-      <div class="cta-btns rv d2">
-        <button
-          class="btn-fire"
-          onclick="
-            document
-              .getElementById('menu')
-              .scrollIntoView({ behavior: 'smooth' })
-          "
-        >
-          Hozir buyurtma
-        </button>
-        <button
-          class="btn-outline-fire"
-          onclick="
-            document
-              .getElementById('delivery')
-              .scrollIntoView({ behavior: 'smooth' })
-          "
-        >
-          Yetkazish haqida
-        </button>
+      <div class="cta-actions fr fr-d3">
+        <div class="magnetic">
+          <button
+            class="btn-fire"
+            onclick="
+              document
+                .getElementById('menu')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Hozir buyurtma
+          </button>
+        </div>
+        <div class="magnetic">
+          <button
+            class="btn-ghost"
+            onclick="
+              document
+                .getElementById('delivery')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Yetkazish haqida
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- ═══ FOOTER ═══ -->
     <footer>
-      <div class="footer-top">
+      <div class="ft">
         <div>
-          <a class="footer-logo-big" href="#">Burger<em>Boss</em></a>
-          <p class="footer-tagline">
+          <a class="ft-logo" href="#">Burger<em>Boss</em></a>
+          <p class="ft-desc">
             Toshkentning №1 fast food — yangi go'sht, maxsus sous va 30 daqiqada
             yetkazish.
           </p>
-          <div class="footer-social">
-            <a class="fsoc" href="#">IG</a>
-            <a class="fsoc" href="#">TG</a>
-            <a class="fsoc" href="#">TK</a>
+          <div class="ft-soc">
+            <a class="ft-s" href="#">IG</a>
+            <a class="ft-s" href="#">TG</a>
+            <a class="ft-s" href="#">TK</a>
           </div>
         </div>
         <div>
-          <div class="footer-col-title">Manzil</div>
-          <ul class="footer-links">
+          <div class="ft-ch">Manzil</div>
+          <ul class="ft-ul">
             <li><a href="#">Mustaqillik sh. 24</a></li>
             <li><a href="#">Yunusobod tumani</a></li>
-            <li><a href="#">Toshkent shahri</a></li>
             <li><a href="#">10:00 – 00:00</a></li>
           </ul>
         </div>
         <div>
-          <div class="footer-col-title">Havolalar</div>
-          <ul class="footer-links">
+          <div class="ft-ch">Havolalar</div>
+          <ul class="ft-ul">
             <li><a href="#menu">Menyu</a></li>
             <li><a href="#featured">Signature</a></li>
             <li><a href="#delivery">Yetkazish</a></li>
             <li><a href="#">Franchayzing</a></li>
-            <li><a href="#">Ish o'rinlari</a></li>
           </ul>
         </div>
         <div>
-          <div class="footer-col-title">Aloqa</div>
-          <ul class="footer-links">
-            <li><a href="tel:+998711234567">+998 71 123-45-67</a></li>
-            <li><a href="mailto:info@burgerboss.uz">info@burgerboss.uz</a></li>
+          <div class="ft-ch">Aloqa</div>
+          <ul class="ft-ul">
+            <li><a href="#">+998 71 123-45-67</a></li>
+            <li><a href="#">info@burgerboss.uz</a></li>
             <li><a href="#">Telegram bot</a></li>
           </ul>
         </div>
       </div>
-      <div class="footer-bottom">
-        <div class="footer-copy">
+      <div class="ft-bot">
+        <div class="ft-copy">
           © 2025 BurgerBoss. Barcha huquqlar himoyalangan.
         </div>
-        <div class="footer-phone">+998 71 123-45-67</div>
+        <div class="ft-phone">+998 71 123-45-67</div>
       </div>
     </footer>
 
+    <!-- ═══════════════════════════════════════
+   JAVASCRIPT — ALL ANIMATIONS
+═══════════════════════════════════════ -->
     <script>
-      /* ═══ CURSOR ═══ */
-      const cur = document.getElementById("cursor");
-      const trail = document.getElementById("cursor-trail");
+      /* ── CURSOR ── */
+      const dot = document.getElementById("cur-dot");
+      const ring = document.getElementById("cur-ring");
+      let mx = 0,
+        my = 0;
       document.addEventListener("mousemove", (e) => {
-        cur.style.left = e.clientX + "px";
-        cur.style.top = e.clientY + "px";
-        setTimeout(() => {
-          trail.style.left = e.clientX + "px";
-          trail.style.top = e.clientY + "px";
-        }, 80);
+        mx = e.clientX;
+        my = e.clientY;
+        dot.style.left = mx + "px";
+        dot.style.top = my + "px";
+        ring.style.left = mx + "px";
+        ring.style.top = my + "px";
       });
+      document
+        .querySelectorAll("a, button, .mc, .gi, .tc, .stat, .dc")
+        .forEach((el) => {
+          el.addEventListener("mouseenter", () =>
+            document.body.classList.add("cur-hover"),
+          );
+          el.addEventListener("mouseleave", () =>
+            document.body.classList.remove("cur-hover"),
+          );
+        });
+      document
+        .querySelectorAll(
+          ".btn-fire,.btn-ghost,.nav-btn,.mc-btn,.magnetic button",
+        )
+        .forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            document.body.classList.add("cur-btn");
+            document.body.classList.remove("cur-hover");
+          });
+          el.addEventListener("mouseleave", () =>
+            document.body.classList.remove("cur-btn"),
+          );
+        });
 
-      /* ═══ NAVBAR SCROLL ═══ */
-      const navbar = document.getElementById("navbar");
-      const floatOrder = document.getElementById("floatOrder");
+      /* ── NAVBAR SCROLL ── */
+      const nav = document.getElementById("nav");
+      const fb = document.getElementById("floatBtn");
       window.addEventListener(
         "scroll",
         () => {
-          if (window.scrollY > 80) navbar.classList.add("scrolled");
-          else navbar.classList.remove("scrolled");
-          if (window.scrollY > 400) floatOrder.classList.add("show");
-          else floatOrder.classList.remove("show");
+          nav.classList.toggle("stuck", window.scrollY > 60);
+          fb.classList.toggle("show", window.scrollY > 500);
         },
         { passive: true },
       );
 
-      /* ═══ SCROLL REVEAL ═══ */
+      /* ── HERO PARALLAX ── */
+      const heroBg = document.getElementById("heroBg");
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (window.scrollY < window.innerHeight) {
+            heroBg.style.transform = `translateY(${window.scrollY * 0.35}px)`;
+          }
+        },
+        { passive: true },
+      );
+
+      /* ── FEATURED IMG PARALLAX ── */
+      const featImg = document.getElementById("featImg");
+      if (featImg) {
+        window.addEventListener(
+          "scroll",
+          () => {
+            const rect = featImg
+              .closest(".feat-img-wrap")
+              .getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              const pct =
+                (window.innerHeight - rect.top) /
+                (window.innerHeight + rect.height);
+              featImg.style.transform = `translateY(${(pct - 0.5) * -60}px)`;
+            }
+          },
+          { passive: true },
+        );
+      }
+
+      /* ── INTERSECTION OBSERVER for clip-path + fade reveals ── */
       const io = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
             if (e.isIntersecting) {
-              e.target.classList.add("visible");
+              e.target.classList.add("active");
               io.unobserve(e.target);
             }
           });
         },
-        { threshold: 0.1 },
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll(".cr,.fr,.sl").forEach((el) => io.observe(el));
+
+      /* trigger hero immediately */
+      setTimeout(() => {
+        document
+          .querySelectorAll(".hero .cr,.hero .fr")
+          .forEach((el) => el.classList.add("active"));
+      }, 100);
+
+      /* ── COUNTER ANIMATION ── */
+      function animateCounter(el) {
+        const target = parseFloat(el.dataset.to);
+        const dec = parseInt(el.dataset.dec || "0");
+        const str = el.dataset.str;
+        if (str) {
+          el.textContent = str;
+          return;
+        }
+        const dur = 1600;
+        const start = performance.now();
+        function step(now) {
+          const t = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - t, 3);
+          el.textContent = (target * ease).toFixed(dec);
+          if (t < 1) requestAnimationFrame(step);
+          else el.textContent = target.toFixed(dec);
+        }
+        requestAnimationFrame(step);
+      }
+      const cntObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.querySelectorAll(".cnt,.num").forEach(animateCounter);
+              cntObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.3 },
       );
       document
-        .querySelectorAll(".rv,.rv-l,.rv-r")
-        .forEach((el) => io.observe(el));
+        .querySelectorAll(".stats,.delivery-sec,.feat-body")
+        .forEach((s) => cntObs.observe(s));
 
-      /* ═══ MENU DRAG SCROLL ═══ */
-      const track = document.getElementById("menuTrack");
-      const fill = document.getElementById("menuFill");
-      let isDown = false,
-        startX,
-        scrollLeft;
-
-      track.addEventListener("mousedown", (e) => {
-        isDown = true;
-        track.classList.add("grabbing");
-        startX = e.pageX - track.offsetLeft;
-        scrollLeft = track.scrollLeft;
-      });
-      track.addEventListener("mouseleave", () => {
-        isDown = false;
-        track.classList.remove("grabbing");
-      });
-      track.addEventListener("mouseup", () => {
-        isDown = false;
-        track.classList.remove("grabbing");
-      });
-      track.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - track.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        track.scrollLeft = scrollLeft - walk;
-      });
-      track.addEventListener("scroll", () => {
-        const pct = track.scrollLeft / (track.scrollWidth - track.clientWidth);
-        fill.style.width = 25 + pct * 75 + "%";
-      });
-
-      /* ═══ ADD TO CART ═══ */
-      document.querySelectorAll(".mcard-btn").forEach((btn) => {
-        btn.addEventListener("click", function () {
-          const sp = this.querySelector("span");
-          if (sp.textContent.includes("Qoshildi")) return;
-          sp.textContent = "✓ Qo'shildi";
-          this.style.background = "rgba(40,120,60,.8)";
-          this.style.borderColor = "rgba(40,120,60,.8)";
-          setTimeout(() => {
-            sp.textContent = "+ Savatga";
-            this.style.background = "";
-            this.style.borderColor = "";
-          }, 2200);
+      /* ── MAGNETIC BUTTONS ── */
+      document.querySelectorAll(".magnetic").forEach((wrap) => {
+        const btn = wrap.querySelector("button, a") || wrap;
+        wrap.addEventListener("mousemove", (e) => {
+          const r = wrap.getBoundingClientRect();
+          const cx = r.left + r.width / 2,
+            cy = r.top + r.height / 2;
+          const dx = (e.clientX - cx) * 0.3,
+            dy = (e.clientY - cy) * 0.3;
+          btn.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+        wrap.addEventListener("mouseleave", () => {
+          btn.style.transform = "translate(0,0)";
         });
       });
+
+      /* ── 3D TILT on menu cards ── */
+      document.querySelectorAll("[data-tilt]").forEach((card) => {
+        card.addEventListener("mousemove", (e) => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transform =
+            "perspective(900px) rotateY(0) rotateX(0) scale(1)";
+          card.style.transition =
+            "transform .6s cubic-bezier(.4,0,.2,1),box-shadow .4s,border-color .4s";
+          setTimeout(() => (card.style.transition = ""), 600);
+        });
+        card.addEventListener("mouseenter", () => {
+          card.style.transition =
+            "transform .1s,box-shadow .4s,border-color .4s";
+        });
+      });
+
+      /* ── TEXT SCRAMBLE on card names (hover) ── */
+      const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$";
+      function scramble(el) {
+        const orig = el.dataset.orig || el.textContent;
+        el.dataset.orig = orig;
+        let frame = 0,
+          total = 20;
+        clearInterval(el._sc);
+        el._sc = setInterval(() => {
+          el.textContent = orig
+            .split("")
+            .map((c, i) => {
+              if (c === " ") return " ";
+              if (frame / total > i / orig.length) return c;
+              return CHARS[Math.floor(Math.random() * CHARS.length)];
+            })
+            .join("");
+          frame++;
+          if (frame >= total) {
+            el.textContent = orig;
+            clearInterval(el._sc);
+          }
+        }, 30);
+      }
+      document.querySelectorAll(".mc-name").forEach((el) => {
+        el.closest(".mc").addEventListener("mouseenter", () => scramble(el));
+      });
+
+      /* ── MENU DRAG SCROLL ── */
+      const ms = document.getElementById("menuScroll");
+      const mpf = document.getElementById("mpf");
+      let isDown = false,
+        startX,
+        sLeft;
+      ms.addEventListener("mousedown", (e) => {
+        isDown = true;
+        ms.classList.add("dragging");
+        startX = e.pageX - ms.offsetLeft;
+        sLeft = ms.scrollLeft;
+      });
+      ms.addEventListener("mouseleave", () => {
+        isDown = false;
+        ms.classList.remove("dragging");
+      });
+      ms.addEventListener("mouseup", () => {
+        isDown = false;
+        ms.classList.remove("dragging");
+      });
+      ms.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - ms.offsetLeft;
+        ms.scrollLeft = sLeft - (x - startX) * 1.4;
+      });
+      ms.addEventListener(
+        "scroll",
+        () => {
+          const p = ms.scrollLeft / (ms.scrollWidth - ms.clientWidth);
+          mpf.style.width = 20 + p * 80 + "%";
+        },
+        { passive: true },
+      );
+
+      /* ── ADD TO CART ── */
+      document.querySelectorAll(".mc-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.classList.contains("added")) return;
+          btn.classList.add("added");
+          btn.querySelector("span").textContent = "✓ Qo'shildi";
+          setTimeout(() => {
+            btn.classList.remove("added");
+            btn.querySelector("span").textContent = "+ Savatga";
+          }, 2400);
+        });
+      });
+
+      /* ── NAV LINK active highlight on scroll ── */
+      const sections = ["menu", "featured", "gallery", "delivery"];
+      window.addEventListener(
+        "scroll",
+        () => {
+          const y = window.scrollY + 120;
+          sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+            if (!link) return;
+            if (el.offsetTop <= y && el.offsetTop + el.offsetHeight > y) {
+              link.style.color = "var(--cream)";
+            } else {
+              link.style.color = "";
+            }
+          });
+        },
+        { passive: true },
+      );
     </script>
   </body>
 </html>
