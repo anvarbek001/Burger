@@ -1,0 +1,2634 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BurgerBoss — Toshkent's #1 Fast Food</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --fire: #e8300b;
+        --gold: #f5a623;
+        --dark: #0c0c0c;
+        --card-bg: #141414;
+        --surface: #1a1a1a;
+        --cream: #f5edd8;
+        --muted: rgba(245, 237, 216, 0.55);
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--dark);
+        color: var(--cream);
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* ══════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════ */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        padding: 1.1rem 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(12, 12, 12, 0.8);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        letter-spacing: 3px;
+        color: var(--cream);
+        text-decoration: none;
+      }
+      .logo span {
+        color: var(--fire);
+      }
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        margin-left: 2rem;
+        font-size: 0.8rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--cream);
+      }
+      .nav-cta {
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 1.5px;
+        padding: 0.55rem 1.6rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 2rem;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .nav-cta:hover {
+        background: #c4250a;
+        transform: scale(1.04);
+      }
+
+      /* ══════════════════════════════════
+       FULLSCREEN SCROLL HERO
+    ══════════════════════════════════ */
+      #scroll-hero {
+        position: relative;
+        height: 500vh; /* 5 sections × 100vh */
+      }
+
+      .sticky-hero {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Background slides */
+      .bg-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: opacity, transform;
+      }
+      .bg-slide.active {
+        opacity: 1;
+      }
+
+      .bg-slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Slide 1 — Burger: dark left gradient */
+      #slide-1 {
+        background-image: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800&q=85");
+      }
+      #slide-1::after {
+        background: linear-gradient(
+          105deg,
+          rgba(12, 12, 12, 0.88) 0%,
+          rgba(12, 12, 12, 0.55) 55%,
+          rgba(12, 12, 12, 0.15) 100%
+        );
+      }
+
+      /* Slide 2 — Pizza */
+      #slide-2 {
+        background-image: url("https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1800&q=85");
+      }
+      #slide-2::after {
+        background: radial-gradient(
+          ellipse at 30% 50%,
+          rgba(12, 12, 12, 0.85) 0%,
+          rgba(12, 12, 12, 0.3) 70%
+        );
+      }
+
+      /* Slide 3 — Tacos/Wraps */
+      #slide-3 {
+        background-image: url("https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=1800&q=85");
+      }
+      #slide-3::after {
+        background: linear-gradient(
+          180deg,
+          rgba(12, 12, 12, 0.6) 0%,
+          rgba(12, 12, 12, 0.85) 100%
+        );
+      }
+
+      /* Slide 4 — Fried Chicken */
+      #slide-4 {
+        background-image: url("https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=1800&q=85");
+      }
+      #slide-4::after {
+        background: linear-gradient(
+          135deg,
+          rgba(12, 12, 12, 0.9) 0%,
+          rgba(12, 12, 12, 0.4) 60%,
+          rgba(12, 12, 12, 0.7) 100%
+        );
+      }
+
+      /* Slide 5 — Milkshake / dessert */
+      #slide-5 {
+        background-image: url("https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=1800&q=85");
+      }
+      #slide-5::after {
+        background: radial-gradient(
+          ellipse at 70% 50%,
+          rgba(12, 12, 12, 0.9) 0%,
+          rgba(12, 12, 12, 0.5) 100%
+        );
+      }
+
+      /* ── HERO CONTENT PANEL ── */
+      .hero-panel {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        padding: 0 6vw;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.9s ease;
+        will-change: opacity, transform;
+      }
+      .hero-panel.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .hero-panel.active .hero-badge {
+        animation: panelDown 0.7s 0.1s ease both;
+      }
+      .hero-panel.active .hero-h1 {
+        animation: panelUp 0.8s 0.2s ease both;
+      }
+      .hero-panel.active .hero-sub {
+        animation: panelUp 0.8s 0.35s ease both;
+      }
+      .hero-panel.active .hero-actions {
+        animation: panelUp 0.8s 0.5s ease both;
+      }
+
+      @keyframes panelUp {
+        from {
+          opacity: 0;
+          transform: translateY(36px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes panelDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 1.2rem;
+      }
+      .hero-badge::before {
+        content: "";
+        display: block;
+        width: 28px;
+        height: 2px;
+        background: var(--gold);
+      }
+
+      .hero-h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(4.5rem, 12vw, 11rem);
+        line-height: 0.9;
+        letter-spacing: 2px;
+        color: var(--cream);
+      }
+      .hero-h1 em {
+        font-style: normal;
+        color: var(--fire);
+      }
+
+      .hero-sub {
+        font-size: 1rem;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 420px;
+        margin-top: 1.2rem;
+      }
+
+      .hero-actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.85rem 2.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .btn-primary:hover {
+        background: #c4250a;
+        transform: translateY(-2px);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--cream);
+        border: 1.5px solid rgba(245, 237, 216, 0.3);
+        font-family: "Oswald", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.85rem 2.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .btn-ghost:hover {
+        border-color: var(--cream);
+      }
+
+      /* ── PANEL SPECIFIC LAYOUTS ── */
+      /* Panel 1 — left align (default) */
+      #panel-1 {
+        align-items: center;
+      }
+
+      /* Panel 2 — centered, big title */
+      #panel-2 {
+        justify-content: center;
+        text-align: center;
+      }
+      #panel-2 .hero-badge::before {
+        display: none;
+      }
+      #panel-2 .hero-badge {
+        justify-content: center;
+      }
+      #panel-2 .hero-sub {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #panel-2 .hero-actions {
+        justify-content: center;
+      }
+
+      /* Panel 3 — bottom left */
+      #panel-3 {
+        align-items: flex-end;
+        padding-bottom: 8vh;
+      }
+
+      /* Panel 4 — right align */
+      #panel-4 {
+        justify-content: flex-end;
+        text-align: right;
+      }
+      #panel-4 .hero-badge {
+        justify-content: flex-end;
+      }
+      #panel-4 .hero-badge::before {
+        display: none;
+      }
+      #panel-4 .hero-badge::after {
+        content: "";
+        display: block;
+        width: 28px;
+        height: 2px;
+        background: var(--gold);
+      }
+      #panel-4 .hero-sub {
+        margin-left: auto;
+      }
+      #panel-4 .hero-actions {
+        justify-content: flex-end;
+      }
+
+      /* Panel 5 — centered, full dramatic */
+      #panel-5 {
+        justify-content: center;
+        text-align: center;
+      }
+      #panel-5 .hero-badge {
+        justify-content: center;
+      }
+      #panel-5 .hero-badge::before {
+        display: none;
+      }
+      #panel-5 .hero-sub {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #panel-5 .hero-actions {
+        justify-content: center;
+      }
+
+      /* ── SCROLL INDICATOR & PROGRESS ── */
+      .scroll-progress {
+        position: absolute;
+        bottom: 2.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        z-index: 10;
+        pointer-events: none;
+      }
+      .progress-dots {
+        display: flex;
+        gap: 0.6rem;
+      }
+      .pdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(245, 237, 216, 0.25);
+        transition:
+          background 0.4s,
+          transform 0.4s;
+      }
+      .pdot.active {
+        background: var(--cream);
+        transform: scale(1.5);
+      }
+
+      .scroll-hint-text {
+        font-size: 0.65rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        animation: hintBounce 2s ease-in-out infinite;
+      }
+      @keyframes hintBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(5px);
+        }
+      }
+
+      /* Slide number */
+      .slide-counter {
+        position: absolute;
+        bottom: 2.5rem;
+        right: 3rem;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+        color: rgba(245, 237, 216, 0.25);
+        z-index: 10;
+        pointer-events: none;
+      }
+      .slide-counter span {
+        color: var(--cream);
+      }
+
+      /* Food category pill */
+      .food-pill {
+        position: absolute;
+        top: 2rem;
+        right: 3rem;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.4rem 1.2rem;
+        border-radius: 30px;
+        border: 1px solid rgba(245, 237, 216, 0.2);
+        color: var(--cream);
+        z-index: 10;
+        pointer-events: none;
+        backdrop-filter: blur(10px);
+        background: rgba(12, 12, 12, 0.4);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .food-pill.show {
+        opacity: 1;
+      }
+
+      /* ══════════════════════════════════
+       TICKER
+    ══════════════════════════════════ */
+      .ticker-wrap {
+        background: var(--fire);
+        padding: 0.5rem 0;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .ticker-track {
+        display: inline-flex;
+        animation: tickMove 28s linear infinite;
+      }
+      .ticker-track span {
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0 2.5rem;
+        color: #fff;
+      }
+      .ticker-track span::after {
+        content: " ·";
+        opacity: 0.5;
+      }
+      @keyframes tickMove {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ══════════════════════════════════
+       SECTION HELPERS
+    ══════════════════════════════════ */
+      .s-eyebrow {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 3.5px;
+        text-transform: uppercase;
+        color: var(--fire);
+        margin-bottom: 0.5rem;
+      }
+      .s-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        line-height: 0.95;
+        letter-spacing: 2px;
+      }
+
+      /* ══════════════════════════════════
+       MENU SECTION  — 3D FLIP CARDS
+    ══════════════════════════════════ */
+      .menu-section {
+        padding: 7rem 0;
+        background: var(--dark);
+      }
+
+      /* Flip container */
+      .flip-wrap {
+        perspective: 1100px;
+        height: 420px;
+        cursor: pointer;
+      }
+
+      .flip-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 14px;
+      }
+      .flip-wrap:hover .flip-inner {
+        transform: rotateY(180deg);
+      }
+
+      /* FRONT face */
+      .flip-front,
+      .flip-back {
+        position: absolute;
+        inset: 0;
+        border-radius: 14px;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        overflow: hidden;
+      }
+
+      .flip-front {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .flip-front-img {
+        position: relative;
+        flex: 1;
+        overflow: hidden;
+      }
+      .flip-front-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s ease;
+      }
+      .flip-wrap:hover .flip-front-img img {
+        transform: scale(1.06);
+      }
+      .flip-front-img-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(12, 12, 12, 0.75) 0%,
+          transparent 60%
+        );
+      }
+      .badge-label {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        z-index: 2;
+        background: var(--fire);
+        color: #fff;
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.25rem 0.75rem;
+        border-radius: 3px;
+      }
+      .flip-front-body {
+        padding: 1.2rem 1.4rem 1.4rem;
+        background: var(--card-bg);
+      }
+      .flip-front-body h4 {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--cream);
+        margin-bottom: 0.25rem;
+      }
+      .flip-front-body p {
+        font-size: 0.84rem;
+        color: var(--muted);
+        line-height: 1.55;
+        margin-bottom: 0.9rem;
+      }
+      .flip-front-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .menu-price {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.85rem;
+        color: var(--gold);
+        letter-spacing: 1px;
+      }
+
+      /* BACK face */
+      .flip-back {
+        background: var(--card-bg);
+        border: 1px solid rgba(232, 48, 11, 0.3);
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      /* Back top: full-bleed image with dark overlay */
+      .flip-back-hero {
+        position: relative;
+        height: 170px;
+        flex-shrink: 0;
+        overflow: hidden;
+      }
+      .flip-back-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: brightness(0.55) saturate(1.2);
+        transform: scale(1.05);
+      }
+      .flip-back-hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 30%,
+          rgba(12, 12, 12, 1) 100%
+        );
+      }
+      .flip-back-title-over {
+        position: absolute;
+        bottom: 1rem;
+        left: 1.2rem;
+        right: 1.2rem;
+      }
+      .flip-back-title-over h4 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        letter-spacing: 2px;
+        color: var(--cream);
+        line-height: 1;
+      }
+      .flip-back-title-over span {
+        font-size: 0.68rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--fire);
+        font-weight: 700;
+      }
+
+      /* Ingredients staggered list */
+      .flip-back-body {
+        padding: 0.9rem 1.2rem 0;
+        flex: 1;
+      }
+      .ingr-section-label {
+        font-size: 0.62rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .ingr-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.42rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        opacity: 0;
+        transform: translateX(-14px);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+      .flip-wrap:hover .ingr-row {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      /* Stagger delays */
+      .flip-wrap:hover .ingr-row:nth-child(1) {
+        transition-delay: 0.35s;
+      }
+      .flip-wrap:hover .ingr-row:nth-child(2) {
+        transition-delay: 0.43s;
+      }
+      .flip-wrap:hover .ingr-row:nth-child(3) {
+        transition-delay: 0.51s;
+      }
+      .flip-wrap:hover .ingr-row:nth-child(4) {
+        transition-delay: 0.59s;
+      }
+      .flip-wrap:hover .ingr-row:nth-child(5) {
+        transition-delay: 0.67s;
+      }
+
+      .ingr-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: var(--fire);
+      }
+      .ingr-name {
+        font-size: 0.85rem;
+        color: var(--cream);
+        flex: 1;
+        font-weight: 500;
+      }
+      .ingr-cal {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+        color: var(--muted);
+        letter-spacing: 1px;
+      }
+
+      /* Macros bar */
+      .macro-bar-wrap {
+        padding: 0.8rem 1.2rem 0.5rem;
+      }
+      .macro-label-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.3rem;
+      }
+      .macro-label-row span {
+        font-size: 0.68rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .macro-track {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.4rem;
+      }
+      .macro-fill {
+        height: 100%;
+        border-radius: 4px;
+        width: 0;
+        transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .flip-wrap:hover .macro-fill {
+      }
+      .mf-protein {
+        background: var(--fire);
+      }
+      .mf-carbs {
+        background: var(--gold);
+      }
+      .mf-fat {
+        background: #7ecfff;
+      }
+
+      /* Back footer */
+      .flip-back-footer {
+        padding: 0.9rem 1.2rem 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .flip-back-price {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        color: var(--gold);
+      }
+      .add-btn {
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .add-btn:hover {
+        background: #c4250a;
+        transform: scale(1.06);
+      }
+      .add-btn.added {
+        background: #1a7a3c;
+      }
+
+      /* ══════════════════════════════════
+       FEATURED
+    ══════════════════════════════════ */
+      .featured-section {
+        padding: 7rem 0;
+        background: var(--surface);
+      }
+      .featured-img {
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        position: relative;
+      }
+      .featured-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .featured-img-badge {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        background: rgba(12, 12, 12, 0.85);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+      }
+      .featured-img-badge span {
+        font-size: 0.72rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .featured-img-badge strong {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.1rem;
+        color: var(--cream);
+        display: block;
+        margin-top: 0.1rem;
+      }
+      .featured-body {
+        padding-left: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .feat-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 0.95;
+        letter-spacing: 2px;
+        margin: 1rem 0 1.2rem;
+      }
+      .feat-desc {
+        font-size: 0.97rem;
+        color: var(--muted);
+        line-height: 1.75;
+        max-width: 400px;
+      }
+      .ingr-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1.6rem 0;
+      }
+      .ingr-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--cream);
+        padding: 0.3rem 0.9rem;
+        border-radius: 30px;
+        border: 1px solid rgba(245, 237, 216, 0.2);
+      }
+      .feat-price {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3.5rem;
+        color: var(--gold);
+        line-height: 1;
+        margin-bottom: 1.4rem;
+      }
+
+      /* ══════════════════════════════════
+       PROMO
+    ══════════════════════════════════ */
+      .promo-strip {
+        background: var(--fire);
+        padding: 5rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .promo-bg-img {
+        position: absolute;
+        inset: 0;
+        background-image: url("https://images.unsplash.com/photo-1619881590738-a111d176d906?w=1800&q=80");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+      }
+      .promo-h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3.5rem, 10vw, 8rem);
+        line-height: 0.92;
+        letter-spacing: 3px;
+        color: #fff;
+      }
+      .promo-code {
+        display: inline-block;
+        margin-top: 1.2rem;
+        background: rgba(0, 0, 0, 0.3);
+        font-family: "Oswald", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 4px;
+        color: #fff;
+        padding: 0.6rem 2rem;
+        border-radius: 4px;
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* ══════════════════════════════════
+       GALLERY
+    ══════════════════════════════════ */
+      .gallery-strip {
+        padding: 5rem 0;
+        background: var(--dark);
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-rows: 260px 260px;
+        gap: 10px;
+      }
+      .gallery-item {
+        overflow: hidden;
+        border-radius: 8px;
+        position: relative;
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+      .gallery-item:hover img {
+        transform: scale(1.06);
+      }
+      .gallery-item.tall {
+        grid-row: span 2;
+      }
+      .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(12, 12, 12, 0.8), transparent);
+        padding: 1.2rem 1rem 0.8rem;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--cream);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .gallery-item:hover .gallery-caption {
+        opacity: 1;
+      }
+
+      /* ══════════════════════════════════
+       DELIVERY
+    ══════════════════════════════════ */
+      .delivery-section {
+        padding: 7rem 0;
+        background: var(--surface);
+      }
+      .dcard {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 2.2rem 1.8rem;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .dcard:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      }
+      .dcard-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.5rem;
+        color: var(--fire);
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .dcard h4 {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--cream);
+        margin-bottom: 0.5rem;
+      }
+      .dcard p {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* ══════════════════════════════════
+       TESTIMONIALS
+    ══════════════════════════════════ */
+      .testi-section {
+        padding: 7rem 0;
+        background: var(--dark);
+      }
+      .tcard {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        padding: 2rem;
+      }
+      .tcard-stars {
+        color: var(--gold);
+        font-size: 1rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.9rem;
+      }
+      .tcard-text {
+        font-size: 0.93rem;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .tcard-foot {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.4rem;
+      }
+      .tcard-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+      }
+      .tcard-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .tcard-name {
+        font-family: "Oswald", sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--cream);
+      }
+      .tcard-loc {
+        font-size: 0.76rem;
+        color: var(--muted);
+        margin-top: 0.1rem;
+      }
+
+      /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+      footer {
+        background: #000;
+        padding: 4rem 0 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .footer-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+        color: var(--cream);
+      }
+      .footer-logo span {
+        color: var(--fire);
+      }
+      footer p,
+      footer a {
+        color: rgba(245, 237, 216, 0.4);
+        font-size: 0.87rem;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      footer a:hover {
+        color: var(--gold);
+      }
+      .f-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1.4rem;
+        margin-top: 0.9rem;
+      }
+      .f-divider {
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        margin: 2.5rem 0 1.5rem;
+      }
+      .f-phone {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--cream);
+      }
+
+      /* ══════════════════════════════════
+       FLOAT CTA
+    ══════════════════════════════════ */
+      .float-cta {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 998;
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 0.88rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 0.8rem 1.7rem;
+        border-radius: 40px;
+        cursor: pointer;
+        box-shadow: 0 8px 30px rgba(232, 48, 11, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        opacity: 0;
+        transition:
+          opacity 0.4s,
+          background 0.2s,
+          transform 0.2s;
+      }
+      .float-cta.show {
+        opacity: 1;
+      }
+      .float-cta:hover {
+        background: #c4250a;
+        transform: scale(1.05);
+      }
+      .float-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #fff;
+        animation: dotPulse 1.5s ease-in-out infinite;
+      }
+      @keyframes dotPulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.6);
+        }
+      }
+
+      /* ══════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════ */
+      .reveal {
+        opacity: 0;
+        transform: translateY(36px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 {
+        transition-delay: 0.12s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.24s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.36s;
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          padding: 1rem 1.2rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        .gallery-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto;
+        }
+        .gallery-item.tall {
+          grid-row: span 1;
+        }
+        .featured-body {
+          padding-left: 0;
+          margin-top: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav>
+      <a class="logo" href="#">Burger<span>Boss</span></a>
+      <div class="nav-links">
+        <a href="#menu">Menyu</a>
+        <a href="#featured">Signature</a>
+        <a href="#delivery">Yetkazish</a>
+        <a href="#gallery">Galereya</a>
+        <button
+          class="nav-cta"
+          onclick="
+            document
+              .getElementById('menu')
+              .scrollIntoView({ behavior: 'smooth' })
+          "
+        >
+          Buyurtma
+        </button>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════
+     SCROLL HERO — 5 sections, sticky
+════════════════════════════════════ -->
+    <div id="scroll-hero">
+      <div class="sticky-hero">
+        <!-- Background slides -->
+        <div class="bg-slide active" id="slide-1"></div>
+        <div class="bg-slide" id="slide-2"></div>
+        <div class="bg-slide" id="slide-3"></div>
+        <div class="bg-slide" id="slide-4"></div>
+        <div class="bg-slide" id="slide-5"></div>
+
+        <!-- Food category pill -->
+        <div class="food-pill show" id="food-pill">Beef Burger</div>
+
+        <!-- Content panels -->
+        <!-- Panel 1: Burger — slide from left -->
+        <div class="hero-panel active" id="panel-1">
+          <div>
+            <div class="hero-badge">Toshkentning №1 Fast Food</div>
+            <h1 class="hero-h1">BURGER<br /><em>BOSS</em></h1>
+            <p class="hero-sub">
+              Har bir tishlamda — yangi go'sht, maxsus sous va unutilmas ta'm.
+              Faqat siz uchun, faqat bugun.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Menyu ko'rish
+              </button>
+              <button
+                class="btn-ghost"
+                onclick="
+                  document
+                    .getElementById('delivery')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Yetkazib berish
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Pizza — zoom in from center -->
+        <div class="hero-panel" id="panel-2">
+          <div>
+            <div class="hero-badge">Yangi Keldi</div>
+            <h1 class="hero-h1">STONE<br /><em>PIZZA</em></h1>
+            <p class="hero-sub">
+              Tosh tandirda pishirilgan, San-Marzano tomato va fior di latte
+              pishloq bilan.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Buyurtma
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Tacos — rise from bottom -->
+        <div class="hero-panel" id="panel-3">
+          <div>
+            <div class="hero-badge">Mexican Style</div>
+            <h1 class="hero-h1">CRISPY<br /><em>TACOS</em></h1>
+            <p class="hero-sub">
+              Qovurilgan tortilla, chipotle tovuq, avokado va limon — bir
+              tillamda butun dunyo.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Ko'rish
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 4: Chicken — slide from right -->
+        <div class="hero-panel" id="panel-4">
+          <div>
+            <div class="hero-badge">Classic Recipe</div>
+            <h1 class="hero-h1">CRISPY<br /><em>CHICKEN</em></h1>
+            <p class="hero-sub">
+              Buttermilk marinad, 24 soat kutish, bir daqiqa qovurish —
+              kamolotning ta'mi.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Buyurtma
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 5: Dessert — fade + scale -->
+        <div class="hero-panel" id="panel-5">
+          <div>
+            <div class="hero-badge">Sweet Ending</div>
+            <h1 class="hero-h1">THICK<br /><em>SHAKES</em></h1>
+            <p class="hero-sub">
+              Vanilla, shokolad yoki strawberry — qalin, sovuq va to'liq huzur.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Tanlash
+              </button>
+              <button
+                class="btn-ghost"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                To'liq menyu
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress dots -->
+        <div class="scroll-progress">
+          <div class="progress-dots">
+            <div class="pdot active" data-i="0"></div>
+            <div class="pdot" data-i="1"></div>
+            <div class="pdot" data-i="2"></div>
+            <div class="pdot" data-i="3"></div>
+            <div class="pdot" data-i="4"></div>
+          </div>
+          <div class="scroll-hint-text">Pastga aylantiring</div>
+        </div>
+
+        <!-- Slide counter -->
+        <div class="slide-counter"><span id="slide-cur">01</span> / 05</div>
+      </div>
+      <!-- /sticky-hero -->
+    </div>
+    <!-- /scroll-hero -->
+
+    <!-- TICKER -->
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <span>Toza go'sht</span><span>Har kuni yangi</span
+        ><span>30 daqiqada yetkazish</span> <span>100% Halol</span
+        ><span>Maxsus sous</span><span>Eksklyuziv retsept</span>
+        <span>Toza go'sht</span><span>Har kuni yangi</span
+        ><span>30 daqiqada yetkazish</span> <span>100% Halol</span
+        ><span>Maxsus sous</span><span>Eksklyuziv retsept</span>
+      </div>
+    </div>
+
+    <!-- MENU SECTION -->
+    <section class="menu-section" id="menu">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-lg-6 reveal">
+            <p class="s-eyebrow">Bizning taomlar</p>
+            <h2 class="s-title">
+              MASHHUR<br /><span style="color: var(--fire)">MENYULAR</span>
+            </h2>
+          </div>
+          <div class="col-lg-6 reveal reveal-delay-1 d-flex align-items-end">
+            <p
+              style="
+                color: var(--muted);
+                font-size: 0.9rem;
+                line-height: 1.7;
+                max-width: 380px;
+                margin-left: auto;
+              "
+            >
+              Kartochkaga
+              <strong style="color: var(--cream)">hover qiling</strong> —
+              tarkibi va kaloriyasini ko'ring. Har bir taom sertifikatlangan
+              mahsulotlardan tayyorlanadi.
+            </p>
+          </div>
+        </div>
+        <div class="row g-4">
+          <!-- 1: Boss Double -->
+          <div class="col-md-6 col-lg-4 reveal">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <!-- FRONT -->
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <div class="badge-label">🔥 Bestseller</div>
+                    <img
+                      src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+                      alt="Boss Double"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Boss Double</h4>
+                    <p>
+                      Qo'sh beef patty, smoked cheddar, crispy bacon va maxsus
+                      BossSauce.
+                    </p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">49 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <!-- BACK -->
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+                      alt="Boss Double"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Boss Double</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8300b"></div>
+                      <div class="ingr-name">Beef Patty (x2)</div>
+                      <div class="ingr-cal">180 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Smoked Cheddar</div>
+                      <div class="ingr-cal">90 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #ff6b35"></div>
+                      <div class="ingr-name">Crispy Bacon</div>
+                      <div class="ingr-cal">70 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #7ecfff"></div>
+                      <div class="ingr-name">Brioche Bun</div>
+                      <div class="ingr-cal">110 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #6bcb77"></div>
+                      <div class="ingr-name">BossSauce + Veggies</div>
+                      <div class="ingr-cal">40 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 62%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 45%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 38%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">49 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2: Crispy Chicken -->
+          <div class="col-md-6 col-lg-4 reveal reveal-delay-1">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <div
+                      class="badge-label"
+                      style="background: var(--gold); color: var(--dark)"
+                    >
+                      Yangi
+                    </div>
+                    <img
+                      src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80"
+                      alt="Crispy Chicken"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Crispy Chicken</h4>
+                    <p>
+                      Buttermilk marinad, qovurilgan fillet, coleslaw va
+                      honey-mustard sous.
+                    </p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">38 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80"
+                      alt="Crispy Chicken"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Crispy Chicken</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Chicken Fillet (buttermilk)</div>
+                      <div class="ingr-cal">160 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8300b"></div>
+                      <div class="ingr-name">Crispy Breading</div>
+                      <div class="ingr-cal">80 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #6bcb77"></div>
+                      <div class="ingr-name">Coleslaw</div>
+                      <div class="ingr-cal">35 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #7ecfff"></div>
+                      <div class="ingr-name">Honey-Mustard Sous</div>
+                      <div class="ingr-cal">55 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #fff3b0"></div>
+                      <div class="ingr-name">Brioche Bun</div>
+                      <div class="ingr-cal">110 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 70%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 55%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 28%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">38 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3: Spicy Smash -->
+          <div class="col-md-6 col-lg-4 reveal reveal-delay-2">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <div class="badge-label" style="background: #ff6a00">
+                      🌶 Achchiq
+                    </div>
+                    <img
+                      src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80"
+                      alt="Spicy Smash"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Spicy Smash</h4>
+                    <p>
+                      Smash-patty usulida pishirilgan, jalapeño va chipotle
+                      mayo.
+                    </p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">42 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80"
+                      alt="Spicy Smash"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Spicy Smash</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8300b"></div>
+                      <div class="ingr-name">Smashed Beef Patty</div>
+                      <div class="ingr-cal">190 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #ff6a00"></div>
+                      <div class="ingr-name">Jalapeño Slices</div>
+                      <div class="ingr-cal">10 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Chipotle Mayo</div>
+                      <div class="ingr-cal">85 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #6bcb77"></div>
+                      <div class="ingr-name">Iceberg Lettuce</div>
+                      <div class="ingr-cal">5 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #fff3b0"></div>
+                      <div class="ingr-name">Potato Bun (toasted)</div>
+                      <div class="ingr-cal">115 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 55%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 40%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 50%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">42 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4: Boss Fries -->
+          <div class="col-md-6 col-lg-4 reveal">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <img
+                      src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80"
+                      alt="Boss Fries"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Boss Fries</h4>
+                    <p>
+                      Taxta-texnik qovurilgan, deniz tuzi va mozzarella sous
+                      bilan.
+                    </p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">18 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=80"
+                      alt="Boss Fries"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Boss Fries</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Russet Potato</div>
+                      <div class="ingr-cal">120 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8e0d0"></div>
+                      <div class="ingr-name">Deniz tuzi</div>
+                      <div class="ingr-cal">0 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #7ecfff"></div>
+                      <div class="ingr-name">Mozzarella Sous</div>
+                      <div class="ingr-cal">95 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #6bcb77"></div>
+                      <div class="ingr-name">Zaytun moyi</div>
+                      <div class="ingr-cal">40 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 18%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 78%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 42%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">18 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5: Stone Pizza -->
+          <div class="col-md-6 col-lg-4 reveal reveal-delay-1">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <img
+                      src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80"
+                      alt="Stone Pizza"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Stone Pizza</h4>
+                    <p>
+                      Tosh tandirda pishirilgan, San-Marzano tomato va fior di
+                      latte.
+                    </p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">55 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80"
+                      alt="Stone Pizza"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Stone Pizza</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #fff3b0"></div>
+                      <div class="ingr-name">Qo'l yoğurma xamir</div>
+                      <div class="ingr-cal">140 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8300b"></div>
+                      <div class="ingr-name">San-Marzano Tomato</div>
+                      <div class="ingr-cal">30 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5f5f5"></div>
+                      <div class="ingr-name">Fior di Latte</div>
+                      <div class="ingr-cal">110 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #6bcb77"></div>
+                      <div class="ingr-name">Yangi Basil</div>
+                      <div class="ingr-cal">5 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Extra Virgin Olive Oil</div>
+                      <div class="ingr-cal">50 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 30%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 72%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 35%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">55 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6: Thick Shake -->
+          <div class="col-md-6 col-lg-4 reveal reveal-delay-2">
+            <div class="flip-wrap">
+              <div class="flip-inner">
+                <div class="flip-front">
+                  <div class="flip-front-img">
+                    <img
+                      src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80"
+                      alt="Thick Shake"
+                    />
+                    <div class="flip-front-img-overlay"></div>
+                  </div>
+                  <div class="flip-front-body">
+                    <h4>Thick Shake</h4>
+                    <p>Vanilla, shokolad yoki strawberry — qalin va sovuq.</p>
+                    <div class="flip-front-footer">
+                      <div class="menu-price">22 000 so'm</div>
+                      <span
+                        style="
+                          font-size: 0.72rem;
+                          letter-spacing: 1.5px;
+                          color: var(--muted);
+                          text-transform: uppercase;
+                        "
+                        >hover →</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="flip-back">
+                  <div class="flip-back-hero">
+                    <img
+                      src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80"
+                      alt="Thick Shake"
+                    />
+                    <div class="flip-back-hero-overlay"></div>
+                    <div class="flip-back-title-over">
+                      <span>Tarkibi</span>
+                      <h4>Thick Shake</h4>
+                    </div>
+                  </div>
+                  <div class="flip-back-body">
+                    <div class="ingr-section-label">Ingredientlar</div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5f5f5"></div>
+                      <div class="ingr-name">Premium Sut Krem</div>
+                      <div class="ingr-cal">130 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #f5a623"></div>
+                      <div class="ingr-name">Vanilla / Choc / Berry</div>
+                      <div class="ingr-cal">70 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #7ecfff"></div>
+                      <div class="ingr-name">Muzqaymoq (2 shrik)</div>
+                      <div class="ingr-cal">100 kcal</div>
+                    </div>
+                    <div class="ingr-row">
+                      <div class="ingr-dot" style="background: #e8300b"></div>
+                      <div class="ingr-name">Qand siropi</div>
+                      <div class="ingr-cal">60 kcal</div>
+                    </div>
+                  </div>
+                  <div class="macro-bar-wrap">
+                    <div class="macro-label-row">
+                      <span>Protein</span><span>Carbs</span><span>Fat</span>
+                    </div>
+                    <div class="macro-track">
+                      <div
+                        class="macro-fill mf-protein"
+                        style="width: 20%"
+                      ></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-carbs" style="width: 65%"></div>
+                    </div>
+                    <div class="macro-track">
+                      <div class="macro-fill mf-fat" style="width: 45%"></div>
+                    </div>
+                  </div>
+                  <div class="flip-back-footer">
+                    <div class="flip-back-price">22 000 so'm</div>
+                    <button class="add-btn">+ Savatga</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED -->
+    <section class="featured-section" id="featured">
+      <div class="container">
+        <div class="row align-items-center gy-4">
+          <div class="col-lg-6 reveal">
+            <div class="featured-img">
+              <img
+                src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=900&q=80"
+                alt="Wagyu Signature"
+                loading="lazy"
+              />
+              <div class="featured-img-badge">
+                <span>Chef's Special</span>
+                <strong>Wagyu Signature</strong>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 reveal reveal-delay-1">
+            <div class="featured-body">
+              <p class="s-eyebrow">Tavsiyamiz</p>
+              <h2 class="feat-title">
+                WAGYU<br /><span style="color: var(--fire)">SIGNATURE</span>
+              </h2>
+              <p class="feat-desc">
+                Yaponiya Wagyu go'shtidan tayyorlangan, qo'l yoğurma briosh non,
+                truffle mayo va french mustard bilan xizmat qilinadi.
+              </p>
+              <div class="ingr-list">
+                <span class="ingr-tag">A5 Wagyu</span>
+                <span class="ingr-tag">Brioche Bun</span>
+                <span class="ingr-tag">Truffle Mayo</span>
+                <span class="ingr-tag">Gruyère</span>
+                <span class="ingr-tag">Caramelized Onion</span>
+                <span class="ingr-tag">Arugula</span>
+              </div>
+              <div class="feat-price">89 000 so'm</div>
+              <button class="btn-primary">Buyurtma berish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMO -->
+    <div class="promo-strip">
+      <div class="promo-bg-img"></div>
+      <div class="container" style="position: relative; z-index: 2">
+        <div class="row align-items-center gy-4 reveal">
+          <div class="col-lg-7">
+            <p
+              style="
+                font-size: 0.72rem;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 0.8rem;
+                font-weight: 600;
+              "
+            >
+              BUGUNGI AKSIYA
+            </p>
+            <h2 class="promo-h2">BIRINCHI<br />BUYURTMA<br />–20%</h2>
+            <div class="promo-code">PROMO: BOSS20</div>
+          </div>
+          <div class="col-lg-5 text-lg-end text-center">
+            <img
+              src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&q=80"
+              alt="Promo burger"
+              loading="lazy"
+              style="
+                width: 320px;
+                max-width: 100%;
+                border-radius: 12px;
+                object-fit: cover;
+                aspect-ratio: 4/3;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+              "
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <section class="gallery-strip" id="gallery">
+      <div class="container reveal">
+        <p class="s-eyebrow" style="text-align: center; margin-bottom: 0.4rem">
+          Atmosfera
+        </p>
+        <h2 class="s-title" style="text-align: center; margin-bottom: 2.5rem">
+          BIZNING <span style="color: var(--fire)">GALEREYA</span>
+        </h2>
+        <div class="gallery-grid">
+          <div class="gallery-item tall">
+            <img
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+              alt="Restaurant interior"
+              loading="lazy"
+            />
+            <div class="gallery-caption">Zamonaviy interer</div>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=80"
+              alt="Grill kitchen"
+              loading="lazy"
+            />
+            <div class="gallery-caption">Ochiq oshxona</div>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1616645255967-9e8cf2a2bc67?w=600&q=80"
+              alt="Burger closeup"
+              loading="lazy"
+            />
+            <div class="gallery-caption">Har bir detal muhim</div>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=600&q=80"
+              alt="Food prep"
+              loading="lazy"
+            />
+            <div class="gallery-caption">Yangi ingredientlar</div>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80"
+              alt="Burger and fries"
+              loading="lazy"
+            />
+            <div class="gallery-caption">Klassik to'plam</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DELIVERY -->
+    <section class="delivery-section" id="delivery">
+      <div class="container">
+        <div class="text-center mb-5 reveal">
+          <p class="s-eyebrow">Nima uchun biz?</p>
+          <h2 class="s-title">
+            BIZNING <span style="color: var(--gold)">AFZALLIKLAR</span>
+          </h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3 reveal">
+            <div class="dcard">
+              <div class="dcard-num">30</div>
+              <p
+                style="
+                  font-size: 0.7rem;
+                  letter-spacing: 2px;
+                  text-transform: uppercase;
+                  color: var(--fire);
+                  margin-bottom: 1rem;
+                  font-weight: 600;
+                "
+              >
+                DAQIQA
+              </p>
+              <h4>Tez yetkazish</h4>
+              <p>Kechiksa — keyingi buyurtma bepul. Bu bizning va'damiz.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 reveal reveal-delay-1">
+            <div class="dcard">
+              <div class="dcard-num">100%</div>
+              <p
+                style="
+                  font-size: 0.7rem;
+                  letter-spacing: 2px;
+                  text-transform: uppercase;
+                  color: var(--fire);
+                  margin-bottom: 1rem;
+                  font-weight: 600;
+                "
+              >
+                HALOL
+              </p>
+              <h4>Sertifikatlangan</h4>
+              <p>
+                Barcha mahsulotlarimiz halol sertifikatiga ega. Xavfsiz va
+                sifatli.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 reveal reveal-delay-2">
+            <div class="dcard">
+              <div class="dcard-num">4.9★</div>
+              <p
+                style="
+                  font-size: 0.7rem;
+                  letter-spacing: 2px;
+                  text-transform: uppercase;
+                  color: var(--fire);
+                  margin-bottom: 1rem;
+                  font-weight: 600;
+                "
+              >
+                REYTING
+              </p>
+              <h4>Eng yuqori baho</h4>
+              <p>5000+ mamnun mijozimiz bizni tavsiya qiladi. Har doim.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 reveal reveal-delay-3">
+            <div class="dcard">
+              <div class="dcard-num">24/7</div>
+              <p
+                style="
+                  font-size: 0.7rem;
+                  letter-spacing: 2px;
+                  text-transform: uppercase;
+                  color: var(--fire);
+                  margin-bottom: 1rem;
+                  font-weight: 600;
+                "
+              >
+                OCHIQ
+              </p>
+              <h4>Doim xizmatda</h4>
+              <p>Tun yarmimi yoki tong — biz doim tayyor. To'xtovsiz xizmat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testi-section">
+      <div class="container">
+        <div class="text-center mb-5 reveal">
+          <p class="s-eyebrow">Mijozlar fikri</p>
+          <h2 class="s-title">
+            ULAR <span style="color: var(--fire)">GAPIRADI</span>
+          </h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4 reveal">
+            <div class="tcard">
+              <div class="tcard-stars">★★★★★</div>
+              <p class="tcard-text">
+                "Boss Double burgerini tatib ko'rdim — bu umrimda yeganim eng
+                mazali burger. Sous va go'sht kombinatsiyasi — ajoyib!"
+              </p>
+              <div class="tcard-foot">
+                <div class="tcard-avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"
+                    alt="Jasur"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <div class="tcard-name">Jasur T.</div>
+                  <div class="tcard-loc">Yunusobod, Toshkent</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 reveal reveal-delay-1">
+            <div class="tcard">
+              <div class="tcard-stars">★★★★★</div>
+              <p class="tcard-text">
+                "Tez va issiq yetkazib berishdi! Pizza va frilar juda yaxshi.
+                Har hafta kamida 2-3 marta buyurtma beraman."
+              </p>
+              <div class="tcard-foot">
+                <div class="tcard-avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
+                    alt="Nilufar"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <div class="tcard-name">Nilufar X.</div>
+                  <div class="tcard-loc">Chilonzor, Toshkent</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 reveal reveal-delay-2">
+            <div class="tcard">
+              <div class="tcard-stars">★★★★★</div>
+              <p class="tcard-text">
+                "Wagyu Signature ni bir tatib ko'ring — hayotingiz o'zgaradi.
+                App orqali buyurtma juda qulay va tez!"
+              </p>
+              <div class="tcard-foot">
+                <div class="tcard-avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80"
+                    alt="Sherzod"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <div class="tcard-name">Sherzod M.</div>
+                  <div class="tcard-loc">Mirzo Ulug'bek, Toshkent</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-md-4">
+            <div class="footer-logo">Burger<span>Boss</span></div>
+            <p style="margin-top: 0.8rem; line-height: 1.7">
+              Toshkent, Yunusobod tumani<br />Mustaqillik shoh ko'chasi 24<br />Har
+              kuni 10:00 – 00:00
+            </p>
+            <div class="f-links">
+              <a href="#">Instagram</a><a href="#">Telegram</a
+              ><a href="#">TikTok</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <p
+              style="
+                font-family: &quot;Oswald&quot;, sans-serif;
+                font-weight: 600;
+                font-size: 1rem;
+                color: var(--cream);
+                margin-bottom: 1rem;
+              "
+            >
+              Havolalar
+            </p>
+            <div class="f-links" style="flex-direction: column; gap: 0.5rem">
+              <a href="#menu">Menyu</a><a href="#featured">Signature taomlar</a>
+              <a href="#delivery">Yetkazib berish</a><a href="#">Franchayzing</a
+              ><a href="#">Ish o'rinlari</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <p
+              style="
+                font-family: &quot;Oswald&quot;, sans-serif;
+                font-weight: 600;
+                font-size: 1rem;
+                color: var(--cream);
+                margin-bottom: 0.5rem;
+              "
+            >
+              Bog'laning
+            </p>
+            <div class="f-phone">+998 71 123-45-67</div>
+            <p style="margin-top: 0.5rem">info@burgerboss.uz</p>
+          </div>
+        </div>
+        <hr class="f-divider" />
+        <p style="text-align: center; font-size: 0.8rem">
+          © 2025 BurgerBoss. Barcha huquqlar himoyalangan.
+        </p>
+      </div>
+    </footer>
+
+    <!-- FLOAT CTA -->
+    <button
+      class="float-cta"
+      id="floatCta"
+      onclick="
+        document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })
+      "
+    >
+      <div class="float-dot"></div>
+      Buyurtma berish
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      /* ════════════════════════════════════
+   SCROLL HERO ENGINE
+════════════════════════════════════ */
+      const SLIDES = 5;
+      const hero = document.getElementById("scroll-hero");
+      const slides = Array.from(document.querySelectorAll(".bg-slide"));
+      const panels = Array.from(document.querySelectorAll(".hero-panel"));
+      const pdots = Array.from(document.querySelectorAll(".pdot"));
+      const curEl = document.getElementById("slide-cur");
+      const pillEl = document.getElementById("food-pill");
+
+      const FOOD_LABELS = [
+        "Beef Burger",
+        "Stone Pizza",
+        "Crispy Tacos",
+        "Fried Chicken",
+        "Thick Shakes",
+      ];
+      const PANEL_ANIMS = [
+        // per-slide unique animation for the bg image
+        {
+          transform: "scale(1.05) translateX(-2%)",
+          transitionIn: "scale(1) translateX(0)",
+        },
+        { transform: "scale(1.12)", transitionIn: "scale(1.04)" },
+        { transform: "translateY(4%)", transitionIn: "translateY(0)" },
+        {
+          transform: "scale(1.06) translateX(3%)",
+          transitionIn: "scale(1) translateX(0)",
+        },
+        {
+          transform: "scale(1.08) rotate(1deg)",
+          transitionIn: "scale(1) rotate(0deg)",
+        },
+      ];
+
+      // Apply initial Ken-Burns per slide
+      slides.forEach((sl, i) => {
+        sl.style.transform = PANEL_ANIMS[i].transform;
+        sl.style.transition =
+          "opacity 1.2s cubic-bezier(.4,0,.2,1), transform 8s ease";
+      });
+
+      let current = -1;
+
+      function goToSlide(idx) {
+        if (idx === current) return;
+
+        // deactivate old
+        if (current >= 0) {
+          slides[current].classList.remove("active");
+          panels[current].classList.remove("active");
+          pdots[current].classList.remove("active");
+          slides[current].style.transform = PANEL_ANIMS[current].transform;
+        }
+
+        // activate new
+        slides[idx].classList.add("active");
+        panels[idx].classList.add("active");
+        pdots[idx].classList.add("active");
+
+        // Ken-Burns animate
+        requestAnimationFrame(() => {
+          slides[idx].style.transform = PANEL_ANIMS[idx].transitionIn;
+        });
+
+        // pill label
+        pillEl.classList.remove("show");
+        setTimeout(() => {
+          pillEl.textContent = FOOD_LABELS[idx];
+          pillEl.classList.add("show");
+        }, 400);
+
+        curEl.textContent = String(idx + 1).padStart(2, "0");
+        current = idx;
+      }
+
+      // Init
+      goToSlide(0);
+
+      function onScroll() {
+        const heroRect = hero.getBoundingClientRect();
+        const heroH = hero.offsetHeight;
+        const viewH = window.innerHeight;
+
+        // Progress 0→1 across the full sticky scroll range
+        const scrolled = -heroRect.top;
+        const maxScroll = heroH - viewH;
+        const progress = Math.max(0, Math.min(1, scrolled / maxScroll));
+        const slideIndex = Math.min(SLIDES - 1, Math.floor(progress * SLIDES));
+
+        goToSlide(slideIndex);
+
+        // float CTA
+        const fc = document.getElementById("floatCta");
+        if (scrolled > 200) fc.classList.add("show");
+        else fc.classList.remove("show");
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      /* ════════════════════════════════════
+   REVEAL ON SCROLL
+════════════════════════════════════ */
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll(".reveal").forEach((r) => io.observe(r));
+
+      /* ════════════════════════════════════
+   MACRO BAR ANIMATION ON HOVER
+════════════════════════════════════ */
+      document.querySelectorAll(".flip-wrap").forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.querySelectorAll(".macro-fill").forEach((bar) => {
+            const target = bar.style.width;
+            bar.style.width = "0";
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                bar.style.width = target;
+              });
+            });
+          });
+        });
+      });
+
+      /* ════════════════════════════════════
+   ADD TO CART (flip back buttons)
+════════════════════════════════════ */
+      document.querySelectorAll(".add-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          if (this.classList.contains("added")) return;
+          this.classList.add("added");
+          this.textContent = "✓ Qo'shildi";
+          setTimeout(() => {
+            this.classList.remove("added");
+            this.textContent = "+ Qo'shish";
+          }, 2200);
+        });
+      });
+    </script>
+  </body>
+</html>
