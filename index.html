@@ -2,22 +2,29 @@
 <html lang="uz">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1"
+    />
     <title>Enjoy Lavash — Toshkent №1</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
     <style>
+      /* ══════════════════════════
+   ROOT — MOBILE FIRST
+══════════════════════════ */
       :root {
         --fire: #c0392b;
         --gold: #e67e22;
         --dark: #070605;
         --mid: #0f0d0b;
-        --surface: #171410;
+        --card: #161310;
         --cream: #f0e6d0;
-        --muted: rgba(240, 230, 208, 0.48);
-        --border: rgba(240, 230, 208, 0.08);
+        --muted: rgba(240, 230, 208, 0.52);
+        --border: rgba(240, 230, 208, 0.09);
+        --r: 16px; /* border radius */
       }
       *,
       *::before,
@@ -25,72 +32,42 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
       html {
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
       }
       body {
         background: var(--dark);
         color: var(--cream);
         font-family: "Space Grotesk", sans-serif;
         overflow-x: hidden;
-        cursor: none;
         -webkit-font-smoothing: antialiased;
+        /* NO cursor:none on mobile */
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      button {
+        cursor: pointer;
+        font-family: inherit;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
       }
       ::-webkit-scrollbar {
         width: 2px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--dark);
       }
       ::-webkit-scrollbar-thumb {
         background: var(--fire);
       }
 
-      /* CURSOR */
-      #cur {
-        position: fixed;
-        z-index: 9999;
-        pointer-events: none;
-        width: 72px;
-        height: 72px;
-        transform: translate(-50%, -50%);
-        mix-blend-mode: difference;
-      }
-      #cur-ring {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        border: 1px solid rgba(240, 230, 208, 0.8);
-        transform: scale(0.13);
-        transition:
-          transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-          background 0.3s;
-      }
-      #cur-dot {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: var(--cream);
-        transform: translate(-50%, -50%);
-        transition: opacity 0.3s;
-      }
-      body.hov #cur-ring {
-        transform: scale(1);
-        background: rgba(240, 230, 208, 0.07);
-      }
-      body.hov #cur-dot {
-        opacity: 0;
-      }
-      body.clk #cur-ring {
-        transform: scale(0.75);
-        background: rgba(192, 57, 43, 0.3);
-      }
-
-      /* NAV */
+      /* ══════════════════════════
+   NAV — MOBILE
+══════════════════════════ */
       #nav {
         position: fixed;
         top: 0;
@@ -100,198 +77,205 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2rem 3.5rem;
+        padding: 1rem 1.2rem;
+        background: rgba(7, 6, 5, 0);
         transition:
+          background 0.4s,
           padding 0.4s,
-          background 0.4s;
+          backdrop-filter 0.4s;
       }
-      #nav.compact {
-        padding: 1rem 3.5rem;
-        background: rgba(7, 6, 5, 0.94);
-        backdrop-filter: blur(24px);
+      #nav.stuck {
+        background: rgba(7, 6, 5, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--border);
+        padding: 0.8rem 1.2rem;
       }
-      .nl {
+      .nlogo {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.8rem;
-        letter-spacing: 5px;
+        font-size: 1.55rem;
+        letter-spacing: 4px;
         color: var(--cream);
-        text-decoration: none;
       }
-      .nl em {
+      .nlogo em {
         color: var(--fire);
         font-style: normal;
       }
-      .nr {
-        display: flex;
-        align-items: center;
-        gap: 2.6rem;
-      }
-      .nla {
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 0.63rem;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        font-weight: 500;
-        position: relative;
-        overflow: hidden;
-      }
-      .nla::after {
-        content: "";
-        position: absolute;
-        bottom: -1px;
-        left: -100%;
-        width: 100%;
-        height: 1px;
-        background: var(--gold);
-        transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .nla:hover {
-        color: var(--cream);
-      }
-      .nla:hover::after {
-        left: 0;
-      }
-      .nb {
+
+      /* Hamburger */
+      .ham {
         background: none;
-        border: 1px solid rgba(192, 57, 43, 0.55);
-        color: var(--cream);
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.63rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 0.5rem 1.5rem;
-        cursor: none;
-        position: relative;
-        overflow: hidden;
+        border: none;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 700;
+      }
+      .ham span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--cream);
+        border-radius: 2px;
         transition:
-          color 0.3s,
-          border-color 0.3s;
+          transform 0.3s,
+          opacity 0.3s;
       }
-      .nb::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: var(--fire);
-        transform: scaleX(0);
-        transform-origin: right;
-        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      .ham.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
       }
-      .nb:hover {
-        color: #fff;
-        border-color: var(--fire);
+      .ham.open span:nth-child(2) {
+        opacity: 0;
       }
-      .nb:hover::before {
-        transform: scaleX(1);
-        transform-origin: left;
-      }
-      .nb span {
-        position: relative;
-        z-index: 1;
+      .ham.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
       }
 
-      /* ══════════════════════════════════════════
-   HERO
-══════════════════════════════════════════ */
+      /* Mobile drawer */
+      #drawer {
+        position: fixed;
+        inset: 0;
+        z-index: 650;
+        background: rgba(7, 6, 5, 0.97);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s;
+      }
+      #drawer.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #drawer a {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.8rem;
+        letter-spacing: 4px;
+        color: var(--cream);
+        transition: color 0.2s;
+      }
+      #drawer a:hover {
+        color: var(--fire);
+      }
+      .drawer-cta {
+        background: var(--fire);
+        color: #fff;
+        border: none;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 1rem 3rem;
+        margin-top: 0.5rem;
+      }
+
+      /* Desktop nav links (hidden on mobile) */
+      .nlinks {
+        display: none;
+      }
+
+      /* ══════════════════════════
+   HERO — MOBILE
+══════════════════════════ */
       #hero {
         position: relative;
-        height: 100vh;
+        height: 100svh; /* safe viewport height */
+        min-height: 600px;
         overflow: hidden;
         display: flex;
         align-items: flex-end;
       }
-      /* 3D Canvas — bottom layer */
-      #hc {
+      #hcanvas {
         position: absolute;
         inset: 0;
         z-index: 1;
         pointer-events: none;
       }
-      /* Food photo */
-      #hp {
+      #hphoto {
         position: absolute;
         inset: 0;
         z-index: 2;
-        /* Lavash / fast food photo — using foodiesfeed via picsum fallback */
-        background: url("https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1920&q=90")
+        background: url("https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=90")
           center/cover no-repeat;
-        filter: brightness(0.58) saturate(1.35) contrast(1.08);
+        filter: brightness(0.55) saturate(1.3);
         will-change: transform;
-        transform: scale(1.07);
       }
-      /* Vignette */
-      #hv {
+      #hvig {
         position: absolute;
         inset: 0;
         z-index: 3;
         background:
           linear-gradient(
             to bottom,
-            rgba(7, 6, 5, 0.65) 0%,
-            transparent 22%,
-            transparent 55%,
-            rgba(7, 6, 5, 0.97) 100%
+            rgba(7, 6, 5, 0.7) 0%,
+            transparent 30%,
+            transparent 50%,
+            rgba(7, 6, 5, 0.98) 100%
           ),
-          linear-gradient(to right, rgba(7, 6, 5, 0.72) 0%, transparent 55%);
+          linear-gradient(to right, rgba(7, 6, 5, 0.6) 0%, transparent 60%);
       }
-      /* Red glow */
-      #hg {
+      #hglow {
         position: absolute;
-        right: -8%;
-        top: 5%;
-        width: 60%;
-        height: 80%;
         z-index: 3;
+        right: -10%;
+        top: 0%;
+        width: 70%;
+        height: 70%;
         background: radial-gradient(
           ellipse,
-          rgba(192, 57, 43, 0.28) 0%,
-          transparent 60%
+          rgba(192, 57, 43, 0.22) 0%,
+          transparent 65%
         );
-        animation: gFloat 7s ease-in-out infinite;
+        animation: gf 7s ease-in-out infinite;
         pointer-events: none;
       }
-      @keyframes gFloat {
+      @keyframes gf {
         0%,
         100% {
           transform: translate(0, 0) scale(1);
-          opacity: 0.8;
+          opacity: 0.75;
         }
         50% {
-          transform: translate(-2%, 4%) scale(1.06);
+          transform: translate(-3%, 5%) scale(1.07);
           opacity: 1;
         }
       }
-      /* Content */
+
       .hcon {
         position: relative;
         z-index: 4;
-        padding: 0 4rem 5.5rem;
+        padding: 0 1.4rem 3.5rem;
         width: 100%;
       }
       .htag {
         display: flex;
         align-items: center;
-        gap: 0.9rem;
-        font-size: 0.6rem;
-        letter-spacing: 5px;
+        gap: 0.7rem;
+        font-size: 0.58rem;
+        letter-spacing: 4px;
         text-transform: uppercase;
         color: var(--fire);
         font-weight: 600;
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.4rem;
       }
       .htag-l {
-        width: 30px;
+        width: 22px;
         height: 1px;
         background: var(--fire);
       }
       .hh {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(6rem, 16vw, 15rem);
+        font-size: clamp(5rem, 22vw, 8rem);
         line-height: 0.84;
-        letter-spacing: 5px;
-        margin-bottom: 3.5rem;
+        letter-spacing: 4px;
+        margin-bottom: 1.8rem;
       }
       .hh .stk {
         -webkit-text-stroke: 1.5px var(--cream);
@@ -300,18 +284,13 @@
       .hh .acc {
         color: var(--fire);
       }
-      .hmeta {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 2rem;
-      }
       .hdesc {
-        font-size: 0.92rem;
+        font-size: 0.88rem;
         color: var(--muted);
-        line-height: 1.9;
-        max-width: 340px;
+        line-height: 1.85;
+        margin-bottom: 1.8rem;
         font-weight: 300;
+        max-width: 300px;
       }
       .hdesc strong {
         color: var(--cream);
@@ -319,9 +298,10 @@
       }
       .hbtns {
         display: flex;
-        gap: 1rem;
-        flex-shrink: 0;
+        gap: 0.8rem;
+        flex-wrap: wrap;
       }
+
       /* split word */
       .sl {
         display: block;
@@ -329,30 +309,31 @@
       }
       .sw {
         display: inline-block;
-        transform: translateY(115%) skewY(3deg);
+        transform: translateY(110%) skewY(3deg);
         opacity: 0;
         transition:
-          transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
           opacity 0.5s;
       }
       .sw.in {
         transform: translateY(0) skewY(0);
         opacity: 1;
       }
+
       /* scroll cue */
       .sci {
         position: absolute;
-        right: 3.5rem;
-        bottom: 4.5rem;
+        right: 1.4rem;
+        bottom: 3.5rem;
         z-index: 4;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.8rem;
+        gap: 0.6rem;
       }
       .scl {
         width: 1px;
-        height: 65px;
+        height: 50px;
         overflow: hidden;
         position: relative;
         background: rgba(240, 230, 208, 0.1);
@@ -376,31 +357,34 @@
         }
       }
       .sct {
-        font-size: 0.52rem;
+        font-size: 0.48rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--muted);
         writing-mode: vertical-rl;
       }
 
-      /* BUTTONS */
+      /* ══════════════════════════
+   BUTTONS — MOBILE FRIENDLY
+══════════════════════════ */
       .bp {
         background: var(--fire);
         color: #fff;
         border: none;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.72rem;
-        letter-spacing: 2.5px;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.85rem 2.2rem;
-        cursor: none;
+        padding: 0.85rem 1.8rem;
+        min-height: 48px; /* touch target */
         position: relative;
         overflow: hidden;
         transition:
           transform 0.2s,
           box-shadow 0.3s;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
       }
       .bp::after {
         content: "";
@@ -415,12 +399,17 @@
         transform: translateX(-100%) skewX(-20deg);
         transition: transform 0.55s;
       }
-      .bp:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 44px rgba(192, 57, 43, 0.55);
+      .bp:active {
+        transform: scale(0.97);
       }
-      .bp:hover::after {
-        transform: translateX(120%) skewX(-20deg);
+      @media (hover: hover) {
+        .bp:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 36px rgba(192, 57, 43, 0.5);
+        }
+        .bp:hover::after {
+          transform: translateX(120%) skewX(-20deg);
+        }
       }
       .bg2 {
         background: transparent;
@@ -428,50 +417,37 @@
         border: 1px solid rgba(240, 230, 208, 0.22);
         font-family: "Syne", sans-serif;
         font-weight: 500;
-        font-size: 0.72rem;
-        letter-spacing: 2.5px;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.85rem 2.2rem;
-        cursor: none;
-        position: relative;
-        overflow: hidden;
+        padding: 0.85rem 1.8rem;
+        min-height: 48px;
         transition: border-color 0.3s;
+        display: inline-flex;
+        align-items: center;
       }
-      .bg2::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(240, 230, 208, 0.05);
-        transform: scaleY(0);
-        transform-origin: bottom;
-        transition: transform 0.35s;
+      .bg2:active {
+        background: rgba(240, 230, 208, 0.06);
       }
-      .bg2:hover {
-        border-color: rgba(240, 230, 208, 0.5);
-      }
-      .bg2:hover::before {
-        transform: scaleY(1);
-      }
-      .mag {
-        display: inline-block;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      @media (hover: hover) {
+        .bg2:hover {
+          border-color: rgba(240, 230, 208, 0.5);
+        }
       }
 
-      /* TICKER */
+      /* ══════════════════════════
+   TICKER
+══════════════════════════ */
       .tick {
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
         overflow: hidden;
-        padding: 0.85rem 0;
-        background: var(--dark);
+        padding: 0.75rem 0;
       }
       .ti {
         display: flex;
         width: max-content;
-        animation: tr 24s linear infinite;
-      }
-      .tick:hover .ti {
-        animation-play-state: paused;
+        animation: tr 20s linear infinite;
       }
       @keyframes tr {
         from {
@@ -484,18 +460,13 @@
       .tit {
         display: flex;
         align-items: center;
-        gap: 1.8rem;
-        padding: 0 2rem;
+        gap: 1.4rem;
+        padding: 0 1.4rem;
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.1rem;
-        letter-spacing: 5px;
+        font-size: 1rem;
+        letter-spacing: 4px;
         color: var(--muted);
         white-space: nowrap;
-        transition: color 0.3s;
-        cursor: default;
-      }
-      .tit:hover {
-        color: var(--cream);
       }
       .tdot {
         width: 4px;
@@ -505,20 +476,28 @@
         flex-shrink: 0;
       }
 
-      /* STATS */
+      /* ══════════════════════════
+   STATS — 2x2 MOBILE GRID
+══════════════════════════ */
       .stats {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1fr 1fr;
         border-bottom: 1px solid var(--border);
       }
       .st {
-        padding: 5rem 3rem;
+        padding: 2.5rem 1.4rem;
         border-right: 1px solid var(--border);
         position: relative;
         overflow: hidden;
-        cursor: default;
       }
-      .st:last-child {
+      .st:nth-child(2) {
+        border-right: none;
+      }
+      .st:nth-child(3) {
+        border-top: 1px solid var(--border);
+      }
+      .st:nth-child(4) {
+        border-top: 1px solid var(--border);
         border-right: none;
       }
       .st::before {
@@ -533,12 +512,12 @@
         transform: translateY(101%);
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .st:hover::before {
+      .st:active::before {
         transform: translateY(0);
       }
       .stn {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 6vw, 7rem);
+        font-size: clamp(3rem, 10vw, 4.5rem);
         color: var(--cream);
         line-height: 0.88;
         letter-spacing: -1px;
@@ -546,112 +525,105 @@
         z-index: 1;
       }
       .stn .u {
-        font-size: 0.38em;
+        font-size: 0.4em;
         color: var(--fire);
         letter-spacing: 2px;
       }
       .stl {
-        font-size: 0.57rem;
-        letter-spacing: 4px;
+        font-size: 0.55rem;
+        letter-spacing: 3.5px;
         text-transform: uppercase;
         color: var(--muted);
         font-weight: 500;
-        margin-top: 1rem;
+        margin-top: 0.7rem;
         position: relative;
         z-index: 1;
       }
 
-      /* ══════════════════════════════════════════
+      /* ══════════════════════════
    SECTION HELPERS
-══════════════════════════════════════════ */
+══════════════════════════ */
       .eye {
-        font-size: 0.6rem;
+        font-size: 0.58rem;
         letter-spacing: 5px;
         text-transform: uppercase;
         color: var(--fire);
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.6rem;
+        gap: 0.8rem;
+        margin-bottom: 0.5rem;
       }
       .eye::before {
         content: "";
-        width: 24px;
+        width: 20px;
         height: 1px;
         background: var(--fire);
       }
       .ttl {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3.5rem, 7vw, 6.5rem);
+        font-size: clamp(2.8rem, 10vw, 6rem);
         line-height: 0.88;
-        letter-spacing: 4px;
+        letter-spacing: 3px;
       }
       .ttl .out {
         -webkit-text-stroke: 1px var(--cream);
         color: transparent;
       }
 
-      /* ══════════════════════════════════════════
-   MENU SECTION
-══════════════════════════════════════════ */
+      /* ══════════════════════════
+   MENU SECTION — MOBILE
+══════════════════════════ */
       .msec {
-        padding: 9rem 0;
+        padding: 4rem 0 3rem;
         background: var(--dark);
         position: relative;
         overflow: hidden;
       }
-      /* bg: dark lavash atmosphere */
       .msec::before {
         content: "";
         position: absolute;
         inset: 0;
-        z-index: 0;
-        background: url("https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=1800&q=50")
+        background: url("https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=800&q=40")
           center/cover no-repeat;
-        filter: brightness(0.055) saturate(0);
+        filter: brightness(0.05) saturate(0);
         pointer-events: none;
       }
-      /* red glow top right */
       .msec::after {
         content: "";
         position: absolute;
         top: -20%;
-        right: -10%;
-        width: 50%;
-        height: 80%;
-        z-index: 0;
+        right: -15%;
+        width: 60%;
+        height: 70%;
         background: radial-gradient(
           ellipse,
-          rgba(192, 57, 43, 0.12) 0%,
+          rgba(192, 57, 43, 0.1) 0%,
           transparent 65%
         );
         pointer-events: none;
       }
       .mhead {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        padding: 0 4rem 4rem;
+        padding: 0 1.4rem 1.8rem;
         position: relative;
         z-index: 1;
       }
-      .mhint {
-        font-size: 0.8rem;
-        color: var(--muted);
-        max-width: 210px;
-        line-height: 1.7;
-      }
 
-      /* TAB NAV */
+      /* Tab bar — horizontal scroll */
       .mtabs {
         display: flex;
         gap: 0;
-        padding: 0 4rem 2.5rem;
-        position: relative;
-        z-index: 1;
+        padding: 0 1.4rem;
+        overflow-x: auto;
+        scrollbar-width: none;
         border-bottom: 1px solid var(--border);
         margin-bottom: 0;
+        position: relative;
+        z-index: 1;
+        -webkit-overflow-scrolling: touch;
+      }
+      .mtabs::-webkit-scrollbar {
+        display: none;
       }
       .mtab {
         background: none;
@@ -660,124 +632,92 @@
         color: var(--muted);
         font-family: "Syne", sans-serif;
         font-weight: 600;
-        font-size: 0.68rem;
-        letter-spacing: 2.5px;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.7rem 1.8rem 0.7rem 0;
-        cursor: none;
+        padding: 0.7rem 1.2rem;
+        flex-shrink: 0;
+        min-height: 44px; /* touch target */
         transition:
           color 0.25s,
           border-color 0.25s;
-        margin-right: 1.5rem;
+        white-space: nowrap;
       }
       .mtab.act {
         color: var(--cream);
         border-bottom-color: var(--fire);
       }
-      .mtab:hover {
-        color: var(--cream);
-      }
 
-      /* Card strip */
+      /* Card strip — horizontal scroll */
       .strip {
         display: flex;
-        gap: 3px;
-        padding: 2rem 4rem 0;
+        gap: 10px;
+        padding: 1.5rem 1.4rem;
         overflow-x: auto;
         scrollbar-width: none;
-        cursor: grab;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
         position: relative;
         z-index: 1;
-        transition: opacity 0.3s;
       }
       .strip::-webkit-scrollbar {
         display: none;
       }
-      .strip.drag {
-        cursor: grabbing;
-        user-select: none;
-      }
       .strip.hidden {
-        opacity: 0;
-        pointer-events: none;
-        position: absolute;
+        display: none;
       }
 
+      /* CARD — mobile optimized */
       .mc {
-        flex: 0 0 310px;
-        height: 450px;
+        flex: 0 0 75vw; /* ~280px on 375px screen */
+        max-width: 300px;
+        height: 380px;
         position: relative;
         overflow: hidden;
-        background: var(--mid);
+        background: var(--card);
+        border-radius: var(--r);
         flex-shrink: 0;
-        cursor: none;
-        transform-style: preserve-3d;
-        transition: box-shadow 0.4s;
-      }
-      .mc:hover {
-        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.65);
+        scroll-snap-align: start;
+        border: 1px solid var(--border);
+        /* NO 3D on mobile — performance */
       }
       .mcbg {
         position: absolute;
         inset: 0;
         background-size: cover;
         background-position: center;
-        filter: brightness(0.6) saturate(1.15);
-        transform: scale(1.06);
+        filter: brightness(0.62) saturate(1.15);
         transition:
-          transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-          filter 0.5s;
+          transform 0.6s ease,
+          filter 0.4s;
       }
-      .mc:hover .mcbg {
-        transform: scale(1.13);
-        filter: brightness(0.78) saturate(1.3);
+      .mc:active .mcbg {
+        transform: scale(1.04);
+        filter: brightness(0.72);
       }
       .mcov {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to top,
-          rgba(7, 6, 5, 0.96) 0%,
-          rgba(7, 6, 5, 0.25) 55%,
+          rgba(7, 6, 5, 0.97) 0%,
+          rgba(7, 6, 5, 0.2) 55%,
           transparent 100%
         );
       }
-      .mc::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 46px 46px 0;
-        border-color: transparent var(--fire) transparent transparent;
-        opacity: 0;
-        transition: opacity 0.3s;
-        z-index: 4;
-      }
-      .mc:hover::after {
-        opacity: 1;
-      }
       .mcbadge {
         position: absolute;
-        top: 1.2rem;
-        left: 1.2rem;
+        top: 1rem;
+        left: 1rem;
         z-index: 3;
         font-size: 0.52rem;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: var(--fire);
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .mcbadge::before {
-        content: "";
-        width: 14px;
-        height: 1px;
+        color: #fff;
         background: var(--fire);
+        padding: 0.28rem 0.7rem;
+        border-radius: 4px;
+        font-weight: 700;
       }
       .mcbody {
         position: absolute;
@@ -785,275 +725,197 @@
         left: 0;
         right: 0;
         z-index: 3;
-        padding: 1.8rem;
+        padding: 1.5rem;
       }
       .mcnum {
-        font-size: 0.52rem;
+        font-size: 0.5rem;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: rgba(240, 230, 208, 0.38);
-        margin-bottom: 0.6rem;
+        color: rgba(240, 230, 208, 0.35);
+        margin-bottom: 0.5rem;
       }
       .mcn {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 2rem;
+        font-size: 1.9rem;
         letter-spacing: 3px;
         color: var(--cream);
         line-height: 0.95;
         margin-bottom: 0.4rem;
-        transform: translateY(5px);
-        transition: transform 0.4s;
-      }
-      .mc:hover .mcn {
-        transform: translateY(0);
       }
       .mcd {
-        font-size: 0.74rem;
+        font-size: 0.75rem;
         color: var(--muted);
         line-height: 1.6;
-        max-width: 255px;
-        transform: translateY(8px);
-        opacity: 0;
-        transition:
-          transform 0.4s 0.04s,
-          opacity 0.4s 0.04s;
-      }
-      .mc:hover .mcd {
-        transform: translateY(0);
-        opacity: 1;
+        margin-bottom: 0.9rem;
       }
       .mcft {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: 0.8rem;
-        transform: translateY(8px);
-        opacity: 0;
-        transition:
-          transform 0.4s 0.09s,
-          opacity 0.4s 0.09s;
-      }
-      .mc:hover .mcft {
-        transform: translateY(0);
-        opacity: 1;
       }
       .mcp {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.85rem;
+        font-size: 1.8rem;
         color: var(--gold);
-        letter-spacing: 1px;
       }
       .mcb {
-        font-size: 0.58rem;
-        letter-spacing: 2.5px;
+        font-size: 0.6rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--cream);
-        background: none;
-        border: 1px solid rgba(240, 230, 208, 0.2);
-        padding: 0.36rem 0.9rem;
-        cursor: none;
+        background: rgba(192, 57, 43, 0.85);
+        border: none;
+        padding: 0.45rem 1rem;
+        border-radius: 6px;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
         font-family: "Space Grotesk", sans-serif;
-        transition:
-          border-color 0.2s,
-          background 0.2s;
+        font-weight: 600;
+        transition: background 0.2s;
       }
-      .mcb:hover {
-        border-color: var(--fire);
-        background: rgba(192, 57, 43, 0.12);
+      .mcb:active {
+        background: rgba(192, 57, 43, 0.6);
       }
       .mcb.added {
-        border-color: #22c55e;
-        color: #22c55e;
-        background: rgba(34, 197, 94, 0.08);
+        background: rgba(34, 197, 94, 0.8);
+        color: #fff;
       }
+
+      /* progress bar */
       .sprog {
-        height: 1px;
+        height: 2px;
         background: var(--border);
-        margin: 1.5rem 4rem 0;
+        margin: 0 1.4rem;
         position: relative;
         z-index: 1;
+        border-radius: 2px;
       }
       .sfill {
         position: absolute;
         left: 0;
         top: 0;
-        height: 1px;
+        height: 2px;
         background: var(--fire);
         width: 15%;
         transition: width 0.12s;
+        border-radius: 2px;
       }
 
-      /* ══════════════════════════════════════════
-   FEATURED
-══════════════════════════════════════════ */
+      /* ══════════════════════════
+   FEATURED — MOBILE STACK
+══════════════════════════ */
       .feat {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        min-height: 90vh;
+        background: var(--dark);
         position: relative;
-      }
-      .feat::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          ellipse at 12% 50%,
-          rgba(192, 57, 43, 0.1) 0%,
-          transparent 55%
-        );
-        animation: fg 7s ease-in-out infinite;
-        pointer-events: none;
-        z-index: 0;
-      }
-      @keyframes fg {
-        0%,
-        100% {
-          opacity: 0.7;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.08);
-        }
       }
       .fimg {
         position: relative;
+        height: 65vw;
+        min-height: 240px;
         overflow: hidden;
-        z-index: 1;
       }
       .fbg {
         position: absolute;
         inset: 0;
-        background: url("https://images.unsplash.com/photo-1561651188-d207bbec4ec3?w=1200&q=90")
+        background: url("https://images.unsplash.com/photo-1561651188-d207bbec4ec3?w=900&q=90")
           center/cover no-repeat;
         filter: brightness(0.68) saturate(1.25);
-        will-change: transform;
-        transform: scale(1.05);
       }
       .fov {
         position: absolute;
         inset: 0;
         background: linear-gradient(
-          to right,
+          to bottom,
           transparent 50%,
           var(--dark) 100%
         );
       }
       .fbadge {
         position: absolute;
-        bottom: 3rem;
-        left: 3rem;
+        bottom: 1.2rem;
+        left: 1.2rem;
         z-index: 2;
         background: rgba(7, 6, 5, 0.88);
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(16px);
         border: 1px solid var(--border);
-        padding: 1.4rem 1.8rem;
+        padding: 1rem 1.3rem;
+        border-radius: 10px;
       }
       .fbl {
-        font-size: 0.55rem;
+        font-size: 0.52rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--fire);
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
         font-weight: 600;
       }
       .fbn {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: var(--cream);
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.25rem;
       }
       .fbst {
         color: var(--gold);
         letter-spacing: 2px;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
       }
       .ftxt {
-        padding: 7rem 5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: var(--dark);
-        position: relative;
-        z-index: 1;
-      }
-      .ftxt::before {
-        content: "SIGNATURE";
-        position: absolute;
-        right: -1.5rem;
-        top: 50%;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 8rem;
-        letter-spacing: 6px;
-        color: rgba(240, 230, 208, 0.022);
-        writing-mode: vertical-rl;
-        transform: translateY(-50%);
-        pointer-events: none;
+        padding: 2rem 1.4rem 3rem;
       }
       .ftit {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 7vw, 7rem);
+        font-size: clamp(3.5rem, 14vw, 6rem);
         line-height: 0.88;
         letter-spacing: 4px;
-        margin: 1rem 0 2.5rem;
+        margin: 1rem 0 1.5rem;
       }
       .ftit em {
         font-style: normal;
         color: var(--fire);
       }
       .fbody {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         color: var(--muted);
-        line-height: 1.9;
-        max-width: 380px;
-        margin-bottom: 3rem;
+        line-height: 1.85;
+        margin-bottom: 1.8rem;
       }
       .ftags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 3rem;
+        gap: 0.45rem;
+        margin-bottom: 1.8rem;
       }
       .ftag {
-        font-size: 0.6rem;
-        letter-spacing: 2.5px;
+        font-size: 0.58rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--muted);
         border: 1px solid var(--border);
-        padding: 0.28rem 0.8rem;
-        transition:
-          border-color 0.2s,
-          color 0.2s;
-        cursor: default;
-      }
-      .ftag:hover {
-        border-color: rgba(192, 57, 43, 0.4);
-        color: var(--cream);
+        padding: 0.25rem 0.7rem;
+        border-radius: 4px;
       }
       .fpr {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 5.5rem;
-        line-height: 1;
+        font-size: 3.5rem;
         color: var(--gold);
-        margin-bottom: 2.5rem;
+        line-height: 1;
+        margin-bottom: 1.5rem;
       }
       .fpr sub {
-        font-size: 0.25em;
+        font-size: 0.3em;
         vertical-align: bottom;
         color: var(--muted);
       }
 
-      /* ══════════════════════════════════════════
-   PROMO
-══════════════════════════════════════════ */
+      /* ══════════════════════════
+   PROMO — MOBILE
+══════════════════════════ */
       .promo {
         background: var(--fire);
-        padding: 6rem 4rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 4rem;
+        padding: 3.5rem 1.4rem;
         position: relative;
         overflow: hidden;
       }
@@ -1061,8 +923,8 @@
         content: "ENJOY20";
         position: absolute;
         font-family: "Bebas Neue", sans-serif;
-        font-size: 28vw;
-        letter-spacing: -3vw;
+        font-size: 40vw;
+        letter-spacing: -3px;
         color: rgba(0, 0, 0, 0.07);
         top: 50%;
         left: 50%;
@@ -1070,132 +932,74 @@
         pointer-events: none;
         white-space: nowrap;
       }
-      .promo::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.07) 0%,
-          transparent 50%,
-          rgba(0, 0, 0, 0.06) 100%
-        );
-        pointer-events: none;
-      }
       .plsub {
-        font-size: 0.6rem;
+        font-size: 0.58rem;
         letter-spacing: 4px;
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.55);
         font-weight: 600;
-        margin-bottom: 0.9rem;
+        margin-bottom: 0.8rem;
       }
       .plh {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(5rem, 12vw, 11rem);
+        font-size: clamp(4rem, 16vw, 7rem);
         line-height: 0.85;
         letter-spacing: 4px;
         color: #fff;
-      }
-      .pr {
-        position: relative;
-        z-index: 2;
-        text-align: right;
+        margin-bottom: 2rem;
       }
       .prlbl {
-        font-size: 0.58rem;
+        font-size: 0.55rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.5rem;
         font-weight: 600;
       }
       .prc {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3.5rem, 7vw, 7rem);
-        letter-spacing: 10px;
+        font-size: clamp(2.5rem, 10vw, 4.5rem);
+        letter-spacing: 8px;
         color: #fff;
         border: 1.5px solid rgba(255, 255, 255, 0.32);
-        padding: 0.3rem 1.5rem;
+        padding: 0.3rem 1.2rem;
         display: inline-block;
-        margin-bottom: 1.5rem;
-        position: relative;
-        overflow: hidden;
-        cursor: default;
-      }
-      .prc::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.3),
-          transparent
-        );
-        transform: translateX(-100%);
-      }
-      .prc:hover::after {
-        animation: shine 0.7s ease;
-      }
-      @keyframes shine {
-        to {
-          transform: translateX(100%);
-        }
+        margin-bottom: 1.2rem;
+        border-radius: 4px;
       }
       .prd {
         font-size: 0.82rem;
         color: rgba(255, 255, 255, 0.6);
         line-height: 1.7;
-        max-width: 260px;
-        margin-left: auto;
+        margin-bottom: 1.8rem;
       }
 
-      /* ══════════════════════════════════════════
-   GALLERY
-══════════════════════════════════════════ */
+      /* ══════════════════════════
+   GALLERY — MOBILE
+══════════════════════════ */
       .gal {
-        padding: 9rem 4rem;
-        background: var(--dark);
-        position: relative;
-        overflow: hidden;
-      }
-      .gal::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&q=40")
-          center/cover no-repeat;
-        filter: brightness(0.045) saturate(0);
-        pointer-events: none;
+        padding: 3.5rem 1.4rem;
       }
       .ghd {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        margin-bottom: 4rem;
-        position: relative;
-        z-index: 1;
+        margin-bottom: 2rem;
       }
       .gnt {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         color: var(--muted);
         line-height: 1.7;
-        max-width: 260px;
+        margin-top: 0.7rem;
       }
+      /* 2-col grid on mobile */
       .gg {
         display: grid;
-        grid-template-columns: 3fr 2fr 2fr;
-        grid-template-rows: 340px 240px;
-        gap: 4px;
-        position: relative;
-        z-index: 1;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
       }
       .gi {
         position: relative;
         overflow: hidden;
-        cursor: none;
-        transform-style: preserve-3d;
+        border-radius: 10px;
+        aspect-ratio: 1;
       }
       .gibg {
         position: absolute;
@@ -1204,34 +1008,25 @@
         background-position: center;
         filter: brightness(0.7) saturate(0.95);
         transition:
-          transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-          filter 0.5s;
+          transform 0.5s ease,
+          filter 0.4s;
       }
-      .gi:hover .gibg {
-        filter: brightness(0.95) saturate(1.2);
+      .gi:active .gibg {
+        transform: scale(1.04);
+        filter: brightness(0.9) saturate(1.1);
       }
       .gi.tall {
         grid-row: span 2;
+        aspect-ratio: auto;
       }
       .giov {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to top,
-          rgba(7, 6, 5, 0.92) 0%,
+          rgba(7, 6, 5, 0.9) 0%,
           transparent 55%
         );
-      }
-      .gibrd {
-        position: absolute;
-        inset: 0;
-        border: 1.5px solid rgba(192, 57, 43, 0);
-        transition: border-color 0.4s;
-        pointer-events: none;
-        z-index: 3;
-      }
-      .gi:hover .gibrd {
-        border-color: rgba(192, 57, 43, 0.5);
       }
       .gicap {
         position: absolute;
@@ -1239,43 +1034,27 @@
         left: 0;
         right: 0;
         z-index: 2;
-        padding: 2rem 1.5rem 1.2rem;
-        transform: translateY(100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .gi:hover .gicap {
-        transform: translateY(0);
-      }
-      .ginum {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        font-size: 0.58rem;
-        letter-spacing: 2px;
-        color: var(--muted);
-        font-family: "Bebas Neue", sans-serif;
-        z-index: 2;
+        padding: 1rem 0.9rem 0.7rem;
       }
       .gitt {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.5rem;
-        letter-spacing: 3px;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
         color: var(--cream);
-        margin-bottom: 0.3rem;
       }
       .gisb {
-        font-size: 0.58rem;
+        font-size: 0.52rem;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--fire);
       }
 
-      /* ══════════════════════════════════════════
-   DELIVERY
-══════════════════════════════════════════ */
+      /* ══════════════════════════
+   DELIVERY — 2x2 MOBILE
+══════════════════════════ */
       .del {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1fr 1fr;
         border-top: 1px solid var(--border);
         position: relative;
         overflow: hidden;
@@ -1284,25 +1063,27 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: url("https://images.unsplash.com/photo-1567521464027-f127ff144326?w=1800&q=40")
+        background: url("https://images.unsplash.com/photo-1567521464027-f127ff144326?w=800&q=40")
           center/cover no-repeat;
         filter: brightness(0.05) saturate(0);
         pointer-events: none;
       }
       .pil {
-        padding: 5rem 3rem;
+        padding: 2.5rem 1.4rem;
         border-right: 1px solid var(--border);
         position: relative;
         overflow: hidden;
-        cursor: default;
         z-index: 1;
-        transition: background 0.4s;
       }
-      .pil:last-child {
+      .pil:nth-child(2) {
         border-right: none;
       }
-      .pil:hover {
-        background: rgba(192, 57, 43, 0.05);
+      .pil:nth-child(3) {
+        border-top: 1px solid var(--border);
+      }
+      .pil:nth-child(4) {
+        border-top: 1px solid var(--border);
+        border-right: none;
       }
       .pil::after {
         content: "";
@@ -1316,47 +1097,45 @@
         transform-origin: bottom;
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .pil:hover::after {
+      .pil:active::after {
         transform: scaleY(1);
       }
       .piln {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 6vw, 6.5rem);
+        font-size: clamp(3rem, 9vw, 5rem);
         color: var(--cream);
         line-height: 0.88;
-        letter-spacing: -1px;
-        transition:
-          color 0.3s,
-          text-shadow 0.4s;
+        transition: color 0.3s;
       }
-      .pil:hover .piln {
+      .pil:active .piln {
         color: var(--fire);
-        text-shadow: 0 0 50px rgba(192, 57, 43, 0.45);
       }
       .pilu {
-        font-size: 0.57rem;
-        letter-spacing: 4px;
+        font-size: 0.52rem;
+        letter-spacing: 3.5px;
         text-transform: uppercase;
         color: rgba(192, 57, 43, 0.65);
         font-weight: 600;
-        margin: 0.5rem 0 1.8rem;
+        margin: 0.4rem 0 1rem;
       }
       .pilt {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: var(--cream);
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.45rem;
       }
       .pild {
-        font-size: 0.8rem;
+        font-size: 0.76rem;
         color: var(--muted);
-        line-height: 1.75;
+        line-height: 1.65;
       }
 
-      /* TESTIMONIALS */
+      /* ══════════════════════════
+   TESTIMONIALS — HORIZONTAL SCROLL
+══════════════════════════ */
       .test {
-        padding: 9rem 4rem;
+        padding: 3.5rem 0;
         background: var(--dark);
         position: relative;
         overflow: hidden;
@@ -1365,30 +1144,41 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=40")
+        background: url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=30")
           center/cover no-repeat;
-        filter: brightness(0.045) saturate(0);
+        filter: brightness(0.04) saturate(0);
         pointer-events: none;
       }
-      .tg {
-        display: grid;
-        grid-template-columns: 1.4fr 1fr 1fr;
-        gap: 1px;
-        background: var(--border);
-        margin-top: 5rem;
+      .thead {
+        padding: 0 1.4rem 2rem;
         position: relative;
         z-index: 1;
       }
+      .tscroll {
+        display: flex;
+        gap: 10px;
+        padding: 0 1.4rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        position: relative;
+        z-index: 1;
+      }
+      .tscroll::-webkit-scrollbar {
+        display: none;
+      }
       .tc {
-        background: var(--dark);
-        padding: 3.5rem 3rem;
+        flex: 0 0 85vw;
+        max-width: 320px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 2rem 1.5rem;
+        scroll-snap-align: start;
+        flex-shrink: 0;
         position: relative;
         overflow: hidden;
-        cursor: default;
-        transition: background 0.4s;
-      }
-      .tc:hover {
-        background: var(--mid);
       }
       .tc::before {
         content: "";
@@ -1396,7 +1186,7 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 1.5px;
+        height: 2px;
         background: linear-gradient(
           90deg,
           var(--fire),
@@ -1405,32 +1195,32 @@
         );
         transform: scaleX(0);
         transform-origin: left;
-        transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.5s;
       }
-      .tc:hover::before {
+      .tc:active::before {
         transform: scaleX(1);
       }
       .tcq {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 8rem;
+        font-size: 5rem;
         color: var(--fire);
-        opacity: 0.11;
+        opacity: 0.12;
         line-height: 0.6;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         display: block;
       }
       .tcst {
         color: var(--gold);
         letter-spacing: 4px;
-        font-size: 0.85rem;
-        margin-bottom: 1.4rem;
+        font-size: 0.82rem;
+        margin-bottom: 1rem;
       }
       .tctx {
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         color: var(--muted);
-        line-height: 1.9;
+        line-height: 1.85;
         font-style: italic;
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.8rem;
       }
       .tctx em {
         color: var(--cream);
@@ -1440,19 +1230,15 @@
       .tcft {
         display: flex;
         align-items: center;
-        gap: 1.2rem;
+        gap: 1rem;
       }
       .tcav {
-        width: 46px;
-        height: 46px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         overflow: hidden;
         border: 1px solid var(--border);
         flex-shrink: 0;
-        transition: border-color 0.3s;
-      }
-      .tc:hover .tcav {
-        border-color: rgba(192, 57, 43, 0.45);
       }
       .tcav img {
         width: 100%;
@@ -1462,31 +1248,24 @@
       .tcnm {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         color: var(--cream);
       }
       .tclc {
-        font-size: 0.64rem;
+        font-size: 0.62rem;
         color: var(--muted);
         margin-top: 0.2rem;
-        letter-spacing: 1px;
-      }
-      .tc.big .tctx {
-        font-size: 1.02rem;
       }
 
-      /* CTA */
+      /* ══════════════════════════
+   CTA — MOBILE
+══════════════════════════ */
       .cta {
-        min-height: 72vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        padding: 5rem 1.4rem;
         text-align: center;
-        padding: 8rem 4rem;
+        border-top: 1px solid var(--border);
         position: relative;
         overflow: hidden;
-        border-top: 1px solid var(--border);
       }
       .cta::before {
         content: "";
@@ -1495,10 +1274,10 @@
         background:
           linear-gradient(rgba(192, 57, 43, 0.04) 1px, transparent 1px),
           linear-gradient(90deg, rgba(192, 57, 43, 0.04) 1px, transparent 1px);
-        background-size: 90px 90px;
-        animation: gMove 22s linear infinite;
+        background-size: 70px 70px;
+        animation: gm 20s linear infinite;
       }
-      @keyframes gMove {
+      @keyframes gm {
         from {
           transform: rotate(0deg);
         }
@@ -1512,17 +1291,17 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 900px;
-        height: 900px;
+        width: 400px;
+        height: 400px;
         border-radius: 50%;
         background: radial-gradient(
           circle,
           rgba(192, 57, 43, 0.09) 0%,
           transparent 70%
         );
-        animation: cPulse 5s ease-in-out infinite;
+        animation: cp 5s ease-in-out infinite;
       }
-      @keyframes cPulse {
+      @keyframes cp {
         0%,
         100% {
           transform: translate(-50%, -50%) scale(1);
@@ -1533,9 +1312,9 @@
       }
       .ctah {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(5rem, 14vw, 14rem);
+        font-size: clamp(4rem, 18vw, 8rem);
         line-height: 0.85;
-        letter-spacing: 5px;
+        letter-spacing: 4px;
         position: relative;
         z-index: 1;
       }
@@ -1544,42 +1323,38 @@
         color: transparent;
       }
       .ctasub {
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         color: var(--muted);
-        margin: 2.5rem auto 4rem;
-        max-width: 360px;
+        margin: 1.8rem auto 2.5rem;
+        max-width: 300px;
         line-height: 1.85;
         position: relative;
         z-index: 1;
       }
       .ctabtn {
         display: flex;
-        gap: 1.2rem;
+        gap: 0.8rem;
         justify-content: center;
+        flex-wrap: wrap;
         position: relative;
         z-index: 1;
       }
 
-      /* FOOTER */
+      /* ══════════════════════════
+   FOOTER — MOBILE
+══════════════════════════ */
       footer {
         background: #000;
         border-top: 1px solid var(--border);
-        padding: 5.5rem 4rem 2.5rem;
-      }
-      .ftg {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 5rem;
-        margin-bottom: 5rem;
+        padding: 3rem 1.4rem 2rem;
       }
       .flogo {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 3rem;
-        letter-spacing: 5px;
+        font-size: 2.5rem;
+        letter-spacing: 4px;
         color: var(--cream);
-        text-decoration: none;
         display: block;
-        margin-bottom: 1.2rem;
+        margin-bottom: 1rem;
       }
       .flogo em {
         color: var(--fire);
@@ -1589,16 +1364,16 @@
         font-size: 0.8rem;
         color: var(--muted);
         line-height: 1.8;
-        max-width: 255px;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
       }
       .fsoc {
         display: flex;
-        gap: 0.8rem;
+        gap: 0.7rem;
+        margin-bottom: 2.5rem;
       }
       .fs {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         border: 1px solid var(--border);
         display: flex;
@@ -1607,116 +1382,101 @@
         color: var(--muted);
         font-size: 0.65rem;
         font-weight: 700;
-        text-decoration: none;
         transition:
           border-color 0.2s,
-          color 0.2s,
-          transform 0.25s;
-        cursor: none;
+          color 0.2s;
       }
-      .fs:hover {
+      .fs:active {
         border-color: var(--fire);
         color: var(--fire);
-        transform: translateY(-3px);
+      }
+      /* 2-col footer links */
+      .flinks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
       }
       .fh {
-        font-size: 0.62rem;
+        font-size: 0.6rem;
         letter-spacing: 4px;
         text-transform: uppercase;
         color: var(--cream);
         font-weight: 600;
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.2rem;
       }
       .ful {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 0.9rem;
+        gap: 0.8rem;
       }
       .ful a {
         color: var(--muted);
-        text-decoration: none;
         font-size: 0.82rem;
-        display: inline-flex;
+        display: flex;
         align-items: center;
         gap: 0.5rem;
-        transition:
-          color 0.2s,
-          gap 0.3s;
+        min-height: 36px;
+        transition: color 0.2s;
       }
-      .ful a::before {
-        content: "→";
-        font-size: 0.65rem;
-        color: var(--fire);
-        opacity: 0;
-        transform: translateX(-8px);
-        transition:
-          opacity 0.2s,
-          transform 0.25s;
-      }
-      .ful a:hover {
+      .ful a:active {
         color: var(--cream);
-        gap: 0.9rem;
-      }
-      .ful a:hover::before {
-        opacity: 1;
-        transform: translateX(0);
       }
       .fbot {
         border-top: 1px solid var(--border);
-        padding-top: 2rem;
+        padding-top: 1.5rem;
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 0.5rem;
       }
       .fcopy {
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         color: rgba(240, 230, 208, 0.18);
       }
       .fph {
         font-family: "Syne", sans-serif;
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 1rem;
         color: var(--cream);
       }
 
-      /* FLOAT */
+      /* FLOAT BUTTON */
       #fb {
         position: fixed;
-        bottom: 2.8rem;
-        right: 2.8rem;
+        bottom: 1.2rem;
+        right: 1.2rem;
         z-index: 400;
         background: var(--fire);
         color: #fff;
         border: none;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 2.5px;
+        font-size: 0.72rem;
+        letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.78rem 1.8rem;
-        cursor: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 40px;
+        min-height: 48px;
         display: flex;
         align-items: center;
         gap: 0.6rem;
-        box-shadow: 0 8px 32px rgba(192, 57, 43, 0.5);
+        box-shadow: 0 6px 24px rgba(192, 57, 43, 0.5);
         opacity: 0;
         transform: translateY(10px);
         pointer-events: none;
         transition:
           opacity 0.35s,
           transform 0.35s,
-          background 0.2s,
-          box-shadow 0.2s;
+          background 0.2s;
       }
       #fb.show {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
       }
-      #fb:hover {
+      #fb:active {
         background: #a93226;
-        box-shadow: 0 16px 50px rgba(192, 57, 43, 0.65);
       }
       .fp {
         width: 6px;
@@ -1737,13 +1497,13 @@
         }
       }
 
-      /* REVEAL */
+      /* REVEAL — simple fade for mobile */
       .rv {
         opacity: 0;
-        transform: translateY(28px);
+        transform: translateY(24px);
         transition:
-          opacity 0.9s ease,
-          transform 0.9s ease;
+          opacity 0.7s ease,
+          transform 0.7s ease;
       }
       .rv.v {
         opacity: 1;
@@ -1753,129 +1513,422 @@
         transition-delay: 0.1s;
       }
       .d2 {
-        transition-delay: 0.2s;
+        transition-delay: 0.18s;
       }
       .d3 {
-        transition-delay: 0.3s;
+        transition-delay: 0.26s;
       }
       .d4 {
-        transition-delay: 0.4s;
-      }
-      .d5 {
-        transition-delay: 0.5s;
+        transition-delay: 0.34s;
       }
 
-      @media (max-width: 900px) {
-        #nav {
-          padding: 1.1rem 1.5rem;
+      /* ══════════════════════════
+   DESKTOP OVERRIDES
+══════════════════════════ */
+      @media (min-width: 768px) {
+        body {
+          cursor: none;
         }
-        .nr > *:not(:last-child) {
+        #nav {
+          padding: 1.8rem 4rem;
+        }
+        #nav.stuck {
+          padding: 1rem 4rem;
+        }
+        .ham {
           display: none;
         }
+        .nlinks {
+          display: flex;
+          align-items: center;
+          gap: 2.5rem;
+        }
+        .nla {
+          color: var(--muted);
+          font-size: 0.65rem;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          font-weight: 500;
+          position: relative;
+          overflow: hidden;
+        }
+        .nla::after {
+          content: "";
+          position: absolute;
+          bottom: -1px;
+          left: -100%;
+          width: 100%;
+          height: 1px;
+          background: var(--gold);
+          transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nla:hover {
+          color: var(--cream);
+        }
+        .nla:hover::after {
+          left: 0;
+        }
+        .nb {
+          background: none;
+          border: 1px solid rgba(192, 57, 43, 0.5);
+          color: var(--cream);
+          font-family: "Syne", sans-serif;
+          font-weight: 700;
+          font-size: 0.65rem;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          padding: 0.5rem 1.5rem;
+          cursor: none;
+          position: relative;
+          overflow: hidden;
+          transition:
+            color 0.3s,
+            border-color 0.3s;
+        }
+        .nb::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: var(--fire);
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nb:hover {
+          color: #fff;
+          border-color: var(--fire);
+        }
+        .nb:hover::before {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+        .nb span {
+          position: relative;
+          z-index: 1;
+        }
+
+        #hphoto {
+          background-image: url("https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1920&q=95");
+        }
         .hcon {
-          padding: 0 1.5rem 4.5rem;
+          padding: 0 4rem 5.5rem;
+        }
+        .htag {
+          font-size: 0.6rem;
         }
         .hh {
-          font-size: clamp(5rem, 22vw, 9rem);
+          font-size: clamp(7rem, 17vw, 15rem);
+          margin-bottom: 3.5rem;
         }
-        .hmeta {
-          flex-direction: column;
-          align-items: flex-start;
+        .hdesc {
+          font-size: 0.92rem;
+          max-width: 340px;
+        }
+        .hmeta-wrap {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+        .hbtns {
+          justify-content: flex-end;
         }
         .sci {
-          right: 1.5rem;
-          bottom: 3.5rem;
+          right: 3.5rem;
+          bottom: 4.5rem;
         }
+        .scl {
+          height: 65px;
+        }
+
         .stats {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(4, 1fr);
         }
         .st:nth-child(2) {
-          border-right: none;
+          border-right: 1px solid var(--border);
         }
         .st:nth-child(3) {
-          border-top: 1px solid var(--border);
+          border-top: none;
         }
-        .mhead,
-        .strip,
+        .st:nth-child(4) {
+          border-top: none;
+        }
+        .stn {
+          font-size: clamp(4rem, 6vw, 7rem);
+        }
+
+        .msec {
+          padding: 8rem 0 5rem;
+        }
+        .mhead {
+          padding: 0 4rem 2rem;
+        }
         .mtabs {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
+          padding: 0 4rem;
         }
-        .sprog {
-          margin: 1.5rem 1.5rem 0;
+        .strip {
+          padding: 2rem 4rem;
+          gap: 4px;
         }
         .mc {
-          flex: 0 0 275px;
-          height: 400px;
+          flex: 0 0 310px;
+          height: 450px;
+          border-radius: 4px;
         }
+        .mc:hover .mcbg {
+          transform: scale(1.1);
+          filter: brightness(0.75) saturate(1.25);
+        }
+        .mcn {
+          font-size: 2rem;
+        }
+        .mcd {
+          opacity: 0;
+          transform: translateY(8px);
+          transition:
+            transform 0.4s 0.04s,
+            opacity 0.4s 0.04s;
+        }
+        .mc:hover .mcd {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .mcft {
+          opacity: 0;
+          transform: translateY(8px);
+          transition:
+            transform 0.4s 0.09s,
+            opacity 0.4s 0.09s;
+        }
+        .mc:hover .mcft {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .mcb {
+          border-radius: 2px;
+        }
+        .sprog {
+          margin: 1.5rem 4rem 0;
+        }
+
         .feat {
-          grid-template-columns: 1fr;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          min-height: 90vh;
         }
         .fimg {
-          height: 58vw;
+          height: auto;
+        }
+        .fbg {
+          transition: transform 0.8s ease;
+        }
+        .fbadge {
+          border-radius: 2px;
+          padding: 1.4rem 1.8rem;
         }
         .ftxt {
-          padding: 4rem 2rem;
+          padding: 7rem 5rem;
         }
+        .ftit {
+          font-size: clamp(4rem, 7vw, 7rem);
+          margin-bottom: 2.5rem;
+        }
+        .fbody {
+          margin-bottom: 3rem;
+        }
+        .fpr {
+          font-size: 5.5rem;
+          margin-bottom: 2.5rem;
+        }
+
         .promo {
-          flex-direction: column;
-          padding: 5rem 2rem;
-          gap: 3rem;
+          padding: 6rem 4rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 4rem;
         }
-        .pr {
-          text-align: left;
+        .plh {
+          font-size: clamp(5rem, 12vw, 11rem);
         }
         .prd {
-          margin-left: 0;
+          max-width: 260px;
         }
+        .promo-r {
+          text-align: right;
+        }
+        .prd-wrap {
+          text-align: right;
+        }
+
         .gal {
-          padding: 5rem 1.5rem;
+          padding: 8rem 4rem;
+        }
+        .ghd {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          margin-bottom: 4rem;
+        }
+        .gnt {
+          margin-top: 0;
+          max-width: 260px;
         }
         .gg {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 200px 200px 200px;
+          grid-template-columns: 3fr 2fr 2fr;
+          grid-template-rows: 340px 240px;
+        }
+        .gi {
+          border-radius: 2px;
+          aspect-ratio: auto;
         }
         .gi.tall {
-          grid-row: span 1;
+          grid-row: span 2;
         }
+        .gi:hover .gibg {
+          transform: scale(1.06);
+          filter: brightness(0.95) saturate(1.2);
+        }
+
         .del {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(4, 1fr);
         }
         .pil:nth-child(2) {
-          border-right: none;
+          border-right: 1px solid var(--border);
         }
         .pil:nth-child(3) {
-          border-top: 1px solid var(--border);
+          border-top: none;
         }
+        .pil:nth-child(4) {
+          border-top: none;
+          border-right: none;
+        }
+        .pil {
+          padding: 5rem 3rem;
+        }
+        .piln {
+          font-size: clamp(4rem, 6vw, 6.5rem);
+        }
+
         .test {
-          padding: 5rem 1.5rem;
+          padding: 8rem 0;
         }
-        .tg {
-          grid-template-columns: 1fr;
+        .thead {
+          padding: 0 4rem 3rem;
         }
+        .tscroll {
+          gap: 2px;
+          padding: 0;
+        }
+        .tc {
+          flex: none;
+          max-width: none;
+          border-radius: 0;
+          border: none;
+          border-right: 1px solid var(--border);
+        }
+        .tscroll {
+          overflow-x: visible;
+          display: grid;
+          grid-template-columns: 1.4fr 1fr 1fr;
+          scroll-snap-type: none;
+        }
+
         .cta {
-          padding: 6rem 1.5rem;
+          padding: 8rem 4rem;
         }
+        .ctah {
+          font-size: clamp(5rem, 14vw, 14rem);
+        }
+        .ctasub {
+          max-width: 360px;
+          font-size: 0.88rem;
+        }
+
         footer {
-          padding: 4rem 1.5rem 2rem;
+          padding: 5.5rem 4rem 2.5rem;
         }
-        .ftg {
-          grid-template-columns: 1fr 1fr;
-          gap: 3rem;
+        .flogo {
+          font-size: 3rem;
         }
+        .flinks {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 0;
+        }
+        .fbot {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+
         #fb {
-          bottom: 1.2rem;
-          right: 1.2rem;
+          bottom: 2.8rem;
+          right: 2.8rem;
+          font-size: 0.7rem;
+          padding: 0.78rem 1.8rem;
+          border-radius: 40px;
+        }
+      }
+
+      /* Cursor — desktop only */
+      #cur {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        #cur {
+          display: block;
+          position: fixed;
+          z-index: 9999;
+          pointer-events: none;
+          width: 72px;
+          height: 72px;
+          transform: translate(-50%, -50%);
+          mix-blend-mode: difference;
+        }
+        #cur-ring {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1px solid rgba(240, 230, 208, 0.8);
+          transform: scale(0.13);
+          transition:
+            transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+            background 0.3s;
+        }
+        #cur-dot {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--cream);
+          transform: translate(-50%, -50%);
+          transition: opacity 0.3s;
+        }
+        body.hov #cur-ring {
+          transform: scale(1);
+          background: rgba(240, 230, 208, 0.07);
+        }
+        body.hov #cur-dot {
+          opacity: 0;
+        }
+        body.clk #cur-ring {
+          transform: scale(0.75);
+          background: rgba(192, 57, 43, 0.3);
         }
       }
     </style>
   </head>
   <body>
-    <!-- CURSOR -->
+    <!-- CURSOR (desktop only) -->
     <div id="cur">
       <div id="cur-ring"></div>
       <div id="cur-dot"></div>
     </div>
+
+    <!-- FLOAT -->
     <button
       id="fb"
       onclick="
@@ -1886,16 +1939,36 @@
       Buyurtma
     </button>
 
+    <!-- MOBILE DRAWER -->
+    <div id="drawer">
+      <a href="#menu" onclick="closeDrawer()">Menyu</a>
+      <a href="#feat" onclick="closeDrawer()">Signature</a>
+      <a href="#gal" onclick="closeDrawer()">Galereya</a>
+      <a href="#del" onclick="closeDrawer()">Yetkazish</a>
+      <button
+        class="drawer-cta"
+        onclick="
+          closeDrawer();
+          document
+            .getElementById('menu')
+            .scrollIntoView({ behavior: 'smooth' });
+        "
+      >
+        Buyurtma berish
+      </button>
+    </div>
+
     <!-- NAV -->
     <nav id="nav">
-      <a class="nl" href="#">Enjoy<em>Lavash</em></a>
-      <div class="nr">
+      <a class="nlogo" href="#">Enjoy<em>Lavash</em></a>
+      <!-- Desktop links -->
+      <div class="nlinks">
         <a class="nla" href="#menu">Menyu</a>
         <a class="nla" href="#feat">Signature</a>
         <a class="nla" href="#gal">Galereya</a>
         <a class="nla" href="#del">Yetkazish</a>
         <button
-          class="nb mag"
+          class="nb"
           onclick="
             document
               .getElementById('menu')
@@ -1905,14 +1978,18 @@
           <span>Buyurtma</span>
         </button>
       </div>
+      <!-- Hamburger (mobile) -->
+      <button class="ham" id="ham" onclick="toggleDrawer()" aria-label="Menyu">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
 
     <!-- HERO -->
     <section id="hero">
-      <canvas id="hc"></canvas>
-      <div id="hp"></div>
-      <div id="hv"></div>
-      <div id="hg"></div>
+      <canvas id="hcanvas"></canvas>
+      <div id="hphoto"></div>
+      <div id="hvig"></div>
+      <div id="hglow"></div>
       <div class="hcon">
         <div class="htag">
           <span class="htag-l"></span>Toshkentning №1 Lavash Uyi
@@ -1921,42 +1998,37 @@
           <span class="sl"
             ><span class="sw" style="transition-delay: 0.1s">ENJOY</span></span
           >
-          <span class="sl"
-            ><span class="sw stk" style="transition-delay: 0.22s">LAVA</span
-            ><span class="sw acc" style="transition-delay: 0.3s">SH</span></span
-          >
+          <span class="sl">
+            <span class="sw stk" style="transition-delay: 0.22s">LAVA</span
+            ><span class="sw acc" style="transition-delay: 0.3s">SH</span>
+          </span>
         </h1>
-        <div class="hmeta">
-          <p class="hdesc rv d2">
-            Har bir tishlamda — <strong>yangi lavash</strong>, maxsus sous va
-            unutilmas ta'm. Issiq, to'liq, mazali.
-          </p>
-          <div class="hbtns rv d3">
-            <div class="mag">
-              <button
-                class="bp"
-                onclick="
-                  document
-                    .getElementById('menu')
-                    .scrollIntoView({ behavior: 'smooth' })
-                "
-              >
-                Menyu ko'rish
-              </button>
-            </div>
-            <div class="mag">
-              <button
-                class="bg2"
-                onclick="
-                  document
-                    .getElementById('del')
-                    .scrollIntoView({ behavior: 'smooth' })
-                "
-              >
-                Yetkazish
-              </button>
-            </div>
-          </div>
+        <!-- Mobile: stack, Desktop: side by side -->
+        <div class="hdesc rv d2">
+          Har bir tishlamda — <strong>yangi lavash</strong>, maxsus sous va
+          unutilmas ta'm.
+        </div>
+        <div class="hbtns rv d3">
+          <button
+            class="bp"
+            onclick="
+              document
+                .getElementById('menu')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Menyu ko'rish
+          </button>
+          <button
+            class="bg2"
+            onclick="
+              document
+                .getElementById('del')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Yetkazish
+          </button>
         </div>
       </div>
       <div class="sci">
@@ -1972,17 +2044,13 @@
         <div class="tit"><span class="tdot"></span>Shawarma</div>
         <div class="tit"><span class="tdot"></span>Royal Lavash</div>
         <div class="tit"><span class="tdot"></span>100% Halol</div>
-        <div class="tit"><span class="tdot"></span>30 Daqiqada Yetkazish</div>
-        <div class="tit"><span class="tdot"></span>Har Kuni Yangi</div>
-        <div class="tit"><span class="tdot"></span>Maxsus Sous</div>
+        <div class="tit"><span class="tdot"></span>30 Daqiqada</div>
         <div class="tit"><span class="tdot"></span>12 Yil Tajriba</div>
         <div class="tit"><span class="tdot"></span>Tovuqli Lavash</div>
         <div class="tit"><span class="tdot"></span>Shawarma</div>
         <div class="tit"><span class="tdot"></span>Royal Lavash</div>
         <div class="tit"><span class="tdot"></span>100% Halol</div>
-        <div class="tit"><span class="tdot"></span>30 Daqiqada Yetkazish</div>
-        <div class="tit"><span class="tdot"></span>Har Kuni Yangi</div>
-        <div class="tit"><span class="tdot"></span>Maxsus Sous</div>
+        <div class="tit"><span class="tdot"></span>30 Daqiqada</div>
         <div class="tit"><span class="tdot"></span>12 Yil Tajriba</div>
       </div>
     </div>
@@ -2000,51 +2068,44 @@
           <span class="cnt" data-to="4.8" data-dec="1">0</span
           ><span class="u">★</span>
         </div>
-        <div class="stl">O'rtacha reyting</div>
+        <div class="stl">Reyting</div>
       </div>
       <div class="st rv d2">
         <div class="stn">
           <span class="cnt" data-to="8">0</span><span class="u">K+</span>
         </div>
-        <div class="stl">Mamnun mijoz</div>
+        <div class="stl">Mijoz</div>
       </div>
       <div class="st rv d3">
         <div class="stn">
           <span class="cnt" data-to="12">0</span><span class="u">yil</span>
         </div>
-        <div class="stl">Tajribamiz</div>
+        <div class="stl">Tajriba</div>
       </div>
     </div>
 
-    <!-- MENU SECTION -->
+    <!-- MENU -->
     <section class="msec" id="menu">
       <div class="mhead">
-        <div>
-          <div class="eye rv">Bizning taomlar</div>
-          <h2 class="ttl rv d1">
-            MASHHUR<br /><span class="out">MENYULAR</span>
-          </h2>
-        </div>
-        <p class="mhint rv d2">
-          Kategoriyani tanlang va sevimli taomingizni toping
-        </p>
+        <div class="eye rv">Bizning taomlar</div>
+        <h2 class="ttl rv d1">
+          MASHHUR<br /><span class="out">MENYULAR</span>
+        </h2>
       </div>
-
-      <!-- TABS -->
       <div class="mtabs">
         <button class="mtab act" data-cat="lavash">Lavashlar</button>
         <button class="mtab" data-cat="shawarma">Shawarma</button>
         <button class="mtab" data-cat="snack">Snacklar</button>
-        <button class="mtab" data-cat="ichimlik">Ichimliklar</button>
+        <button class="mtab" data-cat="ich">Ichimliklar</button>
       </div>
 
       <!-- LAVASH -->
       <div class="strip" id="s-lavash">
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2053,8 +2114,8 @@
             <div class="mcnum">01/05</div>
             <div class="mcn">Tovuqli Lavash</div>
             <div class="mcd">
-              Grillda pishirilgan tovuq, yangi sabzavotlar, tuzlangan karam va
-              maxsus garlic sous.
+              Grillda pishirilgan tovuq, yangi sabzavotlar va maxsus garlic
+              sous.
             </div>
             <div class="mcft">
               <div class="mcp">32 000</div>
@@ -2062,11 +2123,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2075,8 +2136,7 @@
             <div class="mcnum">02/05</div>
             <div class="mcn">Mol Lavash</div>
             <div class="mcd">
-              Mol go'shti, pishloq, pomidor, karam, dijon xantal va barbecue
-              sous.
+              Mol go'shti, pishloq, pomidor, karam va barbecue sous.
             </div>
             <div class="mcft">
               <div class="mcp">38 000</div>
@@ -2084,11 +2144,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1484723091739-30990f47b472?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1484723091739-30990f47b472?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2097,8 +2157,7 @@
             <div class="mcnum">03/05</div>
             <div class="mcn">Spicy Lavash</div>
             <div class="mcd">
-              Achchiq sous, jalapeño, qovurilgan tovuq, avokado va chipotle
-              mayo.
+              Achchiq sous, jalapeño, qovurilgan tovuq va avokado.
             </div>
             <div class="mcft">
               <div class="mcp">35 000</div>
@@ -2106,11 +2165,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2118,7 +2177,7 @@
             <div class="mcnum">04/05</div>
             <div class="mcn">Veggie Lavash</div>
             <div class="mcd">
-              Grillda qovurilgan sabzavotlar, pishloq, hummus va zaytun moyi.
+              Grillda qovurilgan sabzavotlar, pishloq va hummus.
             </div>
             <div class="mcft">
               <div class="mcp">28 000</div>
@@ -2126,11 +2185,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1571091655789-405eb7a3a3a8?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1571091655789-405eb7a3a3a8?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2139,8 +2198,7 @@
             <div class="mcnum">05/05</div>
             <div class="mcn">Royal Lavash</div>
             <div class="mcd">
-              A5 Wagyu go'shti, truffle sous, gruyère pishloq va karamelized
-              piyoz.
+              A5 Wagyu go'shti, truffle sous, gruyère va karamelized piyoz.
             </div>
             <div class="mcft">
               <div class="mcp">75 000</div>
@@ -2152,11 +2210,11 @@
 
       <!-- SHAWARMA -->
       <div class="strip hidden" id="s-shawarma">
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2165,7 +2223,7 @@
             <div class="mcnum">01/04</div>
             <div class="mcn">Shawarma Classic</div>
             <div class="mcd">
-              Tovuq yoki mol go'shti, karam, pomidor, xiyor va garlic sous.
+              Tovuq yoki mol go'shti, karam, pomidor va garlic sous.
             </div>
             <div class="mcft">
               <div class="mcp">30 000</div>
@@ -2173,11 +2231,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1551326844-4df70f2d7ccd?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1551326844-4df70f2d7ccd?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2186,7 +2244,7 @@
             <div class="mcnum">02/04</div>
             <div class="mcn">Double Shawarma</div>
             <div class="mcd">
-              Ikki qavatli, mol + tovuq, qo'shimcha sous va pishloq bilan.
+              Ikki qavatli, mol + tovuq, qo'shimcha sous va pishloq.
             </div>
             <div class="mcft">
               <div class="mcp">42 000</div>
@@ -2194,11 +2252,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2206,7 +2264,7 @@
             <div class="mcnum">03/04</div>
             <div class="mcn">Shawarma Tray</div>
             <div class="mcd">
-              Katta tray shawarma, 4 kishi uchun, qo'shimcha souslar bilan.
+              Katta tray, 4 kishi uchun, qo'shimcha souslar bilan.
             </div>
             <div class="mcft">
               <div class="mcp">120 000</div>
@@ -2214,21 +2272,19 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1448043552756-e747b7a2b2b8?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1448043552756-e747b7a2b2b8?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
-          <div class="mcbadge">Yangi</div>
+          <div class="mcbadge">Set</div>
           <div class="mcbody">
             <div class="mcnum">04/04</div>
             <div class="mcn">Shawarma Box</div>
-            <div class="mcd">
-              Shawarma + kartoshka fri + ichimlik — to'liq set.
-            </div>
+            <div class="mcd">Shawarma + kartoshka fri + ichimlik to'plami.</div>
             <div class="mcft">
               <div class="mcp">55 000</div>
               <button class="mcb"><span>+ Savatga</span></button>
@@ -2239,11 +2295,11 @@
 
       <!-- SNACK -->
       <div class="strip hidden" id="s-snack">
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2252,7 +2308,7 @@
             <div class="mcnum">01/04</div>
             <div class="mcn">Kartoshka Fri</div>
             <div class="mcd">
-              Oltin qovurilgan, deniz tuzi va mozzarella sous bilan.
+              Oltin qovurilgan, deniz tuzi va mozzarella sous.
             </div>
             <div class="mcft">
               <div class="mcp">18 000</div>
@@ -2260,11 +2316,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2272,7 +2328,7 @@
             <div class="mcnum">02/04</div>
             <div class="mcn">Mini Rollar x4</div>
             <div class="mcd">
-              To'rtta kichkina lavash rolli, pishloq va sabzavotlar bilan.
+              To'rtta kichkina lavash rolli, pishloq va sabzavotlar.
             </div>
             <div class="mcft">
               <div class="mcp">22 000</div>
@@ -2280,11 +2336,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2301,11 +2357,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2322,12 +2378,12 @@
       </div>
 
       <!-- ICHIMLIK -->
-      <div class="strip hidden" id="s-ichimlik">
-        <div class="mc" data-tilt>
+      <div class="strip hidden" id="s-ich">
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2344,11 +2400,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1559181567-c3190bba4c2d?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1559181567-c3190bba4c2d?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2356,7 +2412,7 @@
             <div class="mcnum">02/04</div>
             <div class="mcn">Ayron</div>
             <div class="mcd">
-              Sovuq qatiq ichimlik, o'zbek an'anaviy taomi bilan.
+              Sovuq qatiq ichimlik, an'anaviy o'zbek taomi bilan.
             </div>
             <div class="mcft">
               <div class="mcp">10 000</div>
@@ -2364,11 +2420,11 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
@@ -2377,7 +2433,7 @@
             <div class="mcnum">03/04</div>
             <div class="mcn">Milkshake</div>
             <div class="mcd">
-              Qalin muzqaymoqli milkshake — vanilla, shokolad yoki strawberry.
+              Qalin muzqaymoqli — vanilla, shokolad yoki strawberry.
             </div>
             <div class="mcft">
               <div class="mcp">22 000</div>
@@ -2385,17 +2441,17 @@
             </div>
           </div>
         </div>
-        <div class="mc" data-tilt>
+        <div class="mc">
           <div
             class="mcbg"
             style="
-              background-image: url(&quot;https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=700&q=85&quot;);
+              background-image: url(&quot;https://images.unsplash.com/photo-1622597467836-f3e6707a1d23?w=600&q=85&quot;);
             "
           ></div>
           <div class="mcov"></div>
           <div class="mcbody">
             <div class="mcnum">04/04</div>
-            <div class="mcn">Qovoq Sharbati</div>
+            <div class="mcn">Meva Sharbati</div>
             <div class="mcd">
               Yangi siqilgan mevali sharbat — har kuni yangi tayyorlanadi.
             </div>
@@ -2435,66 +2491,57 @@
         </h2>
         <p class="fbody rv d2">
           A5 darajali mol go'shti, qo'l yoğurma lavash, truffle sous va dijon
-          xantal bilan xizmat qilinadi. Har bir tishlamda — hashamat va
-          to'yimlilik.
+          xantal bilan. Har bir tishlamda — hashamat.
         </p>
         <div class="ftags rv d2">
           <span class="ftag">A5 Mol Go'shti</span
           ><span class="ftag">Yangi Lavash</span>
           <span class="ftag">Truffle Sous</span
           ><span class="ftag">Gruyère</span>
-          <span class="ftag">Karamelized Piyoz</span
-          ><span class="ftag">Rukola</span>
+          <span class="ftag">Karamelized Piyoz</span>
         </div>
         <div class="fpr rv d3">
           <span class="cnt" data-to="75">0</span> 000 <sub>so'm</sub>
         </div>
-        <div class="mag rv d4"><button class="bp">Buyurtma berish</button></div>
+        <button class="bp rv d4" style="width: 100%">Buyurtma berish</button>
       </div>
     </section>
 
     <!-- PROMO -->
     <div class="promo">
-      <div class="pl">
-        <div class="plsub">Bugungi aksiya</div>
-        <h2 class="plh">
-          <span class="sl"><span class="sw">BIRINCHI</span></span>
-          <span class="sl"><span class="sw">BUYURTMA</span></span>
-          <span class="sl"><span class="sw">–20%</span></span>
-        </h2>
-      </div>
-      <div class="pr">
+      <div class="plsub">Bugungi aksiya</div>
+      <h2 class="plh">
+        <span class="sl"><span class="sw">BIRINCHI</span></span>
+        <span class="sl"><span class="sw">BUYURTMA</span></span>
+        <span class="sl"><span class="sw">–20%</span></span>
+      </h2>
+      <div>
         <div class="prlbl">Promo kod</div>
         <div class="prc">ENJOY20</div>
-        <p class="prd">
-          Birinchi buyurtmangizda 20% chegirma. Faqat onlayn. Muddati
-          cheklangan.
-        </p>
-        <div class="mag" style="margin-top: 2rem">
-          <button
-            class="bg2"
-            style="border-color: rgba(255, 255, 255, 0.25); color: #fff"
-          >
-            Hozir buyurtma
-          </button>
-        </div>
+        <p class="prd">Birinchi buyurtmangizda 20% chegirma. Faqat onlayn.</p>
+        <button
+          class="bg2"
+          style="
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            margin-top: 1.5rem;
+            width: 100%;
+          "
+        >
+          Hozir buyurtma
+        </button>
       </div>
     </div>
 
     <!-- GALLERY -->
     <section class="gal" id="gal">
       <div class="ghd rv">
-        <div>
-          <div class="eye">Atmosfera</div>
-          <h2 class="ttl">BIZNING<br /><span class="out">GALEREYA</span></h2>
-        </div>
-        <p class="gnt">
-          Har bir burchakda — ta'm, issiqlik va huzur. Zamonaviy interer, ochiq
-          oshxona.
-        </p>
+        <div class="eye">Atmosfera</div>
+        <h2 class="ttl">BIZNING<br /><span class="out">GALEREYA</span></h2>
+        <p class="gnt">Har bir burchakda ta'm, issiqlik va huzur</p>
       </div>
       <div class="gg">
-        <div class="gi tall" data-gi>
+        <div class="gi tall">
           <div
             class="gibg"
             style="
@@ -2502,14 +2549,12 @@
             "
           ></div>
           <div class="giov"></div>
-          <div class="gibrd"></div>
-          <div class="ginum">01</div>
           <div class="gicap">
             <div class="gitt">Zamonaviy Interer</div>
             <div class="gisb">Atmosfera</div>
           </div>
         </div>
-        <div class="gi" data-gi>
+        <div class="gi">
           <div
             class="gibg"
             style="
@@ -2517,14 +2562,12 @@
             "
           ></div>
           <div class="giov"></div>
-          <div class="gibrd"></div>
-          <div class="ginum">02</div>
           <div class="gicap">
             <div class="gitt">Yangi Lavash</div>
             <div class="gisb">Mahsulot</div>
           </div>
         </div>
-        <div class="gi" data-gi>
+        <div class="gi">
           <div
             class="gibg"
             style="
@@ -2532,14 +2575,12 @@
             "
           ></div>
           <div class="giov"></div>
-          <div class="gibrd"></div>
-          <div class="ginum">03</div>
           <div class="gicap">
-            <div class="gitt">Tayyorlash Jarayoni</div>
+            <div class="gitt">Tayyorlash</div>
             <div class="gisb">Sifat</div>
           </div>
         </div>
-        <div class="gi" data-gi>
+        <div class="gi">
           <div
             class="gibg"
             style="
@@ -2547,14 +2588,12 @@
             "
           ></div>
           <div class="giov"></div>
-          <div class="gibrd"></div>
-          <div class="ginum">04</div>
           <div class="gicap">
-            <div class="gitt">Yangi Ingredientlar</div>
-            <div class="gisb">Tayyorlash</div>
+            <div class="gitt">Ingredientlar</div>
+            <div class="gisb">Yangi</div>
           </div>
         </div>
-        <div class="gi" data-gi>
+        <div class="gi">
           <div
             class="gibg"
             style="
@@ -2562,11 +2601,9 @@
             "
           ></div>
           <div class="giov"></div>
-          <div class="gibrd"></div>
-          <div class="ginum">05</div>
           <div class="gicap">
-            <div class="gitt">Klassik To'plam</div>
-            <div class="gisb">Menyu</div>
+            <div class="gitt">To'plam</div>
+            <div class="gisb">Klassik</div>
           </div>
         </div>
       </div>
@@ -2578,48 +2615,47 @@
         <div class="piln"><span class="cnt" data-to="30">0</span></div>
         <div class="pilu">Daqiqa</div>
         <div class="pilt">Tez Yetkazish</div>
-        <div class="pild">
-          Kechiksa — keyingi buyurtma bepul. Bu bizning va'damiz.
-        </div>
+        <div class="pild">Kechiksa — keyingi buyurtma bepul.</div>
       </div>
       <div class="pil rv d1">
         <div class="piln"><span class="cnt" data-to="100">0</span></div>
         <div class="pilu">% Halol</div>
         <div class="pilt">Sertifikatlangan</div>
-        <div class="pild">Barcha mahsulotlarimiz halol sertifikatiga ega.</div>
+        <div class="pild">Barcha mahsulotlarimiz halol.</div>
       </div>
       <div class="pil rv d2">
         <div class="piln">
           <span class="cnt" data-to="4" data-dec="1" data-str="4.8">4.8</span>
         </div>
         <div class="pilu">Reyting ★</div>
-        <div class="pilt">Eng Yuqori Baho</div>
-        <div class="pild">8000+ mamnun mijozimiz bizni tavsiya qiladi.</div>
+        <div class="pilt">Yuqori Baho</div>
+        <div class="pild">8000+ mamnun mijozimiz.</div>
       </div>
       <div class="pil rv d3">
         <div class="piln"><span class="cnt" data-to="12">0</span></div>
         <div class="pilu">Yil Tajriba</div>
-        <div class="pilt">Ishonchli Xizmat</div>
-        <div class="pild">12 yildan beri Toshkentda eng yaxshi lavash.</div>
+        <div class="pilt">Ishonchli</div>
+        <div class="pild">12 yildan beri №1 lavash.</div>
       </div>
     </section>
 
     <!-- TESTIMONIALS -->
     <section class="test">
-      <div class="eye rv" style="position: relative; z-index: 1">
-        Mijozlar fikri
+      <div class="thead">
+        <div class="eye rv" style="position: relative; z-index: 1">
+          Mijozlar fikri
+        </div>
+        <h2 class="ttl rv d1" style="position: relative; z-index: 1">
+          ULAR <span class="out">GAPIRADI</span>
+        </h2>
       </div>
-      <h2 class="ttl rv d1" style="position: relative; z-index: 1">
-        ULAR <span class="out">GAPIRADI</span>
-      </h2>
-      <div class="tg">
+      <div class="tscroll">
         <div class="tc big rv">
           <span class="tcq">"</span>
           <div class="tcst">★★★★★</div>
           <p class="tctx">
             "<em>Royal Lavashni tatib ko'rdim</em> — bu umrimda yeganim eng
-            mazali lavash. Sous va go'sht kombinatsiyasi — ajoyib! Har haftada
-            buyurtma beraman."
+            mazali lavash. Har haftada buyurtma beraman."
           </p>
           <div class="tcft">
             <div class="tcav">
@@ -2636,8 +2672,7 @@
           <div class="tcst">★★★★★</div>
           <p class="tctx">
             "Tez va issiq yetkazib berishdi!
-            <em>Tovuqli lavash juda mazali.</em> Har hafta 2-3 marta buyurtma
-            beraman."
+            <em>Tovuqli lavash juda mazali.</em>"
           </p>
           <div class="tcft">
             <div class="tcav">
@@ -2653,8 +2688,7 @@
           <span class="tcq">"</span>
           <div class="tcst">★★★★★</div>
           <p class="tctx">
-            "<em>Spicy Lavash</em> — hayotingiz o'zgaradi. App orqali buyurtma
-            juda qulay va tez!"
+            "<em>Spicy Lavash</em> — hayotingiz o'zgaradi. App juda qulay!"
           </p>
           <div class="tcft">
             <div class="tcav">
@@ -2662,7 +2696,7 @@
             </div>
             <div>
               <div class="tcnm">Sherzod M.</div>
-              <div class="tclc">Mirzo Ulug'bek, Toshkent</div>
+              <div class="tclc">Mirzo Ulug'bek</div>
             </div>
           </div>
         </div>
@@ -2679,55 +2713,43 @@
         30 daqiqada eshigingizga yetkazamiz. ENJOY20 kodi bilan 20% chegirma!
       </p>
       <div class="ctabtn rv d3">
-        <div class="mag">
-          <button
-            class="bp"
-            onclick="
-              document
-                .getElementById('menu')
-                .scrollIntoView({ behavior: 'smooth' })
-            "
-          >
-            Hozir Buyurtma
-          </button>
-        </div>
-        <div class="mag">
-          <button
-            class="bg2"
-            onclick="
-              document
-                .getElementById('del')
-                .scrollIntoView({ behavior: 'smooth' })
-            "
-          >
-            Yetkazish Haqida
-          </button>
-        </div>
+        <button
+          class="bp"
+          style="width: 100%; max-width: 300px; justify-content: center"
+          onclick="
+            document
+              .getElementById('menu')
+              .scrollIntoView({ behavior: 'smooth' })
+          "
+        >
+          Hozir Buyurtma
+        </button>
+        <button
+          class="bg2"
+          style="width: 100%; max-width: 300px; justify-content: center"
+          onclick="
+            document
+              .getElementById('del')
+              .scrollIntoView({ behavior: 'smooth' })
+          "
+        >
+          Yetkazish haqida
+        </button>
       </div>
     </div>
 
     <!-- FOOTER -->
     <footer>
-      <div class="ftg">
-        <div>
-          <a class="flogo" href="#">Enjoy<em>Lavash</em></a>
-          <p class="fdesc">
-            Toshkentning №1 lavash uyi — yangi lavash, maxsus sous va 30
-            daqiqada yetkazish.
-          </p>
-          <div class="fsoc">
-            <a class="fs" href="#">IG</a><a class="fs" href="#">TG</a
-            ><a class="fs" href="#">TK</a>
-          </div>
-        </div>
-        <div>
-          <div class="fh">Manzil</div>
-          <ul class="ful">
-            <li><a href="#">Mustaqillik sh. 24</a></li>
-            <li><a href="#">Yunusobod tumani</a></li>
-            <li><a href="#">10:00 – 00:00</a></li>
-          </ul>
-        </div>
+      <a class="flogo" href="#">Enjoy<em>Lavash</em></a>
+      <p class="fdesc">
+        Toshkentning №1 lavash uyi — yangi lavash, maxsus sous va 30 daqiqada
+        yetkazish.
+      </p>
+      <div class="fsoc">
+        <a class="fs" href="#">IG</a><a class="fs" href="#">TG</a
+        ><a class="fs" href="#">TK</a>
+      </div>
+      <div class="flinks">
         <div>
           <div class="fh">Havolalar</div>
           <ul class="ful">
@@ -2740,64 +2762,69 @@
         <div>
           <div class="fh">Aloqa</div>
           <ul class="ful">
-            <li><a href="#">+998 95-143-24-99</a></li>
+            <li><a href="tel:+998711234567">+998 71 123-45-67</a></li>
             <li><a href="#">info@enjoylavash.uz</a></li>
             <li><a href="#">Telegram bot</a></li>
+            <li><a href="#">Mustaqillik sh. 24</a></li>
           </ul>
         </div>
       </div>
       <div class="fbot">
-        <div class="fcopy">
-          © 2025 EnjoyLavash. Barcha huquqlar himoyalangan.
-          <div class="fph">+998 95-143-24-99</div>
-        </div>
+        <div class="fcopy">© 2025 EnjoyLavash</div>
+        <div class="fph">+998 71 123-45-67</div>
       </div>
     </footer>
 
     <script>
-      /* ══════════════════════════════════════════
-   HERO 3D CANVAS
-══════════════════════════════════════════ */
+      /* ══ DRAWER ══ */
+      function toggleDrawer() {
+        const d = document.getElementById("drawer"),
+          h = document.getElementById("ham");
+        d.classList.toggle("open");
+        h.classList.toggle("open");
+        document.body.style.overflow = d.classList.contains("open")
+          ? "hidden"
+          : "";
+      }
+      function closeDrawer() {
+        document.getElementById("drawer").classList.remove("open");
+        document.getElementById("ham").classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      /* ══ HERO CANVAS — lightweight for mobile ══ */
       (function () {
-        const cv = document.getElementById("hc");
+        const cv = document.getElementById("hcanvas");
         const rsz = () => {
           cv.width = innerWidth;
           cv.height = innerHeight;
         };
         rsz();
-        window.addEventListener("resize", rsz);
+        window.addEventListener("resize", rsz, { passive: true });
         const ctx = cv.getContext("2d");
+        const isMob = innerWidth < 768;
 
-        // Particles
-        const P = Array.from({ length: 75 }, () => ({
+        const P = Array.from({ length: isMob ? 35 : 70 }, () => ({
           x: Math.random() * innerWidth,
           y: Math.random() * innerHeight,
-          vx: (Math.random() - 0.5) * 0.42,
-          vy: (Math.random() - 0.5) * 0.32,
-          r: Math.random() * 1.6 + 0.4,
-          a: Math.random() * 0.18 + 0.04,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.28,
+          r: Math.random() * 1.4 + 0.4,
+          a: Math.random() * 0.15 + 0.04,
         }));
 
-        // Floating shapes
-        const S = Array.from({ length: 16 }, () => ({
+        const S = Array.from({ length: isMob ? 8 : 15 }, () => ({
           x: Math.random() * innerWidth,
           y: Math.random() * innerHeight,
-          vx: (Math.random() - 0.5) * 0.38,
-          vy: (Math.random() - 0.5) * 0.28,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.22,
           rz: Math.random() * Math.PI * 2,
-          vrz: (Math.random() - 0.5) * 0.008,
-          sz: Math.random() * 55 + 16,
+          vrz: (Math.random() - 0.5) * 0.007,
+          sz: Math.random() * 45 + 14,
           t: Math.floor(Math.random() * 3),
-          op: Math.random() * 0.2 + 0.04,
+          op: Math.random() * 0.16 + 0.03,
           c: Math.random() > 0.4 ? "192,57,43" : "230,126,34",
         }));
-
-        let mx = innerWidth / 2,
-          my = innerHeight / 2;
-        cv.addEventListener("mousemove", (e) => {
-          mx = e.clientX;
-          my = e.clientY;
-        });
 
         function hex(c, x, y, r) {
           c.beginPath();
@@ -2820,131 +2847,66 @@
           c.closePath();
         }
 
-        // Food-shaped floating icons (circles with food colors)
-        const foods = [
-          {
-            x: Math.random() * innerWidth,
-            y: Math.random() * innerHeight,
-            r: 40,
-            vx: 0.2,
-            vy: 0.15,
-            col: "#C0392B",
-            op: 0.12,
-          },
-          {
-            x: Math.random() * innerWidth,
-            y: Math.random() * innerHeight,
-            r: 25,
-            vx: -0.18,
-            vy: 0.22,
-            col: "#E67E22",
-            op: 0.1,
-          },
-          {
-            x: Math.random() * innerWidth,
-            y: Math.random() * innerHeight,
-            r: 55,
-            vx: 0.15,
-            vy: -0.2,
-            col: "#C0392B",
-            op: 0.08,
-          },
-        ];
-
+        let frame = 0;
         function draw() {
           ctx.clearRect(0, 0, cv.width, cv.height);
-          // subtle grid
-          ctx.strokeStyle = "rgba(192,57,43,.035)";
-          ctx.lineWidth = 0.7;
-          for (let x = 0; x < cv.width; x += 88) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, cv.height);
-            ctx.stroke();
+          if (!isMob) {
+            ctx.strokeStyle = "rgba(192,57,43,.03)";
+            ctx.lineWidth = 0.6;
+            for (let x = 0; x < cv.width; x += 90) {
+              ctx.beginPath();
+              ctx.moveTo(x, 0);
+              ctx.lineTo(x, cv.height);
+              ctx.stroke();
+            }
+            for (let y = 0; y < cv.height; y += 90) {
+              ctx.beginPath();
+              ctx.moveTo(0, y);
+              ctx.lineTo(cv.width, y);
+              ctx.stroke();
+            }
           }
-          for (let y = 0; y < cv.height; y += 88) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(cv.width, y);
-            ctx.stroke();
-          }
-
-          // food blobs
-          foods.forEach((f) => {
-            f.x += f.vx;
-            f.y += f.vy;
-            if (f.x < -f.r) f.x = cv.width + f.r;
-            if (f.x > cv.width + f.r) f.x = -f.r;
-            if (f.y < -f.r) f.y = cv.height + f.r;
-            if (f.y > cv.height + f.r) f.y = -f.r;
-            const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 3);
-            g.addColorStop(
-              0,
-              f.col.replace(")", `,${f.op})`).replace("rgb", "rgba"),
-            );
-            g.addColorStop(1, "transparent");
-            ctx.fillStyle = g;
-            ctx.fillRect(f.x - f.r * 3, f.y - f.r * 3, f.r * 6, f.r * 6);
-          });
-
-          // particles
           P.forEach((p) => {
             p.x += p.vx;
             p.y += p.vy;
             if (p.x < 0 || p.x > cv.width) p.vx *= -1;
             if (p.y < 0 || p.y > cv.height) p.vy *= -1;
-            const dx = mx - p.x,
-              dy = my - p.y,
-              d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 180) {
-              p.vx -= dx * 0.0006;
-              p.vy -= dy * 0.0006;
-            }
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(192,57,43,${p.a})`;
             ctx.fill();
           });
-
-          // connections
-          for (let i = 0; i < P.length; i++)
-            for (let j = i + 1; j < P.length; j++) {
-              const dx = P[i].x - P[j].x,
-                dy = P[i].y - P[j].y,
-                d = Math.sqrt(dx * dx + dy * dy);
-              if (d < 125) {
-                ctx.strokeStyle = `rgba(192,57,43,${0.09 * (1 - d / 125)})`;
-                ctx.lineWidth = 0.55;
-                ctx.beginPath();
-                ctx.moveTo(P[i].x, P[i].y);
-                ctx.lineTo(P[j].x, P[j].y);
-                ctx.stroke();
+          if (!isMob) {
+            for (let i = 0; i < P.length; i++)
+              for (let j = i + 1; j < P.length; j++) {
+                const dx = P[i].x - P[j].x,
+                  dy = P[i].y - P[j].y,
+                  d = Math.sqrt(dx * dx + dy * dy);
+                if (d < 120) {
+                  ctx.strokeStyle = `rgba(192,57,43,${0.08 * (1 - d / 120)})`;
+                  ctx.lineWidth = 0.5;
+                  ctx.beginPath();
+                  ctx.moveTo(P[i].x, P[i].y);
+                  ctx.lineTo(P[j].x, P[j].y);
+                  ctx.stroke();
+                }
               }
-            }
-
-          // shapes
+          }
           S.forEach((s) => {
             s.rz += s.vrz;
             s.x += s.vx;
             s.y += s.vy;
-            if (s.x < -90) s.x = cv.width + 90;
-            if (s.x > cv.width + 90) s.x = -90;
-            if (s.y < -90) s.y = cv.height + 90;
-            if (s.y > cv.height + 90) s.y = -90;
-            const dx = mx - s.x,
-              dy = my - s.y,
-              dd = Math.sqrt(dx * dx + dy * dy);
-            if (dd < 280) {
-              s.x += dx * 0.0007;
-              s.y += dy * 0.0007;
-            }
+            if (s.x < -80) s.x = cv.width + 80;
+            if (s.x > cv.width + 80) s.x = -80;
+            if (s.y < -80) s.y = cv.height + 80;
+            if (s.y > cv.height + 80) s.y = -80;
             ctx.save();
             ctx.translate(s.x, s.y);
             ctx.rotate(s.rz);
             ctx.globalAlpha = s.op;
-            ctx.strokeStyle = `rgba(${s.c},${s.op * 2.8})`;
+            ctx.strokeStyle = `rgba(${s.c},${s.op * 2.5})`;
             ctx.lineWidth = 1;
-            ctx.fillStyle = `rgba(${s.c},${s.op * 0.4})`;
+            ctx.fillStyle = `rgba(${s.c},${s.op * 0.35})`;
             if (s.t === 0) {
               tri(ctx, 0, 0, s.sz);
               ctx.stroke();
@@ -2959,74 +2921,80 @@
             }
             ctx.restore();
           });
-          requestAnimationFrame(draw);
+          // reduce fps on mobile
+          if (isMob) {
+            if (++frame % 2 === 0) requestAnimationFrame(draw);
+            else setTimeout(() => requestAnimationFrame(draw), 16);
+          } else requestAnimationFrame(draw);
         }
         draw();
       })();
 
-      /* CURSOR */
+      /* ══ CURSOR (desktop) ══ */
       const cur = document.getElementById("cur");
-      document.addEventListener("mousemove", (e) => {
-        cur.style.left = e.clientX + "px";
-        cur.style.top = e.clientY + "px";
-      });
-      document
-        .querySelectorAll("a,button,.mc,.gi,.tc,.st,.pil")
-        .forEach((el) => {
-          el.addEventListener("mouseenter", () =>
-            document.body.classList.add("hov"),
-          );
-          el.addEventListener("mouseleave", () =>
-            document.body.classList.remove("hov"),
-          );
+      if (cur && window.innerWidth >= 768) {
+        document.addEventListener("mousemove", (e) => {
+          cur.style.left = e.clientX + "px";
+          cur.style.top = e.clientY + "px";
         });
-      document.addEventListener("mousedown", () =>
-        document.body.classList.add("clk"),
-      );
-      document.addEventListener("mouseup", () =>
-        document.body.classList.remove("clk"),
-      );
-
-      /* NAV */
-      const nav = document.getElementById("nav"),
-        fbtn = document.getElementById("fb");
-      window.addEventListener(
-        "scroll",
-        () => {
-          nav.classList.toggle("compact", scrollY > 80);
-          fbtn.classList.toggle("show", scrollY > 600);
-        },
-        { passive: true },
-      );
-
-      /* HERO PARALLAX */
-      const hp = document.getElementById("hp");
-      window.addEventListener(
-        "scroll",
-        () => {
-          if (scrollY < innerHeight)
-            hp.style.transform = `translateY(${scrollY * 0.38}px) scale(1.07)`;
-        },
-        { passive: true },
-      );
-
-      /* FEATURED PARALLAX */
-      const fbg = document.getElementById("fbg");
-      if (fbg) {
-        window.addEventListener(
-          "scroll",
-          () => {
-            const r = fbg.closest(".fimg").getBoundingClientRect();
-            if (r.top < innerHeight && r.bottom > 0) {
-              const p = (innerHeight - r.top) / (innerHeight + r.height);
-              fbg.style.transform = `translateY(${(p - 0.5) * -65}px) scale(1.05)`;
-            }
-          },
-          { passive: true },
+        document
+          .querySelectorAll("a,button,.mc,.gi,.tc,.st,.pil")
+          .forEach((el) => {
+            el.addEventListener("mouseenter", () =>
+              document.body.classList.add("hov"),
+            );
+            el.addEventListener("mouseleave", () =>
+              document.body.classList.remove("hov"),
+            );
+          });
+        document.addEventListener("mousedown", () =>
+          document.body.classList.add("clk"),
+        );
+        document.addEventListener("mouseup", () =>
+          document.body.classList.remove("clk"),
         );
       }
 
-      /* SPLIT WORD */
+      /* ══ NAV ══ */
+      const nav = document.getElementById("nav"),
+        fb = document.getElementById("fb");
+      window.addEventListener(
+        "scroll",
+        () => {
+          nav.classList.toggle("stuck", scrollY > 60);
+          fb.classList.toggle("show", scrollY > 500);
+        },
+        { passive: true },
+      );
+
+      /* ══ HERO PARALLAX (desktop only) ══ */
+      if (window.innerWidth >= 768) {
+        const hp = document.getElementById("hphoto");
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (scrollY < innerHeight)
+              hp.style.transform = `translateY(${scrollY * 0.38}px) scale(1.07)`;
+          },
+          { passive: true },
+        );
+        const fbg = document.getElementById("fbg");
+        if (fbg) {
+          window.addEventListener(
+            "scroll",
+            () => {
+              const r = fbg.closest(".fimg").getBoundingClientRect();
+              if (r.top < innerHeight && r.bottom > 0) {
+                const p = (innerHeight - r.top) / (innerHeight + r.height);
+                fbg.style.transform = `translateY(${(p - 0.5) * -55}px) scale(1.05)`;
+              }
+            },
+            { passive: true },
+          );
+        }
+      }
+
+      /* ══ SPLIT WORD ══ */
       const swObs = new IntersectionObserver(
         (es) => {
           es.forEach((e) => {
@@ -3042,7 +3010,7 @@
       );
       document.querySelectorAll(".sl").forEach((sl) => swObs.observe(sl));
 
-      /* REVEAL */
+      /* ══ REVEAL ══ */
       const rvObs = new IntersectionObserver(
         (es) => {
           es.forEach((e) => {
@@ -3052,7 +3020,7 @@
             }
           });
         },
-        { threshold: 0.08 },
+        { threshold: 0.07 },
       );
       document.querySelectorAll(".rv").forEach((el) => rvObs.observe(el));
       setTimeout(
@@ -3060,10 +3028,10 @@
           document
             .querySelectorAll("#hero .sw,#hero .rv")
             .forEach((el) => el.classList.add("in", "v")),
-        120,
+        100,
       );
 
-      /* COUNTER */
+      /* ══ COUNTER ══ */
       function ac(el) {
         const to = parseFloat(el.dataset.to),
           dec = parseInt(el.dataset.dec || "0"),
@@ -3072,16 +3040,15 @@
           el.textContent = str;
           return;
         }
-        const dur = 2000,
+        const dur = 1800,
           s = performance.now();
-        function step(n) {
+        (function step(n) {
           const t = Math.min((n - s) / dur, 1),
             e = 1 - Math.pow(1 - t, 4);
           el.textContent = (to * e).toFixed(dec);
           if (t < 1) requestAnimationFrame(step);
           else el.textContent = to.toFixed(dec);
-        }
-        requestAnimationFrame(step);
+        })(s);
       }
       const cObs = new IntersectionObserver(
         (es) => {
@@ -3092,112 +3059,55 @@
             }
           });
         },
-        { threshold: 0.25 },
+        { threshold: 0.2 },
       );
       document
         .querySelectorAll(".stats,.del,.ftxt")
         .forEach((s) => cObs.observe(s));
 
-      /* 3D TILT — menu cards */
-      document.querySelectorAll("[data-tilt]").forEach((c) => {
-        c.addEventListener("mousemove", (e) => {
-          const r = c.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5,
-            y = (e.clientY - r.top) / r.height - 0.5;
-          c.style.transform = `perspective(900px) rotateY(${x * 12}deg) rotateX(${-y * 9}deg) scale(1.03)`;
+      /* ══ 3D TILT (desktop only) ══ */
+      if (window.innerWidth >= 768) {
+        document.querySelectorAll("[data-tilt]").forEach((c) => {
+          c.addEventListener("mousemove", (e) => {
+            const r = c.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5,
+              y = (e.clientY - r.top) / r.height - 0.5;
+            c.style.transform = `perspective(900px) rotateY(${x * 12}deg) rotateX(${-y * 9}deg) scale(1.03)`;
+          });
+          c.addEventListener("mouseleave", () => {
+            c.style.transform =
+              "perspective(900px) rotateY(0) rotateX(0) scale(1)";
+            c.style.transition =
+              "transform .7s cubic-bezier(.4,0,.2,1),box-shadow .4s";
+            setTimeout(() => (c.style.transition = ""), 700);
+          });
+          c.addEventListener(
+            "mouseenter",
+            () => (c.style.transition = "transform .12s,box-shadow .4s"),
+          );
         });
-        c.addEventListener("mouseleave", () => {
-          c.style.transform =
-            "perspective(900px) rotateY(0) rotateX(0) scale(1)";
-          c.style.transition =
-            "transform .7s cubic-bezier(.4,0,.2,1),box-shadow .4s";
-          setTimeout(() => (c.style.transition = ""), 700);
-        });
-        c.addEventListener(
-          "mouseenter",
-          () => (c.style.transition = "transform .12s,box-shadow .4s"),
-        );
-      });
+      }
 
-      /* 3D TILT — gallery */
-      document.querySelectorAll("[data-gi]").forEach((g) => {
-        g.addEventListener("mousemove", (e) => {
-          const r = g.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5,
-            y = (e.clientY - r.top) / r.height - 0.5;
-          g.style.transform = `perspective(700px) rotateY(${x * 7}deg) rotateX(${-y * 5}deg) scale(1.02)`;
-          g.style.zIndex = "10";
-        });
-        g.addEventListener("mouseleave", () => {
-          g.style.transform =
-            "perspective(700px) rotateY(0) rotateX(0) scale(1)";
-          g.style.transition = "transform .7s cubic-bezier(.4,0,.2,1)";
-          g.style.zIndex = "";
-          setTimeout(() => (g.style.transition = ""), 700);
-        });
-        g.addEventListener(
-          "mouseenter",
-          () => (g.style.transition = "transform .12s"),
-        );
-      });
-
-      /* MAGNETIC */
-      document.querySelectorAll(".mag").forEach((w) => {
-        const b = w.querySelector("button,a") || w;
-        w.addEventListener("mousemove", (e) => {
-          const r = w.getBoundingClientRect();
-          b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.3}px,${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
-        });
-        w.addEventListener(
-          "mouseleave",
-          () => (b.style.transform = "translate(0,0)"),
-        );
-      });
-
-      /* TABS */
+      /* ══ TABS ══ */
       const tabs = document.querySelectorAll(".mtab");
-      const strips = document.querySelectorAll(".strip");
-      let activeStrip = document.getElementById("s-lavash");
-      const sf = document.getElementById("sf");
-
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
           tabs.forEach((t) => t.classList.remove("act"));
           tab.classList.add("act");
-          strips.forEach((s) => s.classList.add("hidden"));
-          const target = document.getElementById("s-" + tab.dataset.cat);
-          if (target) {
-            target.classList.remove("hidden");
-            activeStrip = target;
-            sf.style.width = "15%";
+          document
+            .querySelectorAll(".strip")
+            .forEach((s) => s.classList.add("hidden"));
+          const t = document.getElementById("s-" + tab.dataset.cat);
+          if (t) {
+            t.classList.remove("hidden");
+            document.getElementById("sf").style.width = "15%";
           }
         });
       });
 
-      /* STRIP DRAG */
-      let dn = false,
-        sx2 = 0,
-        sl2 = 0;
+      /* ══ STRIP PROGRESS ══ */
+      const sf = document.getElementById("sf");
       document.querySelectorAll(".strip").forEach((s) => {
-        s.addEventListener("mousedown", (e) => {
-          dn = true;
-          s.classList.add("drag");
-          sx2 = e.pageX - s.offsetLeft;
-          sl2 = s.scrollLeft;
-        });
-        s.addEventListener("mouseleave", () => {
-          dn = false;
-          s.classList.remove("drag");
-        });
-        s.addEventListener("mouseup", () => {
-          dn = false;
-          s.classList.remove("drag");
-        });
-        s.addEventListener("mousemove", (e) => {
-          if (!dn) return;
-          e.preventDefault();
-          s.scrollLeft = sl2 - (e.pageX - s.offsetLeft - sx2) * 1.5;
-        });
         s.addEventListener(
           "scroll",
           () => {
@@ -3211,12 +3121,12 @@
         );
       });
 
-      /* CART */
+      /* ══ CART ══ */
       document.querySelectorAll(".mcb").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (btn.classList.contains("added")) return;
           btn.classList.add("added");
-          btn.querySelector("span").textContent = "✓ Qo'shildi";
+          btn.querySelector("span").textContent = "✓ Savatda";
           setTimeout(() => {
             btn.classList.remove("added");
             btn.querySelector("span").textContent = "+ Savatga";
@@ -3224,7 +3134,7 @@
         });
       });
 
-      /* PROMO + CTA split words */
+      /* ══ PROMO + CTA SPLIT ══ */
       const pObs = new IntersectionObserver(
         (es) => {
           es.forEach((e) => {
@@ -3238,47 +3148,35 @@
             }
           });
         },
-        { threshold: 0.2 },
+        { threshold: 0.15 },
       );
       document
         .querySelectorAll(".promo .sl,.cta .sl,.ftxt .sl")
         .forEach((el) => pObs.observe(el));
 
-      /* TEXT SCRAMBLE */
-      const CH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      function scr(el) {
-        const orig = el.dataset.orig || el.textContent;
-        el.dataset.orig = orig;
-        let f = 0,
-          tot = 20;
-        clearInterval(el._s);
-        el._s = setInterval(() => {
-          el.textContent = orig
-            .split("")
-            .map((c, i) => {
-              if (c === " ") return " ";
-              if (f / tot > i / orig.length) return c;
-              return CH[Math.floor(Math.random() * CH.length)];
-            })
-            .join("");
-          if (++f >= tot) {
-            el.textContent = orig;
-            clearInterval(el._s);
-          }
-        }, 35);
+      /* ══ MAGNETIC (desktop) ══ */
+      if (window.innerWidth >= 768) {
+        document.querySelectorAll(".mag").forEach((w) => {
+          const b = w.querySelector("button,a") || w;
+          w.addEventListener("mousemove", (e) => {
+            const r = w.getBoundingClientRect();
+            b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.28}px,${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
+          });
+          w.addEventListener(
+            "mouseleave",
+            () => (b.style.transform = "translate(0,0)"),
+          );
+        });
       }
-      document.querySelectorAll(".mcn").forEach((el) => {
-        el.closest(".mc").addEventListener("mouseenter", () => scr(el));
-      });
 
-      /* NAV ACTIVE */
+      /* ══ NAV ACTIVE ══ */
       window.addEventListener(
         "scroll",
         () => {
-          const y = scrollY + 140;
+          const y = scrollY + 100;
           ["menu", "feat", "gal", "del"].forEach((id) => {
-            const s = document.getElementById(id),
-              l = document.querySelector(`.nr a[href="#${id}"]`);
+            const s = document.getElementById(id);
+            const l = document.querySelector(`.nlinks a[href="#${id}"]`);
             if (s && l)
               l.style.color =
                 s.offsetTop <= y && s.offsetTop + s.offsetHeight > y
@@ -3288,6 +3186,18 @@
         },
         { passive: true },
       );
+
+      /* ══ TOUCH SCROLL FEEDBACK ══ */
+      document.querySelectorAll(".strip,.tscroll").forEach((el) => {
+        el.addEventListener(
+          "touchstart",
+          () => (el.style.cursor = "grabbing"),
+          { passive: true },
+        );
+        el.addEventListener("touchend", () => (el.style.cursor = ""), {
+          passive: true,
+        });
+      });
     </script>
   </body>
 </html>
