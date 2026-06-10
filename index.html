@@ -3,24 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>BurgerBoss — Toshkent №1</title>
+    <title>Enjoy Lavash — Toshkent №1</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* ═══════════════════════════════════════
-   ROOT
-═══════════════════════════════════════ */
       :root {
-        --fire: #e8300b;
-        --gold: #f5a623;
-        --dark: #080808;
-        --mid: #111;
-        --surface: #161616;
-        --cream: #f2ead6;
-        --muted: rgba(242, 234, 214, 0.45);
-        --border: rgba(242, 234, 214, 0.07);
+        --fire: #c0392b;
+        --gold: #e67e22;
+        --dark: #070605;
+        --mid: #0f0d0b;
+        --surface: #171410;
+        --cream: #f0e6d0;
+        --muted: rgba(240, 230, 208, 0.48);
+        --border: rgba(240, 230, 208, 0.08);
       }
       *,
       *::before,
@@ -38,9 +35,8 @@
         font-family: "Space Grotesk", sans-serif;
         overflow-x: hidden;
         cursor: none;
+        -webkit-font-smoothing: antialiased;
       }
-
-      /* ─── SCROLLBAR ─── */
       ::-webkit-scrollbar {
         width: 2px;
       }
@@ -51,155 +47,122 @@
         background: var(--fire);
       }
 
-      /* ─── NOISE ─── */
-      body::after {
-        content: "";
+      /* CURSOR */
+      #cur {
         position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 9000;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-        opacity: 0.03;
-      }
-
-      /* ═══════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════ */
-      #cur-dot {
-        position: fixed;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--fire);
-        pointer-events: none;
         z-index: 9999;
+        pointer-events: none;
+        width: 72px;
+        height: 72px;
         transform: translate(-50%, -50%);
-        transition:
-          width 0.2s,
-          height 0.2s,
-          background 0.2s,
-          transform 0.1s;
-        will-change: left, top;
+        mix-blend-mode: difference;
       }
       #cur-ring {
-        position: fixed;
-        width: 36px;
-        height: 36px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
-        border: 1px solid rgba(232, 48, 11, 0.5);
-        pointer-events: none;
-        z-index: 9998;
-        transform: translate(-50%, -50%);
+        border: 1px solid rgba(240, 230, 208, 0.8);
+        transform: scale(0.13);
         transition:
-          width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-          height 0.35s,
-          border-color 0.35s,
-          left 0.09s,
-          top 0.09s;
-        will-change: left, top;
+          transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+          background 0.3s;
       }
-      .cur-hover #cur-dot {
+      #cur-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
         width: 5px;
         height: 5px;
-        background: var(--gold);
+        border-radius: 50%;
+        background: var(--cream);
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s;
       }
-      .cur-hover #cur-ring {
-        width: 54px;
-        height: 54px;
-        border-color: var(--gold);
+      body.hov #cur-ring {
+        transform: scale(1);
+        background: rgba(240, 230, 208, 0.07);
       }
-      .cur-btn #cur-dot {
-        width: 4px;
-        height: 4px;
-        background: #fff;
+      body.hov #cur-dot {
+        opacity: 0;
       }
-      .cur-btn #cur-ring {
-        width: 64px;
-        height: 64px;
-        border-color: rgba(255, 255, 255, 0.4);
-        background: rgba(232, 48, 11, 0.08);
+      body.clk #cur-ring {
+        transform: scale(0.75);
+        background: rgba(192, 57, 43, 0.3);
       }
 
-      /* ═══════════════════════════════════════
-   NAVBAR
-═══════════════════════════════════════ */
-      nav {
+      /* NAV */
+      #nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 500;
+        z-index: 600;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.6rem 4rem;
-      }
-      nav.stuck {
-        background: rgba(8, 8, 8, 0.92);
-        backdrop-filter: blur(24px);
-        padding: 1.1rem 4rem;
-        border-bottom: 1px solid var(--border);
+        padding: 2rem 3.5rem;
         transition:
           padding 0.4s,
           background 0.4s;
       }
-      .logo {
+      #nav.compact {
+        padding: 1rem 3.5rem;
+        background: rgba(7, 6, 5, 0.94);
+        backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nl {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.9rem;
-        letter-spacing: 4px;
+        font-size: 1.8rem;
+        letter-spacing: 5px;
         color: var(--cream);
         text-decoration: none;
       }
-      .logo em {
+      .nl em {
         color: var(--fire);
         font-style: normal;
       }
-
-      .nav-links {
+      .nr {
         display: flex;
         align-items: center;
-        gap: 2.8rem;
+        gap: 2.6rem;
       }
-      .nav-links a {
+      .nla {
         color: var(--muted);
         text-decoration: none;
-        font-size: 0.7rem;
-        letter-spacing: 2.5px;
+        font-size: 0.63rem;
+        letter-spacing: 3px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 500;
         position: relative;
         overflow: hidden;
-        display: inline-block;
       }
-      /* underline sweep */
-      .nav-links a::after {
+      .nla::after {
         content: "";
         position: absolute;
-        bottom: 0;
+        bottom: -1px;
         left: -100%;
         width: 100%;
         height: 1px;
         background: var(--gold);
-        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .nav-links a:hover {
+      .nla:hover {
         color: var(--cream);
       }
-      .nav-links a:hover::after {
+      .nla:hover::after {
         left: 0;
       }
-
-      .nav-btn {
+      .nb {
         background: none;
-        border: 1px solid rgba(232, 48, 11, 0.5);
+        border: 1px solid rgba(192, 57, 43, 0.55);
         color: var(--cream);
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.72rem;
+        font-size: 0.63rem;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 0.55rem 1.6rem;
-        border-radius: 1px;
+        padding: 0.5rem 1.5rem;
         cursor: none;
         position: relative;
         overflow: hidden;
@@ -207,7 +170,7 @@
           color 0.3s,
           border-color 0.3s;
       }
-      .nav-btn::before {
+      .nb::before {
         content: "";
         position: absolute;
         inset: 0;
@@ -216,234 +179,195 @@
         transform-origin: right;
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .nav-btn:hover {
+      .nb:hover {
         color: #fff;
         border-color: var(--fire);
       }
-      .nav-btn:hover::before {
+      .nb:hover::before {
         transform: scaleX(1);
         transform-origin: left;
       }
-      .nav-btn span {
+      .nb span {
         position: relative;
         z-index: 1;
       }
 
-      /* ═══════════════════════════════════════
-   CLIP-PATH TEXT REVEAL (Format-3 style)
-═══════════════════════════════════════ */
-      .cr {
-        display: block;
-        overflow: hidden;
-      }
-      .cr-inner {
-        display: block;
-        transform: translateY(105%);
-        transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .cr.active .cr-inner {
-        transform: translateY(0);
-      }
-
-      /* Stagger variants */
-      .cr-d1 .cr-inner {
-        transition-delay: 0.08s;
-      }
-      .cr-d2 .cr-inner {
-        transition-delay: 0.16s;
-      }
-      .cr-d3 .cr-inner {
-        transition-delay: 0.24s;
-      }
-      .cr-d4 .cr-inner {
-        transition-delay: 0.32s;
-      }
-      .cr-d5 .cr-inner {
-        transition-delay: 0.4s;
-      }
-
-      /* Fade reveal for non-text */
-      .fr {
-        opacity: 0;
-        transform: translateY(28px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-      .fr.active {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fr-d1 {
-        transition-delay: 0.1s;
-      }
-      .fr-d2 {
-        transition-delay: 0.2s;
-      }
-      .fr-d3 {
-        transition-delay: 0.3s;
-      }
-      .fr-d4 {
-        transition-delay: 0.4s;
-      }
-
-      /* Left slide */
-      .sl {
-        opacity: 0;
-        transform: translateX(-36px);
-        transition:
-          opacity 0.8s ease,
-          transform 0.8s ease;
-      }
-      .sl.active {
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      /* ═══════════════════════════════════════
+      /* ══════════════════════════════════════════
    HERO
-═══════════════════════════════════════ */
-      .hero {
+══════════════════════════════════════════ */
+      #hero {
         position: relative;
         height: 100vh;
+        overflow: hidden;
         display: flex;
         align-items: flex-end;
-        padding: 0 4rem 6rem;
-        overflow: hidden;
       }
-      .hero-bg {
+      /* 3D Canvas — bottom layer */
+      #hc {
         position: absolute;
         inset: 0;
-        background: url("https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800&q=90")
-          center/cover;
-        filter: brightness(0.3) saturate(1.1);
+        z-index: 1;
+        pointer-events: none;
+      }
+      /* Food photo */
+      #hp {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        /* Lavash / fast food photo — using foodiesfeed via picsum fallback */
+        background: url("https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1920&q=90")
+          center/cover no-repeat;
+        filter: brightness(0.58) saturate(1.35) contrast(1.08);
         will-change: transform;
-        /* parallax set by JS */
+        transform: scale(1.07);
       }
-      .hero-vignette {
+      /* Vignette */
+      #hv {
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(8, 8, 8, 0.96) 0%,
-          rgba(8, 8, 8, 0.55) 55%,
-          rgba(8, 8, 8, 0.1) 100%
-        );
+        z-index: 3;
+        background:
+          linear-gradient(
+            to bottom,
+            rgba(7, 6, 5, 0.65) 0%,
+            transparent 22%,
+            transparent 55%,
+            rgba(7, 6, 5, 0.97) 100%
+          ),
+          linear-gradient(to right, rgba(7, 6, 5, 0.72) 0%, transparent 55%);
       }
-      .hero-orb {
+      /* Red glow */
+      #hg {
         position: absolute;
-        top: 15%;
-        right: 12%;
-        width: 440px;
-        height: 440px;
-        border-radius: 50%;
+        right: -8%;
+        top: 5%;
+        width: 60%;
+        height: 80%;
+        z-index: 3;
         background: radial-gradient(
-          circle,
-          rgba(232, 48, 11, 0.18) 0%,
-          transparent 70%
+          ellipse,
+          rgba(192, 57, 43, 0.28) 0%,
+          transparent 60%
         );
-        animation: orbFloat 9s ease-in-out infinite;
+        animation: gFloat 7s ease-in-out infinite;
+        pointer-events: none;
       }
-      @keyframes orbFloat {
+      @keyframes gFloat {
         0%,
         100% {
           transform: translate(0, 0) scale(1);
+          opacity: 0.8;
         }
-        40% {
-          transform: translate(18px, -28px) scale(1.04);
-        }
-        70% {
-          transform: translate(-12px, 16px) scale(0.97);
+        50% {
+          transform: translate(-2%, 4%) scale(1.06);
+          opacity: 1;
         }
       }
-
-      .hero-content {
+      /* Content */
+      .hcon {
         position: relative;
-        z-index: 2;
+        z-index: 4;
+        padding: 0 4rem 5.5rem;
         width: 100%;
       }
-      .hero-tag {
+      .htag {
         display: flex;
         align-items: center;
         gap: 0.9rem;
-        font-size: 0.62rem;
-        letter-spacing: 4px;
+        font-size: 0.6rem;
+        letter-spacing: 5px;
         text-transform: uppercase;
         color: var(--fire);
-        font-weight: 700;
-        margin-bottom: 2rem;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
       }
-      .hero-tag-line {
-        width: 38px;
+      .htag-l {
+        width: 30px;
         height: 1px;
         background: var(--fire);
       }
-
-      .hero-h1 {
+      .hh {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(6.5rem, 17vw, 16rem);
-        line-height: 0.86;
-        letter-spacing: 4px;
-        margin-bottom: 3rem;
+        font-size: clamp(6rem, 16vw, 15rem);
+        line-height: 0.84;
+        letter-spacing: 5px;
+        margin-bottom: 3.5rem;
       }
-      .hero-h1 .stroke {
+      .hh .stk {
         -webkit-text-stroke: 1.5px var(--cream);
         color: transparent;
       }
-      .hero-h1 .fire {
+      .hh .acc {
         color: var(--fire);
       }
-
-      .hero-bottom {
+      .hmeta {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
         gap: 2rem;
       }
-      .hero-desc {
-        font-size: 0.98rem;
+      .hdesc {
+        font-size: 0.92rem;
         color: var(--muted);
-        line-height: 1.85;
-        max-width: 360px;
+        line-height: 1.9;
+        max-width: 340px;
         font-weight: 300;
       }
-      .hero-desc strong {
+      .hdesc strong {
         color: var(--cream);
-        font-weight: 600;
+        font-weight: 500;
       }
-      .hero-btns {
+      .hbtns {
         display: flex;
         gap: 1rem;
+        flex-shrink: 0;
       }
-
-      /* Scroll cue */
-      .scroll-cue {
+      /* split word */
+      .sl {
+        display: block;
+        overflow: hidden;
+      }
+      .sw {
+        display: inline-block;
+        transform: translateY(115%) skewY(3deg);
+        opacity: 0;
+        transition:
+          transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.5s;
+      }
+      .sw.in {
+        transform: translateY(0) skewY(0);
+        opacity: 1;
+      }
+      /* scroll cue */
+      .sci {
         position: absolute;
-        right: 4rem;
-        bottom: 5rem;
-        z-index: 2;
+        right: 3.5rem;
+        bottom: 4.5rem;
+        z-index: 4;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.7rem;
+        gap: 0.8rem;
       }
-      .scroll-cue-line {
+      .scl {
         width: 1px;
-        height: 64px;
-        background: var(--border);
+        height: 65px;
         overflow: hidden;
         position: relative;
+        background: rgba(240, 230, 208, 0.1);
       }
-      .scroll-cue-line::after {
+      .scl::after {
         content: "";
         position: absolute;
         top: -100%;
+        left: 0;
         width: 1px;
         height: 100%;
         background: var(--fire);
-        animation: lineDrop 1.8s ease-in-out infinite;
+        animation: sd 1.9s ease-in-out infinite;
       }
-      @keyframes lineDrop {
+      @keyframes sd {
         0% {
           top: -100%;
         }
@@ -451,114 +375,105 @@
           top: 200%;
         }
       }
-      .scroll-cue-text {
-        font-size: 0.58rem;
+      .sct {
+        font-size: 0.52rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--muted);
         writing-mode: vertical-rl;
       }
 
-      /* ═══════════════════════════════════════
-   BUTTONS
-═══════════════════════════════════════ */
-      .btn-fire {
+      /* BUTTONS */
+      .bp {
         background: var(--fire);
         color: #fff;
         border: none;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 2px;
+        font-size: 0.72rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        padding: 0.9rem 2.4rem;
-        border-radius: 1px;
+        padding: 0.85rem 2.2rem;
         cursor: none;
         position: relative;
         overflow: hidden;
         transition:
-          box-shadow 0.3s,
-          transform 0.2s;
+          transform 0.2s,
+          box-shadow 0.3s;
         display: inline-block;
       }
-      .btn-fire::after {
+      .bp::after {
         content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
-          135deg,
+          120deg,
+          transparent,
           rgba(255, 255, 255, 0.2),
           transparent
         );
-        transform: translateX(-100%) skewX(-15deg);
-        transition: transform 0.5s;
+        transform: translateX(-100%) skewX(-20deg);
+        transition: transform 0.55s;
       }
-      .btn-fire:hover {
-        box-shadow: 0 12px 40px rgba(232, 48, 11, 0.45);
+      .bp:hover {
         transform: translateY(-2px);
+        box-shadow: 0 14px 44px rgba(192, 57, 43, 0.55);
       }
-      .btn-fire:hover::after {
-        transform: translateX(150%) skewX(-15deg);
+      .bp:hover::after {
+        transform: translateX(120%) skewX(-20deg);
       }
-
-      .btn-ghost {
+      .bg2 {
         background: transparent;
         color: var(--cream);
-        border: 1px solid rgba(242, 234, 214, 0.18);
+        border: 1px solid rgba(240, 230, 208, 0.22);
         font-family: "Syne", sans-serif;
-        font-weight: 600;
-        font-size: 0.8rem;
-        letter-spacing: 2px;
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        padding: 0.9rem 2.4rem;
-        border-radius: 1px;
+        padding: 0.85rem 2.2rem;
         cursor: none;
         position: relative;
         overflow: hidden;
-        transition:
-          border-color 0.3s,
-          color 0.3s;
+        transition: border-color 0.3s;
       }
-      .btn-ghost::before {
+      .bg2::before {
         content: "";
         position: absolute;
         inset: 0;
-        background: rgba(242, 234, 214, 0.05);
+        background: rgba(240, 230, 208, 0.05);
         transform: scaleY(0);
         transform-origin: bottom;
-        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.35s;
       }
-      .btn-ghost:hover {
-        border-color: var(--cream);
+      .bg2:hover {
+        border-color: rgba(240, 230, 208, 0.5);
       }
-      .btn-ghost:hover::before {
+      .bg2:hover::before {
         transform: scaleY(1);
       }
-
-      /* MAGNETIC wrapper */
-      .magnetic {
+      .mag {
         display: inline-block;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* ═══════════════════════════════════════
-   MARQUEE
-═══════════════════════════════════════ */
-      .marquee-wrap {
+      /* TICKER */
+      .tick {
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
         overflow: hidden;
         padding: 0.85rem 0;
+        background: var(--dark);
       }
-      .marquee-inner {
+      .ti {
         display: flex;
         width: max-content;
-        animation: mq 28s linear infinite;
+        animation: tr 24s linear infinite;
       }
-      .marquee-wrap:hover .marquee-inner {
+      .tick:hover .ti {
         animation-play-state: paused;
       }
-      @keyframes mq {
+      @keyframes tr {
         from {
           transform: translateX(0);
         }
@@ -566,483 +481,588 @@
           transform: translateX(-50%);
         }
       }
-      .mq-item {
+      .tit {
         display: flex;
         align-items: center;
         gap: 1.8rem;
         padding: 0 2rem;
         font-family: "Bebas Neue", sans-serif;
-        font-size: 1.2rem;
-        letter-spacing: 4px;
+        font-size: 1.1rem;
+        letter-spacing: 5px;
         color: var(--muted);
         white-space: nowrap;
         transition: color 0.3s;
+        cursor: default;
       }
-      .marquee-inner:hover .mq-item:hover {
+      .tit:hover {
         color: var(--cream);
       }
-      .mq-dot {
-        width: 5px;
-        height: 5px;
+      .tdot {
+        width: 4px;
+        height: 4px;
         border-radius: 50%;
         background: var(--fire);
         flex-shrink: 0;
       }
 
-      /* ═══════════════════════════════════════
-   STATS — COUNTER ANIMATION
-═══════════════════════════════════════ */
+      /* STATS */
       .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         border-bottom: 1px solid var(--border);
       }
-      .stat {
-        padding: 4rem 3rem;
+      .st {
+        padding: 5rem 3rem;
         border-right: 1px solid var(--border);
         position: relative;
         overflow: hidden;
         cursor: default;
       }
-      .stat:last-child {
+      .st:last-child {
         border-right: none;
       }
-      /* slide-up fill on hover */
-      .stat::before {
+      .st::before {
         content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to top,
-          rgba(232, 48, 11, 0.06) 0%,
-          transparent 100%
+          rgba(192, 57, 43, 0.07),
+          transparent
         );
-        transform: translateY(100%);
+        transform: translateY(101%);
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .stat:hover::before {
+      .st:hover::before {
         transform: translateY(0);
       }
-      .stat-n {
+      .stn {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3.5rem, 5vw, 5.5rem);
+        font-size: clamp(4rem, 6vw, 7rem);
+        color: var(--cream);
+        line-height: 0.88;
+        letter-spacing: -1px;
+        position: relative;
+        z-index: 1;
+      }
+      .stn .u {
+        font-size: 0.38em;
         color: var(--fire);
-        line-height: 1;
         letter-spacing: 2px;
-        display: flex;
-        align-items: baseline;
-        gap: 0.2rem;
       }
-      .stat-suffix {
-        font-size: 0.45em;
-        color: var(--gold);
-      }
-      .stat-l {
-        font-size: 0.62rem;
-        letter-spacing: 3px;
+      .stl {
+        font-size: 0.57rem;
+        letter-spacing: 4px;
         text-transform: uppercase;
         color: var(--muted);
-        font-weight: 600;
-        margin-top: 0.7rem;
+        font-weight: 500;
+        margin-top: 1rem;
+        position: relative;
+        z-index: 1;
       }
 
-      /* ═══════════════════════════════════════
-   MENU — CARDS WITH 3D TILT
-═══════════════════════════════════════ */
-      .menu-sec {
-        padding: 8rem 0;
+      /* ══════════════════════════════════════════
+   SECTION HELPERS
+══════════════════════════════════════════ */
+      .eye {
+        font-size: 0.6rem;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: var(--fire);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.6rem;
+      }
+      .eye::before {
+        content: "";
+        width: 24px;
+        height: 1px;
+        background: var(--fire);
+      }
+      .ttl {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3.5rem, 7vw, 6.5rem);
+        line-height: 0.88;
+        letter-spacing: 4px;
+      }
+      .ttl .out {
+        -webkit-text-stroke: 1px var(--cream);
+        color: transparent;
+      }
+
+      /* ══════════════════════════════════════════
+   MENU SECTION
+══════════════════════════════════════════ */
+      .msec {
+        padding: 9rem 0;
+        background: var(--dark);
+        position: relative;
         overflow: hidden;
       }
-      .menu-head {
+      /* bg: dark lavash atmosphere */
+      .msec::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: url("https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=1800&q=50")
+          center/cover no-repeat;
+        filter: brightness(0.055) saturate(0);
+        pointer-events: none;
+      }
+      /* red glow top right */
+      .msec::after {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 50%;
+        height: 80%;
+        z-index: 0;
+        background: radial-gradient(
+          ellipse,
+          rgba(192, 57, 43, 0.12) 0%,
+          transparent 65%
+        );
+        pointer-events: none;
+      }
+      .mhead {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
         padding: 0 4rem 4rem;
+        position: relative;
+        z-index: 1;
       }
-      .menu-hint {
+      .mhint {
         font-size: 0.8rem;
         color: var(--muted);
-        max-width: 240px;
+        max-width: 210px;
         line-height: 1.7;
       }
 
-      .menu-scroll {
+      /* TAB NAV */
+      .mtabs {
         display: flex;
-        gap: 1.4rem;
-        padding: 0 4rem 3rem;
+        gap: 0;
+        padding: 0 4rem 2.5rem;
+        position: relative;
+        z-index: 1;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0;
+      }
+      .mtab {
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: var(--muted);
+        font-family: "Syne", sans-serif;
+        font-weight: 600;
+        font-size: 0.68rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 0.7rem 1.8rem 0.7rem 0;
+        cursor: none;
+        transition:
+          color 0.25s,
+          border-color 0.25s;
+        margin-right: 1.5rem;
+      }
+      .mtab.act {
+        color: var(--cream);
+        border-bottom-color: var(--fire);
+      }
+      .mtab:hover {
+        color: var(--cream);
+      }
+
+      /* Card strip */
+      .strip {
+        display: flex;
+        gap: 3px;
+        padding: 2rem 4rem 0;
         overflow-x: auto;
         scrollbar-width: none;
         cursor: grab;
-        scroll-snap-type: x mandatory;
+        position: relative;
+        z-index: 1;
+        transition: opacity 0.3s;
       }
-      .menu-scroll::-webkit-scrollbar {
+      .strip::-webkit-scrollbar {
         display: none;
       }
-      .menu-scroll.dragging {
+      .strip.drag {
         cursor: grabbing;
         user-select: none;
       }
+      .strip.hidden {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+      }
 
-      /* progress */
-      .mprog {
+      .mc {
+        flex: 0 0 310px;
+        height: 450px;
+        position: relative;
+        overflow: hidden;
+        background: var(--mid);
+        flex-shrink: 0;
+        cursor: none;
+        transform-style: preserve-3d;
+        transition: box-shadow 0.4s;
+      }
+      .mc:hover {
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.65);
+      }
+      .mcbg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.6) saturate(1.15);
+        transform: scale(1.06);
+        transition:
+          transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+          filter 0.5s;
+      }
+      .mc:hover .mcbg {
+        transform: scale(1.13);
+        filter: brightness(0.78) saturate(1.3);
+      }
+      .mcov {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(7, 6, 5, 0.96) 0%,
+          rgba(7, 6, 5, 0.25) 55%,
+          transparent 100%
+        );
+      }
+      .mc::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 46px 46px 0;
+        border-color: transparent var(--fire) transparent transparent;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 4;
+      }
+      .mc:hover::after {
+        opacity: 1;
+      }
+      .mcbadge {
+        position: absolute;
+        top: 1.2rem;
+        left: 1.2rem;
+        z-index: 3;
+        font-size: 0.52rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--fire);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .mcbadge::before {
+        content: "";
+        width: 14px;
+        height: 1px;
+        background: var(--fire);
+      }
+      .mcbody {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 3;
+        padding: 1.8rem;
+      }
+      .mcnum {
+        font-size: 0.52rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(240, 230, 208, 0.38);
+        margin-bottom: 0.6rem;
+      }
+      .mcn {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        letter-spacing: 3px;
+        color: var(--cream);
+        line-height: 0.95;
+        margin-bottom: 0.4rem;
+        transform: translateY(5px);
+        transition: transform 0.4s;
+      }
+      .mc:hover .mcn {
+        transform: translateY(0);
+      }
+      .mcd {
+        font-size: 0.74rem;
+        color: var(--muted);
+        line-height: 1.6;
+        max-width: 255px;
+        transform: translateY(8px);
+        opacity: 0;
+        transition:
+          transform 0.4s 0.04s,
+          opacity 0.4s 0.04s;
+      }
+      .mc:hover .mcd {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .mcft {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.8rem;
+        transform: translateY(8px);
+        opacity: 0;
+        transition:
+          transform 0.4s 0.09s,
+          opacity 0.4s 0.09s;
+      }
+      .mc:hover .mcft {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .mcp {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.85rem;
+        color: var(--gold);
+        letter-spacing: 1px;
+      }
+      .mcb {
+        font-size: 0.58rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: none;
+        border: 1px solid rgba(240, 230, 208, 0.2);
+        padding: 0.36rem 0.9rem;
+        cursor: none;
+        font-family: "Space Grotesk", sans-serif;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .mcb:hover {
+        border-color: var(--fire);
+        background: rgba(192, 57, 43, 0.12);
+      }
+      .mcb.added {
+        border-color: #22c55e;
+        color: #22c55e;
+        background: rgba(34, 197, 94, 0.08);
+      }
+      .sprog {
         height: 1px;
         background: var(--border);
-        margin: 0 4rem;
+        margin: 1.5rem 4rem 0;
         position: relative;
+        z-index: 1;
       }
-      .mprog-f {
+      .sfill {
         position: absolute;
         left: 0;
         top: 0;
         height: 1px;
         background: var(--fire);
-        width: 20%;
-        transition: width 0.1s;
+        width: 15%;
+        transition: width 0.12s;
       }
 
-      /* Card */
-      .mc {
-        flex: 0 0 340px;
-        scroll-snap-align: start;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 3px;
-        overflow: hidden;
-        will-change: transform;
-        /* 3D tilt applied by JS */
-        transition:
-          box-shadow 0.4s,
-          border-color 0.4s;
-        transform-style: preserve-3d;
-        position: relative;
-        cursor: none;
-      }
-      .mc:hover {
-        border-color: rgba(232, 48, 11, 0.25);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-      }
-
-      .mc-img {
-        height: 250px;
-        overflow: hidden;
-        position: relative;
-      }
-      .mc-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.7s ease;
-      }
-      .mc:hover .mc-img img {
-        transform: scale(1.08);
-      }
-      .mc-img-ov {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
-      }
-
-      .mc-badge {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-        z-index: 2;
-        background: var(--fire);
-        color: #fff;
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.58rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 0.28rem 0.8rem;
-        border-radius: 1px;
-      }
-      .mc-badge.gld {
-        background: var(--gold);
-        color: #000;
-      }
-      .mc-badge.spc {
-        background: #ff6500;
-      }
-
-      .mc-body {
-        padding: 1.4rem 1.6rem 1.8rem;
-      }
-      .mc-name {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1.15rem;
-        color: var(--cream);
-        margin-bottom: 0.5rem;
-        /* text scramble target */
-      }
-      .mc-desc {
-        font-size: 0.82rem;
-        color: var(--muted);
-        line-height: 1.65;
-        margin-bottom: 1.4rem;
-      }
-      .mc-foot {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .mc-price {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 2rem;
-        color: var(--gold);
-        letter-spacing: 1px;
-      }
-
-      /* Cart btn with fill animation */
-      .mc-btn {
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--cream);
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.68rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        padding: 0.5rem 1.2rem;
-        border-radius: 1px;
-        cursor: none;
-        position: relative;
-        overflow: hidden;
-        transition:
-          border-color 0.25s,
-          color 0.25s;
-      }
-      .mc-btn::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: var(--fire);
-        transform: translateY(101%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .mc-btn:hover {
-        border-color: var(--fire);
-        color: #fff;
-      }
-      .mc-btn:hover::before {
-        transform: translateY(0);
-      }
-      .mc-btn span {
-        position: relative;
-        z-index: 1;
-      }
-      .mc-btn.added {
-        border-color: #1a7a3c;
-        color: #1a7a3c;
-      }
-      .mc-btn.added::before {
-        background: #1a7a3c;
-        transform: translateY(0);
-      }
-      .mc-btn.added {
-        color: #fff;
-      }
-
-      /* Hover image preview on card (Format-3 work cards) */
-      .mc-hover-tag {
-        position: absolute;
-        bottom: 1rem;
-        right: 1rem;
-        background: rgba(8, 8, 8, 0.8);
-        backdrop-filter: blur(12px);
-        border: 1px solid var(--border);
-        padding: 0.4rem 0.9rem;
-        border-radius: 1px;
-        font-size: 0.6rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--gold);
-        font-weight: 700;
-        opacity: 0;
-        transform: translateY(6px);
-        transition:
-          opacity 0.3s,
-          transform 0.3s;
-        z-index: 3;
-      }
-      .mc:hover .mc-hover-tag {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* ═══════════════════════════════════════
-   SECTION EYEBROW / TITLE HELPERS
-═══════════════════════════════════════ */
-      .s-eye {
-        font-size: 0.62rem;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        color: var(--fire);
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 0.9rem;
-        margin-bottom: 0.7rem;
-      }
-      .s-eye::before {
-        content: "";
-        width: 28px;
-        height: 1px;
-        background: var(--fire);
-      }
-      .s-ttl {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3rem, 7vw, 6rem);
-        line-height: 0.9;
-        letter-spacing: 3px;
-      }
-      .s-ttl .stk {
-        -webkit-text-stroke: 1px var(--cream);
-        color: transparent;
-      }
-
-      /* ═══════════════════════════════════════
-   FEATURED — PARALLAX IMAGE
-═══════════════════════════════════════ */
-      .featured {
+      /* ══════════════════════════════════════════
+   FEATURED
+══════════════════════════════════════════ */
+      .feat {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        min-height: 88vh;
+        min-height: 90vh;
+        position: relative;
       }
-      .feat-img-wrap {
+      .feat::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 12% 50%,
+          rgba(192, 57, 43, 0.1) 0%,
+          transparent 55%
+        );
+        animation: fg 7s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+      @keyframes fg {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+      }
+      .fimg {
         position: relative;
         overflow: hidden;
+        z-index: 1;
       }
-      .feat-img {
-        width: 100%;
-        height: 110%;
-        object-fit: cover;
-        display: block;
-        transform: translateY(0);
+      .fbg {
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1561651188-d207bbec4ec3?w=1200&q=90")
+          center/cover no-repeat;
+        filter: brightness(0.68) saturate(1.25);
         will-change: transform;
-        /* parallax via JS */
+        transform: scale(1.05);
       }
-      .feat-img-ov {
+      .fov {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to right,
-          transparent 55%,
+          transparent 50%,
           var(--dark) 100%
         );
       }
-      .feat-info {
+      .fbadge {
         position: absolute;
         bottom: 3rem;
         left: 3rem;
-        background: rgba(8, 8, 8, 0.82);
+        z-index: 2;
+        background: rgba(7, 6, 5, 0.88);
         backdrop-filter: blur(20px);
         border: 1px solid var(--border);
         padding: 1.4rem 1.8rem;
-        border-radius: 2px;
       }
-      .fi-lbl {
-        font-size: 0.58rem;
+      .fbl {
+        font-size: 0.55rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--fire);
-        font-weight: 700;
         margin-bottom: 0.4rem;
+        font-weight: 600;
       }
-      .fi-name {
+      .fbn {
         font-family: "Syne", sans-serif;
-        font-weight: 800;
+        font-weight: 700;
         font-size: 1.1rem;
         color: var(--cream);
         margin-bottom: 0.3rem;
       }
-      .fi-stars {
+      .fbst {
         color: var(--gold);
         letter-spacing: 2px;
         font-size: 0.85rem;
       }
-
-      .feat-body {
-        padding: 6rem 5rem;
+      .ftxt {
+        padding: 7rem 5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
         background: var(--dark);
+        position: relative;
+        z-index: 1;
       }
-      .feat-ttl {
+      .ftxt::before {
+        content: "SIGNATURE";
+        position: absolute;
+        right: -1.5rem;
+        top: 50%;
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4rem, 7vw, 6rem);
-        line-height: 0.9;
-        letter-spacing: 3px;
-        margin: 1rem 0 2rem;
+        font-size: 8rem;
+        letter-spacing: 6px;
+        color: rgba(240, 230, 208, 0.022);
+        writing-mode: vertical-rl;
+        transform: translateY(-50%);
+        pointer-events: none;
       }
-      .feat-ttl em {
+      .ftit {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(4rem, 7vw, 7rem);
+        line-height: 0.88;
+        letter-spacing: 4px;
+        margin: 1rem 0 2.5rem;
+      }
+      .ftit em {
         font-style: normal;
         color: var(--fire);
       }
-      .feat-txt {
-        font-size: 0.95rem;
+      .fbody {
+        font-size: 0.9rem;
         color: var(--muted);
-        line-height: 1.85;
-        max-width: 400px;
-        margin-bottom: 2.5rem;
+        line-height: 1.9;
+        max-width: 380px;
+        margin-bottom: 3rem;
       }
-      .feat-tags {
+      .ftags {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-        margin-bottom: 2.8rem;
+        margin-bottom: 3rem;
       }
-      .feat-tag {
-        font-size: 0.66rem;
-        letter-spacing: 2px;
+      .ftag {
+        font-size: 0.6rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        color: var(--cream);
-        font-weight: 600;
-        padding: 0.32rem 0.9rem;
-        border-radius: 30px;
+        color: var(--muted);
         border: 1px solid var(--border);
+        padding: 0.28rem 0.8rem;
         transition:
           border-color 0.2s,
-          color 0.2s,
-          background 0.2s;
+          color 0.2s;
         cursor: default;
       }
-      .feat-tag:hover {
-        border-color: var(--fire);
-        color: var(--fire);
-        background: rgba(232, 48, 11, 0.05);
+      .ftag:hover {
+        border-color: rgba(192, 57, 43, 0.4);
+        color: var(--cream);
       }
-      .feat-price {
+      .fpr {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 4.5rem;
-        color: var(--gold);
+        font-size: 5.5rem;
         line-height: 1;
-        margin-bottom: 2rem;
+        color: var(--gold);
+        margin-bottom: 2.5rem;
+      }
+      .fpr sub {
+        font-size: 0.25em;
+        vertical-align: bottom;
+        color: var(--muted);
       }
 
-      /* ═══════════════════════════════════════
-   PROMO STRIP
-═══════════════════════════════════════ */
+      /* ══════════════════════════════════════════
+   PROMO
+══════════════════════════════════════════ */
       .promo {
         background: var(--fire);
-        padding: 5.5rem 4rem;
+        padding: 6rem 4rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 3rem;
+        gap: 4rem;
         position: relative;
         overflow: hidden;
       }
-      /* huge BG watermark */
       .promo::before {
-        content: "BOSS20";
+        content: "ENJOY20";
         position: absolute;
         font-family: "Bebas Neue", sans-serif;
         font-size: 28vw;
-        letter-spacing: -2vw;
+        letter-spacing: -3vw;
         color: rgba(0, 0, 0, 0.07);
         top: 50%;
         left: 50%;
@@ -1050,360 +1070,489 @@
         pointer-events: none;
         white-space: nowrap;
       }
-      .promo-h2 {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(4.5rem, 10vw, 10rem);
-        line-height: 0.88;
-        letter-spacing: 3px;
-        color: #fff;
+      .promo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.07) 0%,
+          transparent 50%,
+          rgba(0, 0, 0, 0.06) 100%
+        );
+        pointer-events: none;
       }
-      .promo-sub {
-        font-size: 0.65rem;
+      .plsub {
+        font-size: 0.6rem;
         letter-spacing: 4px;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.6);
-        font-weight: 700;
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 600;
         margin-bottom: 0.9rem;
       }
-      .promo-right {
+      .plh {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(5rem, 12vw, 11rem);
+        line-height: 0.85;
+        letter-spacing: 4px;
+        color: #fff;
+      }
+      .pr {
         position: relative;
         z-index: 2;
         text-align: right;
       }
-      .promo-code {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3rem, 6vw, 6rem);
-        letter-spacing: 8px;
-        color: #fff;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        padding: 0.4rem 1.8rem;
-        display: inline-block;
-        border-radius: 2px;
-        margin-bottom: 1.5rem;
+      .prlbl {
+        font-size: 0.58rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 0.6rem;
+        font-weight: 600;
       }
-      /* code shimmer on hover */
-      .promo-code {
+      .prc {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3.5rem, 7vw, 7rem);
+        letter-spacing: 10px;
+        color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.32);
+        padding: 0.3rem 1.5rem;
+        display: inline-block;
+        margin-bottom: 1.5rem;
         position: relative;
         overflow: hidden;
+        cursor: default;
       }
-      .promo-code::after {
+      .prc::after {
         content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
           90deg,
           transparent,
-          rgba(255, 255, 255, 0.25),
+          rgba(255, 255, 255, 0.3),
           transparent
         );
         transform: translateX(-100%);
       }
-      .promo-code:hover::after {
-        animation: shimmer 0.6s ease forwards;
+      .prc:hover::after {
+        animation: shine 0.7s ease;
       }
-      @keyframes shimmer {
+      @keyframes shine {
         to {
           transform: translateX(100%);
         }
       }
-      .promo-desc {
-        font-size: 0.84rem;
-        color: rgba(255, 255, 255, 0.65);
+      .prd {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.6);
         line-height: 1.7;
-        max-width: 280px;
+        max-width: 260px;
         margin-left: auto;
       }
 
-      /* ═══════════════════════════════════════
-   GALLERY — ASYMMETRIC + PARALLAX
-═══════════════════════════════════════ */
-      .gallery-sec {
-        padding: 8rem 4rem;
+      /* ══════════════════════════════════════════
+   GALLERY
+══════════════════════════════════════════ */
+      .gal {
+        padding: 9rem 4rem;
         background: var(--dark);
+        position: relative;
+        overflow: hidden;
       }
-      .gallery-head {
+      .gal::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&q=40")
+          center/cover no-repeat;
+        filter: brightness(0.045) saturate(0);
+        pointer-events: none;
+      }
+      .ghd {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
         margin-bottom: 4rem;
+        position: relative;
+        z-index: 1;
       }
-      .gallery-grid {
+      .gnt {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 260px;
+      }
+      .gg {
         display: grid;
         grid-template-columns: 3fr 2fr 2fr;
-        grid-template-rows: 330px 230px;
-        gap: 10px;
+        grid-template-rows: 340px 240px;
+        gap: 4px;
+        position: relative;
+        z-index: 1;
       }
       .gi {
-        overflow: hidden;
-        border-radius: 2px;
         position: relative;
+        overflow: hidden;
         cursor: none;
+        transform-style: preserve-3d;
       }
-      .gi img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        filter: brightness(0.75) saturate(0.75);
+      .gibg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.7) saturate(0.95);
         transition:
-          transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
           filter 0.5s;
       }
-      .gi:hover img {
-        transform: scale(1.07);
-        filter: brightness(1) saturate(1.1);
+      .gi:hover .gibg {
+        filter: brightness(0.95) saturate(1.2);
       }
       .gi.tall {
         grid-row: span 2;
       }
-      .gi-cap {
+      .giov {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(7, 6, 5, 0.92) 0%,
+          transparent 55%
+        );
+      }
+      .gibrd {
+        position: absolute;
+        inset: 0;
+        border: 1.5px solid rgba(192, 57, 43, 0);
+        transition: border-color 0.4s;
+        pointer-events: none;
+        z-index: 3;
+      }
+      .gi:hover .gibrd {
+        border-color: rgba(192, 57, 43, 0.5);
+      }
+      .gicap {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 2rem 1.4rem 1rem;
-        background: linear-gradient(to top, rgba(8, 8, 8, 0.9), transparent);
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.78rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--cream);
-        opacity: 0;
-        transform: translateY(8px);
-        transition:
-          opacity 0.35s,
-          transform 0.35s;
+        z-index: 2;
+        padding: 2rem 1.5rem 1.2rem;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .gi:hover .gi-cap {
-        opacity: 1;
+      .gi:hover .gicap {
         transform: translateY(0);
       }
-      /* line accent */
-      .gi-cap::before {
-        content: "";
-        display: block;
-        width: 24px;
-        height: 1px;
-        background: var(--fire);
-        margin-bottom: 0.5rem;
+      .ginum {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.58rem;
+        letter-spacing: 2px;
+        color: var(--muted);
+        font-family: "Bebas Neue", sans-serif;
+        z-index: 2;
+      }
+      .gitt {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+        color: var(--cream);
+        margin-bottom: 0.3rem;
+      }
+      .gisb {
+        font-size: 0.58rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--fire);
       }
 
-      /* ═══════════════════════════════════════
-   DELIVERY CARDS
-═══════════════════════════════════════ */
-      .delivery-sec {
+      /* ══════════════════════════════════════════
+   DELIVERY
+══════════════════════════════════════════ */
+      .del {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         border-top: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
       }
-      .dc {
-        padding: 4rem 2.8rem;
+      .del::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1567521464027-f127ff144326?w=1800&q=40")
+          center/cover no-repeat;
+        filter: brightness(0.05) saturate(0);
+        pointer-events: none;
+      }
+      .pil {
+        padding: 5rem 3rem;
         border-right: 1px solid var(--border);
         position: relative;
         overflow: hidden;
         cursor: default;
+        z-index: 1;
+        transition: background 0.4s;
       }
-      .dc:last-child {
+      .pil:last-child {
         border-right: none;
       }
-      .dc::before {
+      .pil:hover {
+        background: rgba(192, 57, 43, 0.05);
+      }
+      .pil::after {
         content: "";
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: 0;
-        right: 0;
-        height: 3px;
+        bottom: 0;
+        width: 2px;
         background: var(--fire);
-        transform: scaleX(0);
-        transform-origin: left;
+        transform: scaleY(0);
+        transform-origin: bottom;
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .dc:hover::before {
-        transform: scaleX(1);
+      .pil:hover::after {
+        transform: scaleY(1);
       }
-      .dc-n {
+      .piln {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(3.5rem, 5vw, 5rem);
+        font-size: clamp(4rem, 6vw, 6.5rem);
+        color: var(--cream);
+        line-height: 0.88;
+        letter-spacing: -1px;
+        transition:
+          color 0.3s,
+          text-shadow 0.4s;
+      }
+      .pil:hover .piln {
         color: var(--fire);
-        line-height: 1;
-        letter-spacing: 1px;
+        text-shadow: 0 0 50px rgba(192, 57, 43, 0.45);
       }
-      .dc-u {
-        font-size: 0.6rem;
-        letter-spacing: 3px;
+      .pilu {
+        font-size: 0.57rem;
+        letter-spacing: 4px;
         text-transform: uppercase;
-        color: rgba(232, 48, 11, 0.6);
-        font-weight: 700;
-        margin: 0.4rem 0 1.4rem;
+        color: rgba(192, 57, 43, 0.65);
+        font-weight: 600;
+        margin: 0.5rem 0 1.8rem;
       }
-      .dc-t {
+      .pilt {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 1.05rem;
+        font-size: 1rem;
         color: var(--cream);
         margin-bottom: 0.6rem;
       }
-      .dc-d {
-        font-size: 0.83rem;
+      .pild {
+        font-size: 0.8rem;
         color: var(--muted);
-        line-height: 1.7;
+        line-height: 1.75;
       }
-      /* number count up applied by JS */
 
-      /* ═══════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════ */
-      .testi-sec {
-        padding: 8rem 4rem;
-        border-top: 1px solid var(--border);
+      /* TESTIMONIALS */
+      .test {
+        padding: 9rem 4rem;
+        background: var(--dark);
+        position: relative;
+        overflow: hidden;
       }
-      .testi-grid {
+      .test::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=40")
+          center/cover no-repeat;
+        filter: brightness(0.045) saturate(0);
+        pointer-events: none;
+      }
+      .tg {
         display: grid;
-        grid-template-columns: 1.3fr 1fr 1fr;
+        grid-template-columns: 1.4fr 1fr 1fr;
         gap: 1px;
         background: var(--border);
-        margin-top: 4rem;
+        margin-top: 5rem;
+        position: relative;
+        z-index: 1;
       }
       .tc {
         background: var(--dark);
-        padding: 3rem 2.5rem;
+        padding: 3.5rem 3rem;
         position: relative;
         overflow: hidden;
         cursor: default;
+        transition: background 0.4s;
       }
-      .tc::after {
+      .tc:hover {
+        background: var(--mid);
+      }
+      .tc::before {
         content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 2px;
-        background: var(--fire);
+        height: 1.5px;
+        background: linear-gradient(
+          90deg,
+          var(--fire),
+          var(--gold),
+          transparent
+        );
         transform: scaleX(0);
         transform-origin: left;
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .tc:hover::after {
+      .tc:hover::before {
         transform: scaleX(1);
       }
-      .tc-q {
+      .tcq {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 6rem;
+        font-size: 8rem;
         color: var(--fire);
-        opacity: 0.15;
-        line-height: 0.7;
-        margin-bottom: 1rem;
+        opacity: 0.11;
+        line-height: 0.6;
+        margin-bottom: 1.5rem;
         display: block;
       }
-      .tc-stars {
+      .tcst {
         color: var(--gold);
-        letter-spacing: 3px;
-        font-size: 0.9rem;
-        margin-bottom: 1.2rem;
+        letter-spacing: 4px;
+        font-size: 0.85rem;
+        margin-bottom: 1.4rem;
       }
-      .tc-txt {
-        font-size: 0.93rem;
+      .tctx {
+        font-size: 0.88rem;
         color: var(--muted);
-        line-height: 1.85;
-        margin-bottom: 2rem;
+        line-height: 1.9;
         font-style: italic;
+        margin-bottom: 2.5rem;
       }
-      .tc-txt em {
+      .tctx em {
         color: var(--cream);
         font-style: normal;
-        font-weight: 600;
+        font-weight: 500;
       }
-      .tc-foot {
+      .tcft {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 1.2rem;
       }
-      .tc-av {
-        width: 44px;
-        height: 44px;
+      .tcav {
+        width: 46px;
+        height: 46px;
         border-radius: 50%;
         overflow: hidden;
-        border: 2px solid var(--border);
+        border: 1px solid var(--border);
         flex-shrink: 0;
+        transition: border-color 0.3s;
       }
-      .tc-av img {
+      .tc:hover .tcav {
+        border-color: rgba(192, 57, 43, 0.45);
+      }
+      .tcav img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
-      .tc-name {
+      .tcnm {
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         color: var(--cream);
       }
-      .tc-loc {
-        font-size: 0.7rem;
+      .tclc {
+        font-size: 0.64rem;
         color: var(--muted);
         margin-top: 0.2rem;
+        letter-spacing: 1px;
       }
-      .tc.big .tc-txt {
-        font-size: 1.05rem;
+      .tc.big .tctx {
+        font-size: 1.02rem;
       }
 
-      /* ═══════════════════════════════════════
-   CTA FULL
-═══════════════════════════════════════ */
-      .cta-full {
-        padding: 9rem 4rem;
+      /* CTA */
+      .cta {
+        min-height: 72vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        border-top: 1px solid var(--border);
+        padding: 8rem 4rem;
         position: relative;
         overflow: hidden;
+        border-top: 1px solid var(--border);
       }
-      .cta-full::before {
+      .cta::before {
+        content: "";
+        position: absolute;
+        inset: -50%;
+        background:
+          linear-gradient(rgba(192, 57, 43, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(192, 57, 43, 0.04) 1px, transparent 1px);
+        background-size: 90px 90px;
+        animation: gMove 22s linear infinite;
+      }
+      @keyframes gMove {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .cta::after {
         content: "";
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 700px;
-        height: 700px;
+        width: 900px;
+        height: 900px;
         border-radius: 50%;
         background: radial-gradient(
           circle,
-          rgba(232, 48, 11, 0.1) 0%,
+          rgba(192, 57, 43, 0.09) 0%,
           transparent 70%
         );
-        animation: ctaOrb 6s ease-in-out infinite;
+        animation: cPulse 5s ease-in-out infinite;
       }
-      @keyframes ctaOrb {
+      @keyframes cPulse {
         0%,
         100% {
           transform: translate(-50%, -50%) scale(1);
         }
         50% {
-          transform: translate(-50%, -50%) scale(1.15);
+          transform: translate(-50%, -50%) scale(1.2);
         }
       }
-      .cta-ttl {
+      .ctah {
         font-family: "Bebas Neue", sans-serif;
-        font-size: clamp(5rem, 13vw, 12rem);
-        line-height: 0.88;
-        letter-spacing: 4px;
+        font-size: clamp(5rem, 14vw, 14rem);
+        line-height: 0.85;
+        letter-spacing: 5px;
         position: relative;
         z-index: 1;
       }
-      .cta-ttl .stk {
+      .ctah .out {
         -webkit-text-stroke: 1.5px var(--cream);
         color: transparent;
       }
-      .cta-sub {
-        font-size: 0.97rem;
+      .ctasub {
+        font-size: 0.88rem;
         color: var(--muted);
-        margin: 2.2rem auto 3rem;
-        max-width: 400px;
-        line-height: 1.75;
+        margin: 2.5rem auto 4rem;
+        max-width: 360px;
+        line-height: 1.85;
         position: relative;
         z-index: 1;
       }
-      .cta-actions {
+      .ctabtn {
         display: flex;
         gap: 1.2rem;
         justify-content: center;
@@ -1411,158 +1560,148 @@
         z-index: 1;
       }
 
-      /* ═══════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════ */
+      /* FOOTER */
       footer {
         background: #000;
         border-top: 1px solid var(--border);
-        padding: 5rem 4rem 2.5rem;
+        padding: 5.5rem 4rem 2.5rem;
       }
-      .ft {
+      .ftg {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 4rem;
-        margin-bottom: 4rem;
+        gap: 5rem;
+        margin-bottom: 5rem;
       }
-      .ft-logo {
+      .flogo {
         font-family: "Bebas Neue", sans-serif;
-        font-size: 3.2rem;
-        letter-spacing: 4px;
+        font-size: 3rem;
+        letter-spacing: 5px;
         color: var(--cream);
         text-decoration: none;
         display: block;
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
       }
-      .ft-logo em {
+      .flogo em {
         color: var(--fire);
         font-style: normal;
       }
-      .ft-desc {
-        font-size: 0.83rem;
+      .fdesc {
+        font-size: 0.8rem;
         color: var(--muted);
-        line-height: 1.75;
-        max-width: 270px;
-        margin-bottom: 1.8rem;
+        line-height: 1.8;
+        max-width: 255px;
+        margin-bottom: 2rem;
       }
-      .ft-soc {
+      .fsoc {
         display: flex;
         gap: 0.8rem;
       }
-      .ft-s {
-        width: 38px;
-        height: 38px;
+      .fs {
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         border: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--muted);
-        font-size: 0.68rem;
+        font-size: 0.65rem;
         font-weight: 700;
-        letter-spacing: 1px;
         text-decoration: none;
         transition:
           border-color 0.2s,
           color 0.2s,
-          transform 0.2s;
+          transform 0.25s;
         cursor: none;
       }
-      .ft-s:hover {
+      .fs:hover {
         border-color: var(--fire);
         color: var(--fire);
         transform: translateY(-3px);
       }
-
-      .ft-ch {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.72rem;
-        letter-spacing: 3px;
+      .fh {
+        font-size: 0.62rem;
+        letter-spacing: 4px;
         text-transform: uppercase;
         color: var(--cream);
-        margin-bottom: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
       }
-      .ft-ul {
+      .ful {
         list-style: none;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.9rem;
       }
-      .ft-ul a {
+      .ful a {
         color: var(--muted);
         text-decoration: none;
-        font-size: 0.83rem;
+        font-size: 0.82rem;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         transition:
           color 0.2s,
-          gap 0.25s;
-        position: relative;
+          gap 0.3s;
       }
-      .ft-ul a::before {
+      .ful a::before {
         content: "→";
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         color: var(--fire);
         opacity: 0;
+        transform: translateX(-8px);
         transition:
           opacity 0.2s,
           transform 0.25s;
-        transform: translateX(-8px);
       }
-      .ft-ul a:hover {
+      .ful a:hover {
         color: var(--cream);
-        gap: 0.8rem;
+        gap: 0.9rem;
       }
-      .ft-ul a:hover::before {
+      .ful a:hover::before {
         opacity: 1;
         transform: translateX(0);
       }
-
-      .ft-bot {
+      .fbot {
         border-top: 1px solid var(--border);
-        padding-top: 1.8rem;
+        padding-top: 2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
-      .ft-copy {
-        font-size: 0.75rem;
-        color: rgba(242, 234, 214, 0.2);
+      .fcopy {
+        font-size: 0.7rem;
+        color: rgba(240, 230, 208, 0.18);
       }
-      .ft-phone {
+      .fph {
         font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
         color: var(--cream);
       }
 
-      /* ═══════════════════════════════════════
-   FLOAT BUTTON
-═══════════════════════════════════════ */
-      #floatBtn {
+      /* FLOAT */
+      #fb {
         position: fixed;
-        bottom: 2.5rem;
-        right: 2.5rem;
+        bottom: 2.8rem;
+        right: 2.8rem;
         z-index: 400;
         background: var(--fire);
         color: #fff;
         border: none;
         font-family: "Syne", sans-serif;
         font-weight: 700;
-        font-size: 0.75rem;
-        letter-spacing: 2px;
+        font-size: 0.7rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        padding: 0.75rem 1.6rem;
-        border-radius: 40px;
+        padding: 0.78rem 1.8rem;
         cursor: none;
         display: flex;
         align-items: center;
         gap: 0.6rem;
-        box-shadow: 0 8px 30px rgba(232, 48, 11, 0.45);
+        box-shadow: 0 8px 32px rgba(192, 57, 43, 0.5);
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(10px);
         pointer-events: none;
         transition:
           opacity 0.35s,
@@ -1570,18 +1709,18 @@
           background 0.2s,
           box-shadow 0.2s;
       }
-      #floatBtn.show {
+      #fb.show {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
       }
-      #floatBtn:hover {
-        background: #c4250a;
-        box-shadow: 0 16px 44px rgba(232, 48, 11, 0.6);
+      #fb:hover {
+        background: #a93226;
+        box-shadow: 0 16px 50px rgba(192, 57, 43, 0.65);
       }
-      .fpulse {
-        width: 7px;
-        height: 7px;
+      .fp {
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background: #fff;
         animation: fp 1.4s ease-in-out infinite;
@@ -1593,118 +1732,138 @@
           transform: scale(1);
         }
         50% {
-          opacity: 0.25;
+          opacity: 0.2;
           transform: scale(0.4);
         }
       }
 
-      /* ═══════════════════════════════════════
-   MOBILE
-═══════════════════════════════════════ */
+      /* REVEAL */
+      .rv {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.9s ease,
+          transform 0.9s ease;
+      }
+      .rv.v {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .d1 {
+        transition-delay: 0.1s;
+      }
+      .d2 {
+        transition-delay: 0.2s;
+      }
+      .d3 {
+        transition-delay: 0.3s;
+      }
+      .d4 {
+        transition-delay: 0.4s;
+      }
+      .d5 {
+        transition-delay: 0.5s;
+      }
+
       @media (max-width: 900px) {
-        nav,
-        .nav-links a:not(:last-child) {
-          padding: 1rem 1.5rem;
+        #nav {
+          padding: 1.1rem 1.5rem;
         }
-        .nav-links > *:not(:last-child) {
+        .nr > *:not(:last-child) {
           display: none;
         }
-        .hero {
+        .hcon {
           padding: 0 1.5rem 4.5rem;
         }
-        .hero-h1 {
-          font-size: clamp(4.8rem, 22vw, 9rem);
+        .hh {
+          font-size: clamp(5rem, 22vw, 9rem);
         }
-        .hero-bottom {
+        .hmeta {
           flex-direction: column;
           align-items: flex-start;
         }
-        .scroll-cue {
+        .sci {
           right: 1.5rem;
-          bottom: 4rem;
+          bottom: 3.5rem;
         }
         .stats {
           grid-template-columns: 1fr 1fr;
         }
-        .stat:nth-child(2) {
+        .st:nth-child(2) {
           border-right: none;
         }
-        .stat:nth-child(3) {
+        .st:nth-child(3) {
           border-top: 1px solid var(--border);
         }
-        .menu-head {
-          padding: 0 1.5rem 2.5rem;
-          flex-direction: column;
-          gap: 1rem;
+        .mhead,
+        .strip,
+        .mtabs {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
         }
-        .menu-scroll {
-          padding: 0 1.5rem 2rem;
-        }
-        .mprog {
-          margin: 0 1.5rem;
+        .sprog {
+          margin: 1.5rem 1.5rem 0;
         }
         .mc {
-          flex: 0 0 290px;
+          flex: 0 0 275px;
+          height: 400px;
         }
-        .featured {
+        .feat {
           grid-template-columns: 1fr;
         }
-        .feat-img-wrap {
-          height: 55vw;
+        .fimg {
+          height: 58vw;
         }
-        .feat-body {
-          padding: 3rem 2rem;
-        }
-        .feat-ttl {
-          font-size: clamp(3rem, 12vw, 5rem);
+        .ftxt {
+          padding: 4rem 2rem;
         }
         .promo {
           flex-direction: column;
-          padding: 4rem 2rem;
-          gap: 2rem;
+          padding: 5rem 2rem;
+          gap: 3rem;
         }
-        .promo-right {
+        .pr {
           text-align: left;
         }
-        .promo-desc {
+        .prd {
           margin-left: 0;
         }
-        .gallery-sec {
+        .gal {
           padding: 5rem 1.5rem;
         }
-        .gallery-grid {
+        .gg {
           grid-template-columns: 1fr 1fr;
-          grid-template-rows: 190px 190px 190px;
+          grid-template-rows: 200px 200px 200px;
         }
         .gi.tall {
           grid-row: span 1;
         }
-        .delivery-sec {
+        .del {
           grid-template-columns: 1fr 1fr;
         }
-        .dc:nth-child(2) {
+        .pil:nth-child(2) {
           border-right: none;
         }
-        .dc:nth-child(3) {
+        .pil:nth-child(3) {
           border-top: 1px solid var(--border);
         }
-        .testi-sec {
+        .test {
           padding: 5rem 1.5rem;
         }
-        .testi-grid {
+        .tg {
           grid-template-columns: 1fr;
         }
-        .cta-full {
+        .cta {
           padding: 6rem 1.5rem;
         }
         footer {
-          padding: 3.5rem 1.5rem 2rem;
+          padding: 4rem 1.5rem 2rem;
         }
-        .ft {
+        .ftg {
           grid-template-columns: 1fr 1fr;
-          gap: 2.5rem;
+          gap: 3rem;
         }
-        #floatBtn {
+        #fb {
           bottom: 1.2rem;
           right: 1.2rem;
         }
@@ -1713,30 +1872,30 @@
   </head>
   <body>
     <!-- CURSOR -->
-    <div id="cur-dot"></div>
-    <div id="cur-ring"></div>
-
-    <!-- FLOAT BTN -->
+    <div id="cur">
+      <div id="cur-ring"></div>
+      <div id="cur-dot"></div>
+    </div>
     <button
-      id="floatBtn"
+      id="fb"
       onclick="
         document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })
       "
     >
-      <div class="fpulse"></div>
+      <div class="fp"></div>
       Buyurtma
     </button>
 
-    <!-- ═══ NAV ═══ -->
+    <!-- NAV -->
     <nav id="nav">
-      <a class="logo" href="#">Burger<em>Boss</em></a>
-      <div class="nav-links">
-        <a href="#menu">Menyu</a>
-        <a href="#featured">Signature</a>
-        <a href="#gallery">Galereya</a>
-        <a href="#delivery">Yetkazish</a>
+      <a class="nl" href="#">Enjoy<em>Lavash</em></a>
+      <div class="nr">
+        <a class="nla" href="#menu">Menyu</a>
+        <a class="nla" href="#feat">Signature</a>
+        <a class="nla" href="#gal">Galereya</a>
+        <a class="nla" href="#del">Yetkazish</a>
         <button
-          class="nav-btn magnetic"
+          class="nb mag"
           onclick="
             document
               .getElementById('menu')
@@ -1748,338 +1907,573 @@
       </div>
     </nav>
 
-    <!-- ═══ HERO ═══ -->
-    <section class="hero">
-      <div class="hero-bg" id="heroBg"></div>
-      <div class="hero-vignette"></div>
-      <div class="hero-orb"></div>
-
-      <div class="hero-content">
-        <div class="hero-tag">
-          <div class="hero-tag-line"></div>
-          <span class="cr cr-d1"
-            ><span class="cr-inner">Toshkentning №1 Fast Food</span></span
-          >
+    <!-- HERO -->
+    <section id="hero">
+      <canvas id="hc"></canvas>
+      <div id="hp"></div>
+      <div id="hv"></div>
+      <div id="hg"></div>
+      <div class="hcon">
+        <div class="htag">
+          <span class="htag-l"></span>Toshkentning №1 Lavash Uyi
         </div>
-        <h1 class="hero-h1">
-          <span class="cr"><span class="cr-inner">BURGER</span></span>
-          <span class="cr cr-d2"
-            ><span class="cr-inner"
-              ><span class="stroke">BOS</span><span class="fire">S</span></span
-            ></span
+        <h1 class="hh">
+          <span class="sl"
+            ><span class="sw" style="transition-delay: 0.1s">ENJOY</span></span
+          >
+          <span class="sl"
+            ><span class="sw stk" style="transition-delay: 0.22s">LAVA</span
+            ><span class="sw acc" style="transition-delay: 0.3s">SH</span></span
           >
         </h1>
-        <div class="hero-bottom">
-          <p class="hero-desc fr fr-d3">
-            Har bir tishlamda — <strong>yangi go'sht</strong>, maxsus sous va
-            unutilmas ta'm. Faqat siz uchun.
+        <div class="hmeta">
+          <p class="hdesc rv d2">
+            Har bir tishlamda — <strong>yangi lavash</strong>, maxsus sous va
+            unutilmas ta'm. Issiq, to'liq, mazali.
           </p>
-          <div class="hero-btns fr fr-d4">
-            <div class="magnetic">
-              <button class="btn-fire">Menyu ko'rish</button>
+          <div class="hbtns rv d3">
+            <div class="mag">
+              <button
+                class="bp"
+                onclick="
+                  document
+                    .getElementById('menu')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Menyu ko'rish
+              </button>
             </div>
-            <div class="magnetic">
-              <button class="btn-ghost">Yetkazish</button>
+            <div class="mag">
+              <button
+                class="bg2"
+                onclick="
+                  document
+                    .getElementById('del')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Yetkazish
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="scroll-cue">
-        <span class="scroll-cue-text">Pastga</span>
-        <div class="scroll-cue-line"></div>
+      <div class="sci">
+        <span class="sct">Pastga</span>
+        <div class="scl"></div>
       </div>
     </section>
 
-    <!-- ═══ MARQUEE ═══ -->
-    <div class="marquee-wrap">
-      <div class="marquee-inner">
-        <div class="mq-item"><span class="mq-dot"></span>Toza Go'sht</div>
-        <div class="mq-item"><span class="mq-dot"></span>Har Kuni Yangi</div>
-        <div class="mq-item">
-          <span class="mq-dot"></span>30 Daqiqada Yetkazish
-        </div>
-        <div class="mq-item"><span class="mq-dot"></span>100% Halol</div>
-        <div class="mq-item"><span class="mq-dot"></span>Maxsus Sous</div>
-        <div class="mq-item">
-          <span class="mq-dot"></span>Eksklyuziv Retsept
-        </div>
-        <div class="mq-item"><span class="mq-dot"></span>Chef's Special</div>
-        <div class="mq-item"><span class="mq-dot"></span>Toza Go'sht</div>
-        <div class="mq-item"><span class="mq-dot"></span>Har Kuni Yangi</div>
-        <div class="mq-item">
-          <span class="mq-dot"></span>30 Daqiqada Yetkazish
-        </div>
-        <div class="mq-item"><span class="mq-dot"></span>100% Halol</div>
-        <div class="mq-item"><span class="mq-dot"></span>Maxsus Sous</div>
-        <div class="mq-item">
-          <span class="mq-dot"></span>Eksklyuziv Retsept
-        </div>
-        <div class="mq-item"><span class="mq-dot"></span>Chef's Special</div>
+    <!-- TICKER -->
+    <div class="tick">
+      <div class="ti">
+        <div class="tit"><span class="tdot"></span>Tovuqli Lavash</div>
+        <div class="tit"><span class="tdot"></span>Shawarma</div>
+        <div class="tit"><span class="tdot"></span>Royal Lavash</div>
+        <div class="tit"><span class="tdot"></span>100% Halol</div>
+        <div class="tit"><span class="tdot"></span>30 Daqiqada Yetkazish</div>
+        <div class="tit"><span class="tdot"></span>Har Kuni Yangi</div>
+        <div class="tit"><span class="tdot"></span>Maxsus Sous</div>
+        <div class="tit"><span class="tdot"></span>12 Yil Tajriba</div>
+        <div class="tit"><span class="tdot"></span>Tovuqli Lavash</div>
+        <div class="tit"><span class="tdot"></span>Shawarma</div>
+        <div class="tit"><span class="tdot"></span>Royal Lavash</div>
+        <div class="tit"><span class="tdot"></span>100% Halol</div>
+        <div class="tit"><span class="tdot"></span>30 Daqiqada Yetkazish</div>
+        <div class="tit"><span class="tdot"></span>Har Kuni Yangi</div>
+        <div class="tit"><span class="tdot"></span>Maxsus Sous</div>
+        <div class="tit"><span class="tdot"></span>12 Yil Tajriba</div>
       </div>
     </div>
 
-    <!-- ═══ STATS ═══ -->
+    <!-- STATS -->
     <div class="stats">
-      <div class="stat">
-        <div class="stat-n" data-to="30">
-          <span class="num">0</span><span class="stat-suffix">daq</span>
+      <div class="st rv">
+        <div class="stn">
+          <span class="cnt" data-to="30">0</span><span class="u">daq</span>
         </div>
-        <div class="stat-l">Yetkazish vaqti</div>
+        <div class="stl">Yetkazish vaqti</div>
       </div>
-      <div class="stat">
-        <div class="stat-n" data-to="4.9" data-dec="1">
-          <span class="num">0</span><span class="stat-suffix">★</span>
+      <div class="st rv d1">
+        <div class="stn">
+          <span class="cnt" data-to="4.8" data-dec="1">0</span
+          ><span class="u">★</span>
         </div>
-        <div class="stat-l">O'rtacha reyting</div>
+        <div class="stl">O'rtacha reyting</div>
       </div>
-      <div class="stat">
-        <div class="stat-n" data-to="5">
-          <span class="num">0</span><span class="stat-suffix">K+</span>
+      <div class="st rv d2">
+        <div class="stn">
+          <span class="cnt" data-to="8">0</span><span class="u">K+</span>
         </div>
-        <div class="stat-l">Mamnun mijoz</div>
+        <div class="stl">Mamnun mijoz</div>
       </div>
-      <div class="stat">
-        <div class="stat-n" data-to="24">
-          <span class="num">0</span><span class="stat-suffix">/7</span>
+      <div class="st rv d3">
+        <div class="stn">
+          <span class="cnt" data-to="12">0</span><span class="u">yil</span>
         </div>
-        <div class="stat-l">Doim ochiq</div>
+        <div class="stl">Tajribamiz</div>
       </div>
     </div>
 
-    <!-- ═══ MENU ═══ -->
-    <section class="menu-sec" id="menu">
-      <div class="menu-head">
+    <!-- MENU SECTION -->
+    <section class="msec" id="menu">
+      <div class="mhead">
         <div>
-          <div class="s-eye fr"><span>Bizning taomlar</span></div>
-          <h2 class="s-ttl">
-            <span class="cr"><span class="cr-inner">MASHHUR</span></span>
-            <span class="cr cr-d1"
-              ><span class="cr-inner"
-                ><span class="stk">MENYULAR</span></span
-              ></span
-            >
+          <div class="eye rv">Bizning taomlar</div>
+          <h2 class="ttl rv d1">
+            MASHHUR<br /><span class="out">MENYULAR</span>
           </h2>
         </div>
-        <p class="menu-hint fr fr-d2">
-          Kartochkani o'ngga suring — sevimlingizni tanlang
+        <p class="mhint rv d2">
+          Kategoriyani tanlang va sevimli taomingizni toping
         </p>
       </div>
 
-      <div class="menu-scroll" id="menuScroll">
+      <!-- TABS -->
+      <div class="mtabs">
+        <button class="mtab act" data-cat="lavash">Lavashlar</button>
+        <button class="mtab" data-cat="shawarma">Shawarma</button>
+        <button class="mtab" data-cat="snack">Snacklar</button>
+        <button class="mtab" data-cat="ichimlik">Ichimliklar</button>
+      </div>
+
+      <!-- LAVASH -->
+      <div class="strip" id="s-lavash">
         <div class="mc" data-tilt>
-          <div class="mc-img">
-            <div class="mc-badge">🔥 Bestseller</div>
-            <img
-              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=85"
-              alt="Boss Double"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">49 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Boss Double</div>
-            <div class="mc-desc">
-              Qo'sh beef patty, smoked cheddar, crispy bacon va maxsus
-              BossSauce.
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Bestseller</div>
+          <div class="mcbody">
+            <div class="mcnum">01/05</div>
+            <div class="mcn">Tovuqli Lavash</div>
+            <div class="mcd">
+              Grillda pishirilgan tovuq, yangi sabzavotlar, tuzlangan karam va
+              maxsus garlic sous.
             </div>
-            <div class="mc-foot">
-              <div class="mc-price">49 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
+            <div class="mcft">
+              <div class="mcp">32 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
-
         <div class="mc" data-tilt>
-          <div class="mc-img">
-            <div class="mc-badge gld">★ Yangi</div>
-            <img
-              src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=700&q=85"
-              alt="Crispy Chicken"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">38 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Crispy Chicken</div>
-            <div class="mc-desc">
-              Buttermilk marinad, qovurilgan fillet, coleslaw va honey-mustard
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1513442542250-854d436a73f2?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Yangi</div>
+          <div class="mcbody">
+            <div class="mcnum">02/05</div>
+            <div class="mcn">Mol Lavash</div>
+            <div class="mcd">
+              Mol go'shti, pishloq, pomidor, karam, dijon xantal va barbecue
               sous.
             </div>
-            <div class="mc-foot">
-              <div class="mc-price">38 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
+            <div class="mcft">
+              <div class="mcp">38 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
-
         <div class="mc" data-tilt>
-          <div class="mc-img">
-            <div class="mc-badge spc">🌶 Achchiq</div>
-            <img
-              src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=700&q=85"
-              alt="Spicy Smash"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">42 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Spicy Smash</div>
-            <div class="mc-desc">
-              Smash-patty usulida, jalapeño, chipotle mayo va iceberg lettuce.
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1484723091739-30990f47b472?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Achchiq</div>
+          <div class="mcbody">
+            <div class="mcnum">03/05</div>
+            <div class="mcn">Spicy Lavash</div>
+            <div class="mcd">
+              Achchiq sous, jalapeño, qovurilgan tovuq, avokado va chipotle
+              mayo.
             </div>
-            <div class="mc-foot">
-              <div class="mc-price">42 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
+            <div class="mcft">
+              <div class="mcp">35 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
-
         <div class="mc" data-tilt>
-          <div class="mc-img">
-            <img
-              src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=85"
-              alt="Boss Fries"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">18 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Boss Fries</div>
-            <div class="mc-desc">
-              Texnik qovurilgan, deniz tuzi va mozzarella sous bilan.
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">04/05</div>
+            <div class="mcn">Veggie Lavash</div>
+            <div class="mcd">
+              Grillda qovurilgan sabzavotlar, pishloq, hummus va zaytun moyi.
             </div>
-            <div class="mc-foot">
-              <div class="mc-price">18 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
+            <div class="mcft">
+              <div class="mcp">28 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
-
         <div class="mc" data-tilt>
-          <div class="mc-img">
-            <img
-              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&q=85"
-              alt="Stone Pizza"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">55 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Stone Pizza</div>
-            <div class="mc-desc">
-              Tosh tandirda pishirilgan, San-Marzano tomato va fior di latte.
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1571091655789-405eb7a3a3a8?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Premium</div>
+          <div class="mcbody">
+            <div class="mcnum">05/05</div>
+            <div class="mcn">Royal Lavash</div>
+            <div class="mcd">
+              A5 Wagyu go'shti, truffle sous, gruyère pishloq va karamelized
+              piyoz.
             </div>
-            <div class="mc-foot">
-              <div class="mc-price">55 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="mc" data-tilt>
-          <div class="mc-img">
-            <img
-              src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&q=85"
-              alt="Thick Shake"
-            />
-            <div class="mc-img-ov"></div>
-            <div class="mc-hover-tag">22 000 so'm</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">Thick Shake</div>
-            <div class="mc-desc">
-              Vanilla, shokolad yoki strawberry — qalin, sovuq va to'liq huzur.
-            </div>
-            <div class="mc-foot">
-              <div class="mc-price">22 000</div>
-              <button class="mc-btn"><span>+ Savatga</span></button>
+            <div class="mcft">
+              <div class="mcp">75 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="mprog"><div class="mprog-f" id="mpf"></div></div>
+      <!-- SHAWARMA -->
+      <div class="strip hidden" id="s-shawarma">
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Klassik</div>
+          <div class="mcbody">
+            <div class="mcnum">01/04</div>
+            <div class="mcn">Shawarma Classic</div>
+            <div class="mcd">
+              Tovuq yoki mol go'shti, karam, pomidor, xiyor va garlic sous.
+            </div>
+            <div class="mcft">
+              <div class="mcp">30 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1551326844-4df70f2d7ccd?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Bestseller</div>
+          <div class="mcbody">
+            <div class="mcnum">02/04</div>
+            <div class="mcn">Double Shawarma</div>
+            <div class="mcd">
+              Ikki qavatli, mol + tovuq, qo'shimcha sous va pishloq bilan.
+            </div>
+            <div class="mcft">
+              <div class="mcp">42 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">03/04</div>
+            <div class="mcn">Shawarma Tray</div>
+            <div class="mcd">
+              Katta tray shawarma, 4 kishi uchun, qo'shimcha souslar bilan.
+            </div>
+            <div class="mcft">
+              <div class="mcp">120 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1448043552756-e747b7a2b2b8?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Yangi</div>
+          <div class="mcbody">
+            <div class="mcnum">04/04</div>
+            <div class="mcn">Shawarma Box</div>
+            <div class="mcd">
+              Shawarma + kartoshka fri + ichimlik — to'liq set.
+            </div>
+            <div class="mcft">
+              <div class="mcp">55 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SNACK -->
+      <div class="strip hidden" id="s-snack">
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Mashhur</div>
+          <div class="mcbody">
+            <div class="mcnum">01/04</div>
+            <div class="mcn">Kartoshka Fri</div>
+            <div class="mcd">
+              Oltin qovurilgan, deniz tuzi va mozzarella sous bilan.
+            </div>
+            <div class="mcft">
+              <div class="mcp">18 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">02/04</div>
+            <div class="mcn">Mini Rollar x4</div>
+            <div class="mcd">
+              To'rtta kichkina lavash rolli, pishloq va sabzavotlar bilan.
+            </div>
+            <div class="mcft">
+              <div class="mcp">22 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Yangi</div>
+          <div class="mcbody">
+            <div class="mcnum">03/04</div>
+            <div class="mcn">Lavash Burger</div>
+            <div class="mcd">
+              Lavash ichiga solingan beef patty, pishloq va sous.
+            </div>
+            <div class="mcft">
+              <div class="mcp">45 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">04/04</div>
+            <div class="mcn">Onion Rings</div>
+            <div class="mcd">Qovurilgan piyoz halqalari, ranch sous bilan.</div>
+            <div class="mcft">
+              <div class="mcp">16 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ICHIMLIK -->
+      <div class="strip hidden" id="s-ichimlik">
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Yangi</div>
+          <div class="mcbody">
+            <div class="mcnum">01/04</div>
+            <div class="mcn">Fresh Limonada</div>
+            <div class="mcd">
+              Yangi limon, nanā va shakar bilan. Sovuq va to'liq huzur.
+            </div>
+            <div class="mcft">
+              <div class="mcp">15 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1559181567-c3190bba4c2d?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">02/04</div>
+            <div class="mcn">Ayron</div>
+            <div class="mcd">
+              Sovuq qatiq ichimlik, o'zbek an'anaviy taomi bilan.
+            </div>
+            <div class="mcft">
+              <div class="mcp">10 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbadge">Bestseller</div>
+          <div class="mcbody">
+            <div class="mcnum">03/04</div>
+            <div class="mcn">Milkshake</div>
+            <div class="mcd">
+              Qalin muzqaymoqli milkshake — vanilla, shokolad yoki strawberry.
+            </div>
+            <div class="mcft">
+              <div class="mcp">22 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="mc" data-tilt>
+          <div
+            class="mcbg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=700&q=85&quot;);
+            "
+          ></div>
+          <div class="mcov"></div>
+          <div class="mcbody">
+            <div class="mcnum">04/04</div>
+            <div class="mcn">Qovoq Sharbati</div>
+            <div class="mcd">
+              Yangi siqilgan mevali sharbat — har kuni yangi tayyorlanadi.
+            </div>
+            <div class="mcft">
+              <div class="mcp">18 000</div>
+              <button class="mcb"><span>+ Savatga</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sprog"><div class="sfill" id="sf"></div></div>
     </section>
 
-    <!-- ═══ FEATURED ═══ -->
-    <section class="featured" id="featured">
-      <div class="feat-img-wrap">
-        <img
-          class="feat-img"
-          id="featImg"
-          src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=1000&q=90"
-          alt="Wagyu"
-        />
-        <div class="feat-img-ov"></div>
-        <div class="feat-info">
-          <div class="fi-lbl">Chef's Special</div>
-          <div class="fi-name">Wagyu Signature</div>
-          <div class="fi-stars">★★★★★</div>
+    <!-- FEATURED -->
+    <section class="feat" id="feat">
+      <div class="fimg">
+        <div class="fbg" id="fbg"></div>
+        <div class="fov"></div>
+        <div class="fbadge">
+          <div class="fbl">Chef's Special</div>
+          <div class="fbn">Royal Lavash</div>
+          <div class="fbst">★★★★★</div>
         </div>
       </div>
-      <div class="feat-body">
-        <div class="s-eye fr">Tavsiyamiz</div>
-        <h2 class="feat-ttl">
-          <span class="cr"><span class="cr-inner">WAGYU</span></span>
-          <span class="cr cr-d1"
-            ><span class="cr-inner"><em>SIGNATURE</em></span></span
+      <div class="ftxt">
+        <div class="eye rv">Tavsiyamiz</div>
+        <h2 class="ftit">
+          <span class="sl"
+            ><span class="sw" style="transition-delay: 0.05s">ROYAL</span></span
+          >
+          <span class="sl"
+            ><span class="sw" style="transition-delay: 0.15s"
+              ><em>LAVASH</em></span
+            ></span
           >
         </h2>
-        <p class="feat-txt fr fr-d2">
-          Yaponiya A5 Wagyu go'shtidan tayyorlangan, qo'l yoğurma briosh non,
-          truffle mayo va french mustard bilan xizmat qilinadi.
+        <p class="fbody rv d2">
+          A5 darajali mol go'shti, qo'l yoğurma lavash, truffle sous va dijon
+          xantal bilan xizmat qilinadi. Har bir tishlamda — hashamat va
+          to'yimlilik.
         </p>
-        <div class="feat-tags fr fr-d2">
-          <span class="feat-tag">A5 Wagyu</span>
-          <span class="feat-tag">Brioche Bun</span>
-          <span class="feat-tag">Truffle Mayo</span>
-          <span class="feat-tag">Gruyère</span>
-          <span class="feat-tag">Caramelized Onion</span>
-          <span class="feat-tag">Arugula</span>
+        <div class="ftags rv d2">
+          <span class="ftag">A5 Mol Go'shti</span
+          ><span class="ftag">Yangi Lavash</span>
+          <span class="ftag">Truffle Sous</span
+          ><span class="ftag">Gruyère</span>
+          <span class="ftag">Karamelized Piyoz</span
+          ><span class="ftag">Rukola</span>
         </div>
-        <div class="feat-price fr fr-d3">
-          <span class="cnt" data-to="89">0</span> 000
-          <span style="font-size: 1.5rem; color: var(--muted)">so'm</span>
+        <div class="fpr rv d3">
+          <span class="cnt" data-to="75">0</span> 000 <sub>so'm</sub>
         </div>
-        <div class="magnetic fr fr-d4">
-          <button class="btn-fire">Buyurtma berish</button>
-        </div>
+        <div class="mag rv d4"><button class="bp">Buyurtma berish</button></div>
       </div>
     </section>
 
-    <!-- ═══ PROMO ═══ -->
+    <!-- PROMO -->
     <div class="promo">
-      <div>
-        <div class="promo-sub">Bugungi aksiya</div>
-        <h2 class="promo-h2">BIRINCHI<br />BUYURTMA<br />–20%</h2>
+      <div class="pl">
+        <div class="plsub">Bugungi aksiya</div>
+        <h2 class="plh">
+          <span class="sl"><span class="sw">BIRINCHI</span></span>
+          <span class="sl"><span class="sw">BUYURTMA</span></span>
+          <span class="sl"><span class="sw">–20%</span></span>
+        </h2>
       </div>
-      <div class="promo-right">
-        <div
-          style="
-            font-size: 0.62rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 700;
-            margin-bottom: 0.7rem;
-          "
-        >
-          Promo kod
-        </div>
-        <div class="promo-code">BOSS20</div>
-        <p class="promo-desc">
+      <div class="pr">
+        <div class="prlbl">Promo kod</div>
+        <div class="prc">ENJOY20</div>
+        <p class="prd">
           Birinchi buyurtmangizda 20% chegirma. Faqat onlayn. Muddati
           cheklangan.
         </p>
-        <div class="magnetic" style="margin-top: 1.5rem">
+        <div class="mag" style="margin-top: 2rem">
           <button
-            class="btn-fire"
-            style="
-              background: rgba(0, 0, 0, 0.25);
-              box-shadow: none;
-              border: 1px solid rgba(255, 255, 255, 0.25);
-            "
+            class="bg2"
+            style="border-color: rgba(255, 255, 255, 0.25); color: #fff"
           >
             Hozir buyurtma
           </button>
@@ -2087,505 +2481,738 @@
       </div>
     </div>
 
-    <!-- ═══ GALLERY ═══ -->
-    <section class="gallery-sec" id="gallery">
-      <div class="gallery-head fr">
+    <!-- GALLERY -->
+    <section class="gal" id="gal">
+      <div class="ghd rv">
         <div>
-          <div class="s-eye">Atmosfera</div>
-          <h2 class="s-ttl">BIZNING <span class="stk">GALEREYA</span></h2>
+          <div class="eye">Atmosfera</div>
+          <h2 class="ttl">BIZNING<br /><span class="out">GALEREYA</span></h2>
         </div>
-        <p
-          style="
-            color: var(--muted);
-            font-size: 0.83rem;
-            max-width: 210px;
-            line-height: 1.7;
-          "
-        >
-          Har bir burchakda — ta'm, issiqlik va huzur
+        <p class="gnt">
+          Har bir burchakda — ta'm, issiqlik va huzur. Zamonaviy interer, ochiq
+          oshxona.
         </p>
       </div>
-      <div class="gallery-grid">
-        <div class="gi tall">
-          <img
-            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=85"
-            alt="Interer"
-          />
-          <div class="gi-cap">Zamonaviy interer</div>
+      <div class="gg">
+        <div class="gi tall" data-gi>
+          <div
+            class="gibg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=85&quot;);
+            "
+          ></div>
+          <div class="giov"></div>
+          <div class="gibrd"></div>
+          <div class="ginum">01</div>
+          <div class="gicap">
+            <div class="gitt">Zamonaviy Interer</div>
+            <div class="gisb">Atmosfera</div>
+          </div>
         </div>
-        <div class="gi">
-          <img
-            src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=85"
-            alt="Grill"
-          />
-          <div class="gi-cap">Ochiq oshxona</div>
+        <div class="gi" data-gi>
+          <div
+            class="gibg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=85&quot;);
+            "
+          ></div>
+          <div class="giov"></div>
+          <div class="gibrd"></div>
+          <div class="ginum">02</div>
+          <div class="gicap">
+            <div class="gitt">Yangi Lavash</div>
+            <div class="gisb">Mahsulot</div>
+          </div>
         </div>
-        <div class="gi">
-          <img
-            src="https://images.unsplash.com/photo-1616645255967-9e8cf2a2bc67?w=600&q=85"
-            alt="Burger"
-          />
-          <div class="gi-cap">Har bir detal muhim</div>
+        <div class="gi" data-gi>
+          <div
+            class="gibg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1481671703460-040cb8a2d909?w=600&q=85&quot;);
+            "
+          ></div>
+          <div class="giov"></div>
+          <div class="gibrd"></div>
+          <div class="ginum">03</div>
+          <div class="gicap">
+            <div class="gitt">Tayyorlash Jarayoni</div>
+            <div class="gisb">Sifat</div>
+          </div>
         </div>
-        <div class="gi">
-          <img
-            src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=600&q=85"
-            alt="Fresh"
-          />
-          <div class="gi-cap">Yangi ingredientlar</div>
+        <div class="gi" data-gi>
+          <div
+            class="gibg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=85&quot;);
+            "
+          ></div>
+          <div class="giov"></div>
+          <div class="gibrd"></div>
+          <div class="ginum">04</div>
+          <div class="gicap">
+            <div class="gitt">Yangi Ingredientlar</div>
+            <div class="gisb">Tayyorlash</div>
+          </div>
         </div>
-        <div class="gi">
-          <img
-            src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=85"
-            alt="Set"
-          />
-          <div class="gi-cap">Klassik to'plam</div>
+        <div class="gi" data-gi>
+          <div
+            class="gibg"
+            style="
+              background-image: url(&quot;https://images.unsplash.com/photo-1567521464027-f127ff144326?w=600&q=85&quot;);
+            "
+          ></div>
+          <div class="giov"></div>
+          <div class="gibrd"></div>
+          <div class="ginum">05</div>
+          <div class="gicap">
+            <div class="gitt">Klassik To'plam</div>
+            <div class="gisb">Menyu</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ DELIVERY ═══ -->
-    <section class="delivery-sec" id="delivery">
-      <div class="dc">
-        <div class="dc-n"><span class="cnt" data-to="30">0</span></div>
-        <div class="dc-u">Daqiqa</div>
-        <div class="dc-t">Tez yetkazish</div>
-        <div class="dc-d">
+    <!-- DELIVERY -->
+    <section class="del" id="del">
+      <div class="pil rv">
+        <div class="piln"><span class="cnt" data-to="30">0</span></div>
+        <div class="pilu">Daqiqa</div>
+        <div class="pilt">Tez Yetkazish</div>
+        <div class="pild">
           Kechiksa — keyingi buyurtma bepul. Bu bizning va'damiz.
         </div>
       </div>
-      <div class="dc">
-        <div class="dc-n"><span class="cnt" data-to="100">0</span></div>
-        <div class="dc-u">% Halol</div>
-        <div class="dc-t">Sertifikatlangan</div>
-        <div class="dc-d">Barcha mahsulotlarimiz halol sertifikatiga ega.</div>
+      <div class="pil rv d1">
+        <div class="piln"><span class="cnt" data-to="100">0</span></div>
+        <div class="pilu">% Halol</div>
+        <div class="pilt">Sertifikatlangan</div>
+        <div class="pild">Barcha mahsulotlarimiz halol sertifikatiga ega.</div>
       </div>
-      <div class="dc">
-        <div class="dc-n">
-          <span class="cnt" data-to="4" data-dec="1" data-str="4.9">4.9</span>
+      <div class="pil rv d2">
+        <div class="piln">
+          <span class="cnt" data-to="4" data-dec="1" data-str="4.8">4.8</span>
         </div>
-        <div class="dc-u">Reyting ★</div>
-        <div class="dc-t">Eng yuqori baho</div>
-        <div class="dc-d">5000+ mamnun mijozimiz bizni tavsiya qiladi.</div>
+        <div class="pilu">Reyting ★</div>
+        <div class="pilt">Eng Yuqori Baho</div>
+        <div class="pild">8000+ mamnun mijozimiz bizni tavsiya qiladi.</div>
       </div>
-      <div class="dc">
-        <div class="dc-n">
-          <span class="cnt" data-to="24">0</span
-          ><span style="font-size: 0.45em; color: var(--gold)">/7</span>
-        </div>
-        <div class="dc-u">Ochiq</div>
-        <div class="dc-t">Doim xizmatda</div>
-        <div class="dc-d">Tun yarmimi yoki tong — biz doim tayyor.</div>
+      <div class="pil rv d3">
+        <div class="piln"><span class="cnt" data-to="12">0</span></div>
+        <div class="pilu">Yil Tajriba</div>
+        <div class="pilt">Ishonchli Xizmat</div>
+        <div class="pild">12 yildan beri Toshkentda eng yaxshi lavash.</div>
       </div>
     </section>
 
-    <!-- ═══ TESTIMONIALS ═══ -->
-    <section class="testi-sec">
-      <div class="s-eye fr">Mijozlar fikri</div>
-      <h2 class="s-ttl">
-        <span class="cr"><span class="cr-inner">ULAR</span></span>
-        <span class="cr cr-d1"
-          ><span class="cr-inner"
-            ><span style="color: var(--fire)">GAPIRADI</span></span
-          ></span
-        >
+    <!-- TESTIMONIALS -->
+    <section class="test">
+      <div class="eye rv" style="position: relative; z-index: 1">
+        Mijozlar fikri
+      </div>
+      <h2 class="ttl rv d1" style="position: relative; z-index: 1">
+        ULAR <span class="out">GAPIRADI</span>
       </h2>
-      <div class="testi-grid">
-        <div class="tc big fr">
-          <span class="tc-q">"</span>
-          <div class="tc-stars">★★★★★</div>
-          <p class="tc-txt">
-            "<em>Boss Double burgerini tatib ko'rdim</em> — bu umrimda yeganim
-            eng mazali burger. Sous va go'sht kombinatsiyasi — ajoyib! Har
-            haftada buyurtma beraman."
+      <div class="tg">
+        <div class="tc big rv">
+          <span class="tcq">"</span>
+          <div class="tcst">★★★★★</div>
+          <p class="tctx">
+            "<em>Royal Lavashni tatib ko'rdim</em> — bu umrimda yeganim eng
+            mazali lavash. Sous va go'sht kombinatsiyasi — ajoyib! Har haftada
+            buyurtma beraman."
           </p>
-          <div class="tc-foot">
-            <div class="tc-av">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"
-                alt="Jasur"
-              />
+          <div class="tcft">
+            <div class="tcav">
+              <img src="https://i.pravatar.cc/100?img=11" alt="" />
             </div>
             <div>
-              <div class="tc-name">Jasur T.</div>
-              <div class="tc-loc">Yunusobod, Toshkent</div>
+              <div class="tcnm">Jasur T.</div>
+              <div class="tclc">Yunusobod, Toshkent</div>
             </div>
           </div>
         </div>
-        <div class="tc fr fr-d1">
-          <span class="tc-q">"</span>
-          <div class="tc-stars">★★★★★</div>
-          <p class="tc-txt">
+        <div class="tc rv d1">
+          <span class="tcq">"</span>
+          <div class="tcst">★★★★★</div>
+          <p class="tctx">
             "Tez va issiq yetkazib berishdi!
-            <em>Pizza va frilar juda yaxshi.</em>"
+            <em>Tovuqli lavash juda mazali.</em> Har hafta 2-3 marta buyurtma
+            beraman."
           </p>
-          <div class="tc-foot">
-            <div class="tc-av">
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
-                alt="Nilufar"
-              />
+          <div class="tcft">
+            <div class="tcav">
+              <img src="https://i.pravatar.cc/100?img=47" alt="" />
             </div>
             <div>
-              <div class="tc-name">Nilufar X.</div>
-              <div class="tc-loc">Chilonzor, Toshkent</div>
+              <div class="tcnm">Nilufar X.</div>
+              <div class="tclc">Chilonzor, Toshkent</div>
             </div>
           </div>
         </div>
-        <div class="tc fr fr-d2">
-          <span class="tc-q">"</span>
-          <div class="tc-stars">★★★★★</div>
-          <p class="tc-txt">
-            "<em>Wagyu Signature</em> — hayotingiz o'zgaradi. App orqali
-            buyurtma juda qulay!"
+        <div class="tc rv d2">
+          <span class="tcq">"</span>
+          <div class="tcst">★★★★★</div>
+          <p class="tctx">
+            "<em>Spicy Lavash</em> — hayotingiz o'zgaradi. App orqali buyurtma
+            juda qulay va tez!"
           </p>
-          <div class="tc-foot">
-            <div class="tc-av">
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80"
-                alt="Sherzod"
-              />
+          <div class="tcft">
+            <div class="tcav">
+              <img src="https://i.pravatar.cc/100?img=33" alt="" />
             </div>
             <div>
-              <div class="tc-name">Sherzod M.</div>
-              <div class="tc-loc">Mirzo Ulug'bek, Toshkent</div>
+              <div class="tcnm">Sherzod M.</div>
+              <div class="tclc">Mirzo Ulug'bek, Toshkent</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ CTA ═══ -->
-    <div class="cta-full">
-      <h2 class="cta-ttl">
-        <span class="cr"><span class="cr-inner">BUYURTMA</span></span>
-        <span class="cr cr-d1"
-          ><span class="cr-inner"><span class="stk">BERING</span></span></span
-        >
+    <!-- CTA -->
+    <div class="cta">
+      <h2 class="ctah">
+        <span class="sl"><span class="sw">BUYURTMA</span></span>
+        <span class="sl"><span class="sw out">BERING</span></span>
       </h2>
-      <p class="cta-sub fr fr-d2">
-        30 daqiqada eshigingizga yetkazamiz. BOSS20 kodi bilan 20% chegirma!
+      <p class="ctasub rv d2">
+        30 daqiqada eshigingizga yetkazamiz. ENJOY20 kodi bilan 20% chegirma!
       </p>
-      <div class="cta-actions fr fr-d3">
-        <div class="magnetic">
+      <div class="ctabtn rv d3">
+        <div class="mag">
           <button
-            class="btn-fire"
+            class="bp"
             onclick="
               document
                 .getElementById('menu')
                 .scrollIntoView({ behavior: 'smooth' })
             "
           >
-            Hozir buyurtma
+            Hozir Buyurtma
           </button>
         </div>
-        <div class="magnetic">
+        <div class="mag">
           <button
-            class="btn-ghost"
+            class="bg2"
             onclick="
               document
-                .getElementById('delivery')
+                .getElementById('del')
                 .scrollIntoView({ behavior: 'smooth' })
             "
           >
-            Yetkazish haqida
+            Yetkazish Haqida
           </button>
         </div>
       </div>
     </div>
 
-    <!-- ═══ FOOTER ═══ -->
+    <!-- FOOTER -->
     <footer>
-      <div class="ft">
+      <div class="ftg">
         <div>
-          <a class="ft-logo" href="#">Burger<em>Boss</em></a>
-          <p class="ft-desc">
-            Toshkentning №1 fast food — yangi go'sht, maxsus sous va 30 daqiqada
-            yetkazish.
+          <a class="flogo" href="#">Enjoy<em>Lavash</em></a>
+          <p class="fdesc">
+            Toshkentning №1 lavash uyi — yangi lavash, maxsus sous va 30
+            daqiqada yetkazish.
           </p>
-          <div class="ft-soc">
-            <a class="ft-s" href="#">IG</a>
-            <a class="ft-s" href="#">TG</a>
-            <a class="ft-s" href="#">TK</a>
+          <div class="fsoc">
+            <a class="fs" href="#">IG</a><a class="fs" href="#">TG</a
+            ><a class="fs" href="#">TK</a>
           </div>
         </div>
         <div>
-          <div class="ft-ch">Manzil</div>
-          <ul class="ft-ul">
+          <div class="fh">Manzil</div>
+          <ul class="ful">
             <li><a href="#">Mustaqillik sh. 24</a></li>
             <li><a href="#">Yunusobod tumani</a></li>
             <li><a href="#">10:00 – 00:00</a></li>
           </ul>
         </div>
         <div>
-          <div class="ft-ch">Havolalar</div>
-          <ul class="ft-ul">
+          <div class="fh">Havolalar</div>
+          <ul class="ful">
             <li><a href="#menu">Menyu</a></li>
-            <li><a href="#featured">Signature</a></li>
-            <li><a href="#delivery">Yetkazish</a></li>
+            <li><a href="#feat">Signature</a></li>
+            <li><a href="#del">Yetkazish</a></li>
             <li><a href="#">Franchayzing</a></li>
           </ul>
         </div>
         <div>
-          <div class="ft-ch">Aloqa</div>
-          <ul class="ft-ul">
-            <li><a href="#">+998 71 123-45-67</a></li>
-            <li><a href="#">info@burgerboss.uz</a></li>
+          <div class="fh">Aloqa</div>
+          <ul class="ful">
+            <li><a href="#">+998 95-143-24-99</a></li>
+            <li><a href="#">info@enjoylavash.uz</a></li>
             <li><a href="#">Telegram bot</a></li>
           </ul>
         </div>
       </div>
-      <div class="ft-bot">
-        <div class="ft-copy">
-          © 2025 BurgerBoss. Barcha huquqlar himoyalangan.
+      <div class="fbot">
+        <div class="fcopy">
+          © 2025 EnjoyLavash. Barcha huquqlar himoyalangan.
+          <div class="fph">+998 95-143-24-99</div>
         </div>
-        <div class="ft-phone">+998 71 123-45-67</div>
       </div>
     </footer>
 
-    <!-- ═══════════════════════════════════════
-   JAVASCRIPT — ALL ANIMATIONS
-═══════════════════════════════════════ -->
     <script>
-      /* ── CURSOR ── */
-      const dot = document.getElementById("cur-dot");
-      const ring = document.getElementById("cur-ring");
-      let mx = 0,
-        my = 0;
+      /* ══════════════════════════════════════════
+   HERO 3D CANVAS
+══════════════════════════════════════════ */
+      (function () {
+        const cv = document.getElementById("hc");
+        const rsz = () => {
+          cv.width = innerWidth;
+          cv.height = innerHeight;
+        };
+        rsz();
+        window.addEventListener("resize", rsz);
+        const ctx = cv.getContext("2d");
+
+        // Particles
+        const P = Array.from({ length: 75 }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          vx: (Math.random() - 0.5) * 0.42,
+          vy: (Math.random() - 0.5) * 0.32,
+          r: Math.random() * 1.6 + 0.4,
+          a: Math.random() * 0.18 + 0.04,
+        }));
+
+        // Floating shapes
+        const S = Array.from({ length: 16 }, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          vx: (Math.random() - 0.5) * 0.38,
+          vy: (Math.random() - 0.5) * 0.28,
+          rz: Math.random() * Math.PI * 2,
+          vrz: (Math.random() - 0.5) * 0.008,
+          sz: Math.random() * 55 + 16,
+          t: Math.floor(Math.random() * 3),
+          op: Math.random() * 0.2 + 0.04,
+          c: Math.random() > 0.4 ? "192,57,43" : "230,126,34",
+        }));
+
+        let mx = innerWidth / 2,
+          my = innerHeight / 2;
+        cv.addEventListener("mousemove", (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+        });
+
+        function hex(c, x, y, r) {
+          c.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3 - Math.PI / 6;
+            i
+              ? c.lineTo(x + r * Math.cos(a), y + r * Math.sin(a))
+              : c.moveTo(x + r * Math.cos(a), y + r * Math.sin(a));
+          }
+          c.closePath();
+        }
+        function tri(c, x, y, r) {
+          c.beginPath();
+          for (let i = 0; i < 3; i++) {
+            const a = (i * Math.PI * 2) / 3 - Math.PI / 2;
+            i
+              ? c.lineTo(x + r * Math.cos(a), y + r * Math.sin(a))
+              : c.moveTo(x + r * Math.cos(a), y + r * Math.sin(a));
+          }
+          c.closePath();
+        }
+
+        // Food-shaped floating icons (circles with food colors)
+        const foods = [
+          {
+            x: Math.random() * innerWidth,
+            y: Math.random() * innerHeight,
+            r: 40,
+            vx: 0.2,
+            vy: 0.15,
+            col: "#C0392B",
+            op: 0.12,
+          },
+          {
+            x: Math.random() * innerWidth,
+            y: Math.random() * innerHeight,
+            r: 25,
+            vx: -0.18,
+            vy: 0.22,
+            col: "#E67E22",
+            op: 0.1,
+          },
+          {
+            x: Math.random() * innerWidth,
+            y: Math.random() * innerHeight,
+            r: 55,
+            vx: 0.15,
+            vy: -0.2,
+            col: "#C0392B",
+            op: 0.08,
+          },
+        ];
+
+        function draw() {
+          ctx.clearRect(0, 0, cv.width, cv.height);
+          // subtle grid
+          ctx.strokeStyle = "rgba(192,57,43,.035)";
+          ctx.lineWidth = 0.7;
+          for (let x = 0; x < cv.width; x += 88) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, cv.height);
+            ctx.stroke();
+          }
+          for (let y = 0; y < cv.height; y += 88) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(cv.width, y);
+            ctx.stroke();
+          }
+
+          // food blobs
+          foods.forEach((f) => {
+            f.x += f.vx;
+            f.y += f.vy;
+            if (f.x < -f.r) f.x = cv.width + f.r;
+            if (f.x > cv.width + f.r) f.x = -f.r;
+            if (f.y < -f.r) f.y = cv.height + f.r;
+            if (f.y > cv.height + f.r) f.y = -f.r;
+            const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r * 3);
+            g.addColorStop(
+              0,
+              f.col.replace(")", `,${f.op})`).replace("rgb", "rgba"),
+            );
+            g.addColorStop(1, "transparent");
+            ctx.fillStyle = g;
+            ctx.fillRect(f.x - f.r * 3, f.y - f.r * 3, f.r * 6, f.r * 6);
+          });
+
+          // particles
+          P.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0 || p.x > cv.width) p.vx *= -1;
+            if (p.y < 0 || p.y > cv.height) p.vy *= -1;
+            const dx = mx - p.x,
+              dy = my - p.y,
+              d = Math.sqrt(dx * dx + dy * dy);
+            if (d < 180) {
+              p.vx -= dx * 0.0006;
+              p.vy -= dy * 0.0006;
+            }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(192,57,43,${p.a})`;
+            ctx.fill();
+          });
+
+          // connections
+          for (let i = 0; i < P.length; i++)
+            for (let j = i + 1; j < P.length; j++) {
+              const dx = P[i].x - P[j].x,
+                dy = P[i].y - P[j].y,
+                d = Math.sqrt(dx * dx + dy * dy);
+              if (d < 125) {
+                ctx.strokeStyle = `rgba(192,57,43,${0.09 * (1 - d / 125)})`;
+                ctx.lineWidth = 0.55;
+                ctx.beginPath();
+                ctx.moveTo(P[i].x, P[i].y);
+                ctx.lineTo(P[j].x, P[j].y);
+                ctx.stroke();
+              }
+            }
+
+          // shapes
+          S.forEach((s) => {
+            s.rz += s.vrz;
+            s.x += s.vx;
+            s.y += s.vy;
+            if (s.x < -90) s.x = cv.width + 90;
+            if (s.x > cv.width + 90) s.x = -90;
+            if (s.y < -90) s.y = cv.height + 90;
+            if (s.y > cv.height + 90) s.y = -90;
+            const dx = mx - s.x,
+              dy = my - s.y,
+              dd = Math.sqrt(dx * dx + dy * dy);
+            if (dd < 280) {
+              s.x += dx * 0.0007;
+              s.y += dy * 0.0007;
+            }
+            ctx.save();
+            ctx.translate(s.x, s.y);
+            ctx.rotate(s.rz);
+            ctx.globalAlpha = s.op;
+            ctx.strokeStyle = `rgba(${s.c},${s.op * 2.8})`;
+            ctx.lineWidth = 1;
+            ctx.fillStyle = `rgba(${s.c},${s.op * 0.4})`;
+            if (s.t === 0) {
+              tri(ctx, 0, 0, s.sz);
+              ctx.stroke();
+              ctx.fill();
+            } else if (s.t === 1) {
+              ctx.strokeRect(-s.sz / 2, -s.sz / 2, s.sz, s.sz);
+              ctx.fillRect(-s.sz / 2, -s.sz / 2, s.sz, s.sz);
+            } else {
+              hex(ctx, 0, 0, s.sz);
+              ctx.stroke();
+              ctx.fill();
+            }
+            ctx.restore();
+          });
+          requestAnimationFrame(draw);
+        }
+        draw();
+      })();
+
+      /* CURSOR */
+      const cur = document.getElementById("cur");
       document.addEventListener("mousemove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        dot.style.left = mx + "px";
-        dot.style.top = my + "px";
-        ring.style.left = mx + "px";
-        ring.style.top = my + "px";
+        cur.style.left = e.clientX + "px";
+        cur.style.top = e.clientY + "px";
       });
       document
-        .querySelectorAll("a, button, .mc, .gi, .tc, .stat, .dc")
+        .querySelectorAll("a,button,.mc,.gi,.tc,.st,.pil")
         .forEach((el) => {
           el.addEventListener("mouseenter", () =>
-            document.body.classList.add("cur-hover"),
+            document.body.classList.add("hov"),
           );
           el.addEventListener("mouseleave", () =>
-            document.body.classList.remove("cur-hover"),
+            document.body.classList.remove("hov"),
           );
         });
-      document
-        .querySelectorAll(
-          ".btn-fire,.btn-ghost,.nav-btn,.mc-btn,.magnetic button",
-        )
-        .forEach((el) => {
-          el.addEventListener("mouseenter", () => {
-            document.body.classList.add("cur-btn");
-            document.body.classList.remove("cur-hover");
-          });
-          el.addEventListener("mouseleave", () =>
-            document.body.classList.remove("cur-btn"),
-          );
-        });
+      document.addEventListener("mousedown", () =>
+        document.body.classList.add("clk"),
+      );
+      document.addEventListener("mouseup", () =>
+        document.body.classList.remove("clk"),
+      );
 
-      /* ── NAVBAR SCROLL ── */
-      const nav = document.getElementById("nav");
-      const fb = document.getElementById("floatBtn");
+      /* NAV */
+      const nav = document.getElementById("nav"),
+        fbtn = document.getElementById("fb");
       window.addEventListener(
         "scroll",
         () => {
-          nav.classList.toggle("stuck", window.scrollY > 60);
-          fb.classList.toggle("show", window.scrollY > 500);
+          nav.classList.toggle("compact", scrollY > 80);
+          fbtn.classList.toggle("show", scrollY > 600);
         },
         { passive: true },
       );
 
-      /* ── HERO PARALLAX ── */
-      const heroBg = document.getElementById("heroBg");
+      /* HERO PARALLAX */
+      const hp = document.getElementById("hp");
       window.addEventListener(
         "scroll",
         () => {
-          if (window.scrollY < window.innerHeight) {
-            heroBg.style.transform = `translateY(${window.scrollY * 0.35}px)`;
-          }
+          if (scrollY < innerHeight)
+            hp.style.transform = `translateY(${scrollY * 0.38}px) scale(1.07)`;
         },
         { passive: true },
       );
 
-      /* ── FEATURED IMG PARALLAX ── */
-      const featImg = document.getElementById("featImg");
-      if (featImg) {
+      /* FEATURED PARALLAX */
+      const fbg = document.getElementById("fbg");
+      if (fbg) {
         window.addEventListener(
           "scroll",
           () => {
-            const rect = featImg
-              .closest(".feat-img-wrap")
-              .getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-              const pct =
-                (window.innerHeight - rect.top) /
-                (window.innerHeight + rect.height);
-              featImg.style.transform = `translateY(${(pct - 0.5) * -60}px)`;
+            const r = fbg.closest(".fimg").getBoundingClientRect();
+            if (r.top < innerHeight && r.bottom > 0) {
+              const p = (innerHeight - r.top) / (innerHeight + r.height);
+              fbg.style.transform = `translateY(${(p - 0.5) * -65}px) scale(1.05)`;
             }
           },
           { passive: true },
         );
       }
 
-      /* ── INTERSECTION OBSERVER for clip-path + fade reveals ── */
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
+      /* SPLIT WORD */
+      const swObs = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
             if (e.isIntersecting) {
-              e.target.classList.add("active");
-              io.unobserve(e.target);
+              e.target
+                .querySelectorAll(".sw")
+                .forEach((w) => w.classList.add("in"));
+              swObs.unobserve(e.target);
             }
           });
         },
-        { threshold: 0.12 },
+        { threshold: 0.1 },
       );
-      document.querySelectorAll(".cr,.fr,.sl").forEach((el) => io.observe(el));
+      document.querySelectorAll(".sl").forEach((sl) => swObs.observe(sl));
 
-      /* trigger hero immediately */
-      setTimeout(() => {
-        document
-          .querySelectorAll(".hero .cr,.hero .fr")
-          .forEach((el) => el.classList.add("active"));
-      }, 100);
+      /* REVEAL */
+      const rvObs = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("v");
+              rvObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document.querySelectorAll(".rv").forEach((el) => rvObs.observe(el));
+      setTimeout(
+        () =>
+          document
+            .querySelectorAll("#hero .sw,#hero .rv")
+            .forEach((el) => el.classList.add("in", "v")),
+        120,
+      );
 
-      /* ── COUNTER ANIMATION ── */
-      function animateCounter(el) {
-        const target = parseFloat(el.dataset.to);
-        const dec = parseInt(el.dataset.dec || "0");
-        const str = el.dataset.str;
+      /* COUNTER */
+      function ac(el) {
+        const to = parseFloat(el.dataset.to),
+          dec = parseInt(el.dataset.dec || "0"),
+          str = el.dataset.str;
         if (str) {
           el.textContent = str;
           return;
         }
-        const dur = 1600;
-        const start = performance.now();
-        function step(now) {
-          const t = Math.min((now - start) / dur, 1);
-          const ease = 1 - Math.pow(1 - t, 3);
-          el.textContent = (target * ease).toFixed(dec);
+        const dur = 2000,
+          s = performance.now();
+        function step(n) {
+          const t = Math.min((n - s) / dur, 1),
+            e = 1 - Math.pow(1 - t, 4);
+          el.textContent = (to * e).toFixed(dec);
           if (t < 1) requestAnimationFrame(step);
-          else el.textContent = target.toFixed(dec);
+          else el.textContent = to.toFixed(dec);
         }
         requestAnimationFrame(step);
       }
-      const cntObs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
+      const cObs = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
             if (e.isIntersecting) {
-              e.target.querySelectorAll(".cnt,.num").forEach(animateCounter);
-              cntObs.unobserve(e.target);
+              e.target.querySelectorAll(".cnt").forEach(ac);
+              cObs.unobserve(e.target);
             }
           });
         },
-        { threshold: 0.3 },
+        { threshold: 0.25 },
       );
       document
-        .querySelectorAll(".stats,.delivery-sec,.feat-body")
-        .forEach((s) => cntObs.observe(s));
+        .querySelectorAll(".stats,.del,.ftxt")
+        .forEach((s) => cObs.observe(s));
 
-      /* ── MAGNETIC BUTTONS ── */
-      document.querySelectorAll(".magnetic").forEach((wrap) => {
-        const btn = wrap.querySelector("button, a") || wrap;
-        wrap.addEventListener("mousemove", (e) => {
-          const r = wrap.getBoundingClientRect();
-          const cx = r.left + r.width / 2,
-            cy = r.top + r.height / 2;
-          const dx = (e.clientX - cx) * 0.3,
-            dy = (e.clientY - cy) * 0.3;
-          btn.style.transform = `translate(${dx}px, ${dy}px)`;
+      /* 3D TILT — menu cards */
+      document.querySelectorAll("[data-tilt]").forEach((c) => {
+        c.addEventListener("mousemove", (e) => {
+          const r = c.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5,
+            y = (e.clientY - r.top) / r.height - 0.5;
+          c.style.transform = `perspective(900px) rotateY(${x * 12}deg) rotateX(${-y * 9}deg) scale(1.03)`;
         });
-        wrap.addEventListener("mouseleave", () => {
-          btn.style.transform = "translate(0,0)";
-        });
-      });
-
-      /* ── 3D TILT on menu cards ── */
-      document.querySelectorAll("[data-tilt]").forEach((card) => {
-        card.addEventListener("mousemove", (e) => {
-          const r = card.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5;
-          const y = (e.clientY - r.top) / r.height - 0.5;
-          card.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.02)`;
-        });
-        card.addEventListener("mouseleave", () => {
-          card.style.transform =
+        c.addEventListener("mouseleave", () => {
+          c.style.transform =
             "perspective(900px) rotateY(0) rotateX(0) scale(1)";
-          card.style.transition =
-            "transform .6s cubic-bezier(.4,0,.2,1),box-shadow .4s,border-color .4s";
-          setTimeout(() => (card.style.transition = ""), 600);
+          c.style.transition =
+            "transform .7s cubic-bezier(.4,0,.2,1),box-shadow .4s";
+          setTimeout(() => (c.style.transition = ""), 700);
         });
-        card.addEventListener("mouseenter", () => {
-          card.style.transition =
-            "transform .1s,box-shadow .4s,border-color .4s";
-        });
+        c.addEventListener(
+          "mouseenter",
+          () => (c.style.transition = "transform .12s,box-shadow .4s"),
+        );
       });
 
-      /* ── TEXT SCRAMBLE on card names (hover) ── */
-      const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$";
-      function scramble(el) {
-        const orig = el.dataset.orig || el.textContent;
-        el.dataset.orig = orig;
-        let frame = 0,
-          total = 20;
-        clearInterval(el._sc);
-        el._sc = setInterval(() => {
-          el.textContent = orig
-            .split("")
-            .map((c, i) => {
-              if (c === " ") return " ";
-              if (frame / total > i / orig.length) return c;
-              return CHARS[Math.floor(Math.random() * CHARS.length)];
-            })
-            .join("");
-          frame++;
-          if (frame >= total) {
-            el.textContent = orig;
-            clearInterval(el._sc);
+      /* 3D TILT — gallery */
+      document.querySelectorAll("[data-gi]").forEach((g) => {
+        g.addEventListener("mousemove", (e) => {
+          const r = g.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5,
+            y = (e.clientY - r.top) / r.height - 0.5;
+          g.style.transform = `perspective(700px) rotateY(${x * 7}deg) rotateX(${-y * 5}deg) scale(1.02)`;
+          g.style.zIndex = "10";
+        });
+        g.addEventListener("mouseleave", () => {
+          g.style.transform =
+            "perspective(700px) rotateY(0) rotateX(0) scale(1)";
+          g.style.transition = "transform .7s cubic-bezier(.4,0,.2,1)";
+          g.style.zIndex = "";
+          setTimeout(() => (g.style.transition = ""), 700);
+        });
+        g.addEventListener(
+          "mouseenter",
+          () => (g.style.transition = "transform .12s"),
+        );
+      });
+
+      /* MAGNETIC */
+      document.querySelectorAll(".mag").forEach((w) => {
+        const b = w.querySelector("button,a") || w;
+        w.addEventListener("mousemove", (e) => {
+          const r = w.getBoundingClientRect();
+          b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.3}px,${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
+        });
+        w.addEventListener(
+          "mouseleave",
+          () => (b.style.transform = "translate(0,0)"),
+        );
+      });
+
+      /* TABS */
+      const tabs = document.querySelectorAll(".mtab");
+      const strips = document.querySelectorAll(".strip");
+      let activeStrip = document.getElementById("s-lavash");
+      const sf = document.getElementById("sf");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("act"));
+          tab.classList.add("act");
+          strips.forEach((s) => s.classList.add("hidden"));
+          const target = document.getElementById("s-" + tab.dataset.cat);
+          if (target) {
+            target.classList.remove("hidden");
+            activeStrip = target;
+            sf.style.width = "15%";
           }
-        }, 30);
-      }
-      document.querySelectorAll(".mc-name").forEach((el) => {
-        el.closest(".mc").addEventListener("mouseenter", () => scramble(el));
+        });
       });
 
-      /* ── MENU DRAG SCROLL ── */
-      const ms = document.getElementById("menuScroll");
-      const mpf = document.getElementById("mpf");
-      let isDown = false,
-        startX,
-        sLeft;
-      ms.addEventListener("mousedown", (e) => {
-        isDown = true;
-        ms.classList.add("dragging");
-        startX = e.pageX - ms.offsetLeft;
-        sLeft = ms.scrollLeft;
+      /* STRIP DRAG */
+      let dn = false,
+        sx2 = 0,
+        sl2 = 0;
+      document.querySelectorAll(".strip").forEach((s) => {
+        s.addEventListener("mousedown", (e) => {
+          dn = true;
+          s.classList.add("drag");
+          sx2 = e.pageX - s.offsetLeft;
+          sl2 = s.scrollLeft;
+        });
+        s.addEventListener("mouseleave", () => {
+          dn = false;
+          s.classList.remove("drag");
+        });
+        s.addEventListener("mouseup", () => {
+          dn = false;
+          s.classList.remove("drag");
+        });
+        s.addEventListener("mousemove", (e) => {
+          if (!dn) return;
+          e.preventDefault();
+          s.scrollLeft = sl2 - (e.pageX - s.offsetLeft - sx2) * 1.5;
+        });
+        s.addEventListener(
+          "scroll",
+          () => {
+            if (!s.classList.contains("hidden"))
+              sf.style.width =
+                15 +
+                (s.scrollLeft / (s.scrollWidth - s.clientWidth)) * 85 +
+                "%";
+          },
+          { passive: true },
+        );
       });
-      ms.addEventListener("mouseleave", () => {
-        isDown = false;
-        ms.classList.remove("dragging");
-      });
-      ms.addEventListener("mouseup", () => {
-        isDown = false;
-        ms.classList.remove("dragging");
-      });
-      ms.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - ms.offsetLeft;
-        ms.scrollLeft = sLeft - (x - startX) * 1.4;
-      });
-      ms.addEventListener(
-        "scroll",
-        () => {
-          const p = ms.scrollLeft / (ms.scrollWidth - ms.clientWidth);
-          mpf.style.width = 20 + p * 80 + "%";
-        },
-        { passive: true },
-      );
 
-      /* ── ADD TO CART ── */
-      document.querySelectorAll(".mc-btn").forEach((btn) => {
+      /* CART */
+      document.querySelectorAll(".mcb").forEach((btn) => {
         btn.addEventListener("click", () => {
           if (btn.classList.contains("added")) return;
           btn.classList.add("added");
@@ -2597,22 +3224,66 @@
         });
       });
 
-      /* ── NAV LINK active highlight on scroll ── */
-      const sections = ["menu", "featured", "gallery", "delivery"];
+      /* PROMO + CTA split words */
+      const pObs = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target
+                .querySelectorAll(".sw")
+                .forEach((w, i) =>
+                  setTimeout(() => w.classList.add("in"), i * 80),
+                );
+              pObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.2 },
+      );
+      document
+        .querySelectorAll(".promo .sl,.cta .sl,.ftxt .sl")
+        .forEach((el) => pObs.observe(el));
+
+      /* TEXT SCRAMBLE */
+      const CH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      function scr(el) {
+        const orig = el.dataset.orig || el.textContent;
+        el.dataset.orig = orig;
+        let f = 0,
+          tot = 20;
+        clearInterval(el._s);
+        el._s = setInterval(() => {
+          el.textContent = orig
+            .split("")
+            .map((c, i) => {
+              if (c === " ") return " ";
+              if (f / tot > i / orig.length) return c;
+              return CH[Math.floor(Math.random() * CH.length)];
+            })
+            .join("");
+          if (++f >= tot) {
+            el.textContent = orig;
+            clearInterval(el._s);
+          }
+        }, 35);
+      }
+      document.querySelectorAll(".mcn").forEach((el) => {
+        el.closest(".mc").addEventListener("mouseenter", () => scr(el));
+      });
+
+      /* NAV ACTIVE */
       window.addEventListener(
         "scroll",
         () => {
-          const y = window.scrollY + 120;
-          sections.forEach((id) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const link = document.querySelector(`.nav-links a[href="#${id}"]`);
-            if (!link) return;
-            if (el.offsetTop <= y && el.offsetTop + el.offsetHeight > y) {
-              link.style.color = "var(--cream)";
-            } else {
-              link.style.color = "";
-            }
+          const y = scrollY + 140;
+          ["menu", "feat", "gal", "del"].forEach((id) => {
+            const s = document.getElementById(id),
+              l = document.querySelector(`.nr a[href="#${id}"]`);
+            if (s && l)
+              l.style.color =
+                s.offsetTop <= y && s.offsetTop + s.offsetHeight > y
+                  ? "var(--cream)"
+                  : "";
           });
         },
         { passive: true },
